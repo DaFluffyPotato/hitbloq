@@ -21,8 +21,8 @@
                     <img src="/static/hitbloq.png">
                     <b>Hitbloq</b>
                 </a>
-                <a class="navbar-option" href="/leaderboards">Leaderboards</a>
-                <a class="navbar-option" href="/ranked_lists">Ranked Lists</a>
+                <a class="navbar-option" href="/ladder/\@map_pool">Leaderboard</a>
+                <a class="navbar-option" href="/map_pools">Map Pools</a>
                 <a class="navbar-option" href="https://discord.gg/pxWwtWJ">Discord</a>
                 <a class="navbar-option" href="/about">About</a>
                 <form class="navbar-search" onsubmit="return submitSearch(this)" autocomplete="off">
@@ -33,9 +33,10 @@
                 </form>
             </div>
         </div>
-		</div>
-		\@page_content
-		<script src="/static/css/js/header.js"></script>
-		<script src="/static/css/js/main.js"></script>
+		    \@page_content
+        <div class="nav-info card">
+          <p class="navbar-map-pool">Map Pool: \@map_pool</p>
+        </div>
+		    <script src="/static/js/main.js"></script>
     </body>
 </html>

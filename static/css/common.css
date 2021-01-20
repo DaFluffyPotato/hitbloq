@@ -31,11 +31,17 @@ h2 {
 	color: rgb(214, 222, 242);
 	margin-top: 5px;
 	margin-bottom: 5px;
-	text-shadow: 2px 2px 2px rgb(36, 41, 49); 
+	text-shadow: 2px 2px 2px rgb(36, 41, 49);
 }
 
 a {
 	color: rgb(214, 222, 242);
+  text-decoration: underline;
+  text-decoration-color: rgba(224, 53, 53, 0.55);
+}
+
+a:hover {
+  text-decoration-color: rgba(224, 53, 53, 1);
 }
 
 .div-92 {
@@ -250,4 +256,30 @@ a {
 	display: none;
 	margin-left: auto;
 	margin-right: auto;
+}
+
+.colored-card-overlay {
+  border-radius: 7px;
+  background-color: rgba(224, 53, 53, 1);
+  position: relative;
+  top: 0px;
+}
+
+.overlayed-card {
+  box-shadow: 0px 4px 0px 0px rgba(224, 53, 53, 1) inset;
+}
+
+.navbar-map-pool {
+  margin: 5px 12px 12px 12px;
+  font-style: italic;
+  color: rgba(214, 222, 242, 0.7);
+}
+
+.nav-info {
+  position: fixed;
+  z-index: 3;
+  left: -7px;
+  bottom: -7px;
+  margin-bottom: 0px;
+  background-color: rgba(45, 53, 65, 0.7);
 }

@@ -1,47 +1,41 @@
 <div class="main">
 	<div class="profile-page">
-		<div class="profile-top">
-			<div class="card user-card">
-				<div class="user-info">
-					<img class="picture" src="\@player_pic">
-					<span><b>\@player_name</b></span>
-				</div>
-				<div class="rank-info">
-					<span><b>Global Rank:</b> #\@player_rank</span>
-					<span><b>Competitive Rating:</b> \@player_crcr</span>
+		<div class="card user-card">
+			<div class="user-info">
+				<img class="picture" src="\@player_pic">
+				<span class="user-name"><b>\@player_name</b></span>
+			</div>
+			<div class="rank-info">
+				<span><b>Global Rank:</b> #\@player_rank</span>
+				<span><b>Competitive Rating:</b> \@player_crcr</span>
+			</div>
+		</div>
+		<div class="card rank-graph-card">
+			<span class="rank-graph-title">Rank History:</span>
+			<div class="rank-graph">
+				<canvas class="rank-canvas"></canvas>
+				<div class="rank-line"></div>
+				<div class="rank-circle"></div>
+				<div class="rank-graph-info">
+					<span class="rank-info-global"></span>
+					<span class="rank-info-time"></span>
 				</div>
 			</div>
 		</div>
-		<div class="profile-mid">
-			<div class="mid-column-left">
-				<div class="card rank-graph-card">
-					<span class="rank-graph-title">Rank History:</span>
-					<div class="rank-graph">
-						<canvas class="rank-canvas"></canvas>
-						<div class="rank-line"></div>
-						<div class="rank-circle"></div>
-						<div class="rank-graph-info">
-							<span class="rank-info-global"></span>
-							<span class="rank-info-time"></span>
-						</div>
-					</div>
-				</div>
-			</div>
-				<div class="card profile-songs">
-				<table class="song-table profile-songs-table">
-					<thead class="song-table-header">
-						<th class="rank">Rank</th>
-						<th class="song">Song</th>
-						<th class="score">Score</th>
-					</thead>
-					<tbody>
-						\@played_songs
-					</tbody>
-				</table>
-				<div class="leaderboard-footer">
-					<button class="nav-button nav-right" onclick="window.location.href = '\@next_page';"><i class="fas fa-arrow-right"></i></button>
-					<button class="nav-button nav-left" onclick="window.location.href = '\@last_page';"><i class="fas fa-arrow-left"></i></button>
-				</div>
+		<div class="card profile-songs">
+			<table class="song-table profile-songs-table">
+				<thead class="song-table-header">
+					<th class="rank">Rank</th>
+					<th class="song">Song</th>
+					<th class="score">Score</th>
+				</thead>
+				<tbody>
+					\@played_songs
+				</tbody>
+			</table>
+			<div class="leaderboard-footer">
+				<button class="nav-button nav-right" onclick="window.location.href = '\@next_page';"><i class="fas fa-arrow-right"></i></button>
+				<button class="nav-button nav-left" onclick="window.location.href = '\@last_page';"><i class="fas fa-arrow-left"></i></button>
 			</div>
 		</div>
 	</div>

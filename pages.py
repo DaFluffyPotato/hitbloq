@@ -5,26 +5,42 @@ from profile import Profile
 from templates import templates
 from general import shorten_settings, lengthen_settings, max_score
 
+def normal_page(contents):
+    map_pool = request.cookies.get('map_pool')
+    if not map_pool:
+        map_pool = 'global_main'
+
+    page_html = templates.inject('layout', {'page_content': contents, 'map_pool': map_pool})
+    return page_html
+
 def home_page():
     home_content = '<h2>Active Development Zone!!!</h2>Hitbloq\'s third iteration is being developed. Some whacky stuff happened in the past when we tried to switch to using our own mod, which resulted in the previous two iterations getting killed off.<br>For the time being, you can <a href="/user/0">look around</a> or check out <a href="/about">About</a>.<br><br>You can track my progress in the <a href="https://github.com/DaFluffyPotato/hitbloq">GitHub Repo</a>.'
-    home_html = templates.inject('layout', {'page_content': templates.inject('simple_card_layout', {'page_content': home_content})})
+    home_html = normal_page(templates.inject('simple_card_layout', {'page_content': home_content}))
     return home_html
 
-def leaderboards_page():
-    leaderboards_html = templates.inject('layout', {'page_content': templates.inject('simple_card_layout', {'page_content': 'coming soon...'})})
+def player_leaderboard_page(leaderboard_id):
+    leaderboards_html = normal_page(templates.inject('simple_card_layout', {'page_content': 'coming soon...'}))
     return leaderboards_html
 
 def ranked_lists_page():
     ranked_list_entry_html = ''
+    map_pool = request.cookies.get('map_pool')
+    if not map_pool:
+        map_pool = 'global_main'
     for ranked_list in database.get_ranked_lists():
         if not ranked_list['third_party']:
+            select_status = 'select'
+            if map_pool == ranked_list['_id']:
+                select_status = 'selected'
             values = {
                 'entry_link': '/ranked_list/' + ranked_list['_id'],
                 'entry_img': ranked_list['cover'],
                 'entry_title': ranked_list['shown_name'],
+                'select_status': select_status,
+                'map_pool_id': ranked_list['_id'],
             }
             ranked_list_entry_html += templates.inject('ranked_list_entry_layout', values)
-    ranked_lists_html = templates.inject('layout', {'page_content': templates.inject('ranked_lists_layout', {'ranked_lists': ranked_list_entry_html})})
+    ranked_lists_html = normal_page(templates.inject('ranked_lists_layout', {'ranked_lists': ranked_list_entry_html}))
     return ranked_lists_html
 
 def ranked_list_page(group_id):
@@ -39,11 +55,11 @@ def ranked_list_page(group_id):
             'song_difficulty': str(0.0) + '★',
         }
         ranked_songs_html += templates.inject('ranked_song_entry', values)
-    ranked_list_html = templates.inject('layout', {'page_content': templates.inject('ranked_list_layout', {'table_entries': ranked_songs_html})})
+    ranked_list_html = normal_page(templates.inject('ranked_list_layout', {'table_entries': ranked_songs_html}))
     return ranked_list_html
 
 def about_page():
-    about_html = templates.inject('layout', {'page_content': templates.inject('about_layout', {})})
+    about_html = normal_page(templates.inject('about_layout', {}))
     return about_html
 
 def leaderboard_page(leaderboard_id, leaderboard_page):
@@ -67,7 +83,7 @@ def leaderboard_page(leaderboard_id, leaderboard_page):
         'next_page': request.path.split('?')[0] + '?page=' + str(leaderboard_page + 1),
         'last_page': request.path.split('?')[0] + '?page=' + str(max(leaderboard_page - 1, 0)),
     }
-    leaderboard_html = templates.inject('layout', {'page_content': templates.inject('leaderboard_layout', leaderboard_insert)})
+    leaderboard_html = normal_page(templates.inject('leaderboard_layout', leaderboard_insert))
     return leaderboard_html
 
 def generate_leaderboard_entries(leaderboard_data, leaderboard_page):
@@ -115,7 +131,7 @@ def profile_page(user_id, profile_page):
         'next_page': request.path.split('?')[0] + '?page=' + str(profile_page + 1),
         'last_page': request.path.split('?')[0] + '?page=' + str(max(profile_page - 1, 0)),
     })
-    profile_html = templates.inject('layout', {'page_content': templates.inject('profile_layout', profile_insert)})
+    profile_html = normal_page(templates.inject('profile_layout', profile_insert))
     return profile_html
 
 def generate_profile_entries(profile_obj, profile_page):

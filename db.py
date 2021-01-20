@@ -135,7 +135,7 @@ class HitbloqMongo():
     def search_leaderboards(self, search):
         return list(self.db['leaderboards'].find(search))
 
-    def create_leaderboard(self, name, cover='default', third_party=False):
+    def create_map_pool(self, name, cover='/static/default_pool_cover.png', third_party=False):
         self.db['ranked_lists'].insert_one({
             '_id': name,
             'leaderboard_id_list': [],
@@ -152,6 +152,9 @@ class HitbloqMongo():
 
     def get_ranked_list(self, group_id):
         return self.db['ranked_lists'].find_one({'_id': group_id})
+
+    def get_pool_ids(self):
+        return [v['_id'] for v in self.db['ranked_lists'].aggregate([{'$match': {'deletedAt': None}}, {'$group': {'_id': '$_id'}}])]
 
 print('MongoDB requires a password!')
 database = HitbloqMongo(getpass())

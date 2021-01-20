@@ -3,29 +3,24 @@
     margin: auto;
     padding-top: 1.5rem;
     display: grid;
-    grid-template-rows: 320px 1.5rem auto;
     height: fit-content;
-}
-
-@media only screen and (max-width: 1000px) {
-    .profile-page {
-        grid-template-columns: 1fr;
-    }
+    row-gap: 1.5em;
+    column-gap: 1.5em;
+    grid-template-columns: 65% 35%;
+    grid-template-rows: 260px auto;
 }
 
 /* USER CARD */
 
 .user-card {
-    grid-row: 1;
-    width: fit-content;
     min-width: 400px;
     height: 100%;
     box-sizing: border-box;
     display: grid;
     grid-template-rows: 110px 1fr;
-    float: left;
     padding: 1.5rem;
-    margin-right: 1.5rem;
+    grid-row: 1;
+    grid-column: 1;
 }
 
 .user-card .user-info {
@@ -49,35 +44,30 @@
     padding: 10px;
 }
 
+.user-name {
+}
+
 /* PROFILE TOP */
 
 .profile-top {
-    grid-row: 1;
 }
 
 /* PROFILE MID */
 
 .profile-mid {
-    grid-row: 3;
-    display: grid;
-    grid-template-columns: 40% 1.5rem 1fr;
 }
 
 /* FETCHPAGE CARD */
 
 .fetchpage-card {
-    grid-row: 3;
     position: relative;
     height: 150px;
     padding: 1.5rem;
     box-sizing: border-box;
-    display: grid;
-    grid-template-rows: 1fr 34px;
 }
 
 .fetchpage-input {
     position: relative;
-    grid-row: 2;
     float: left;
     display: flex;
     align-items: center;
@@ -128,10 +118,10 @@
 
 .rank-graph-card {
     box-sizing: border-box;
-    grid-row: 1;
     padding: 1.5rem;
-    display: grid;
-    grid-template-rows: auto 1.5rem 1fr;
+    grid-column: 2;
+    grid-row: 1;
+    margin-bottom: 0px;
 }
 
 .rank-graph-title {
@@ -142,7 +132,6 @@
 }
 
 .rank-graph {
-    grid-row: 3;
     width: 100%;
     height: 100%;
     position: relative;
@@ -202,7 +191,12 @@
     float: left;
     padding: 1.5rem;
     height: fit-content;
-    grid-column: 3;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row: 2;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .profile-songs-table {
@@ -241,3 +235,12 @@
     font-size: 11pt;
 }
 
+@media (max-width: 800px) {
+  .rank-graph-card {
+      display: none;
+  }
+  .user-card {
+    grid-column-start: 1;
+    grid-column-end: 3;
+  }
+}

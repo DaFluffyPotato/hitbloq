@@ -15,7 +15,7 @@ app = Flask(__name__)
 def home():
     return pages.home_page()
 
-@app.route('/ranked_lists')
+@app.route('/map_pools')
 def ranked_lists():
     return pages.ranked_lists_page()
 
@@ -23,9 +23,9 @@ def ranked_lists():
 def ranked_list(group_id):
     return pages.ranked_list_page(group_id)
 
-@app.route('/leaderboards')
-def leaderboards():
-    return pages.leaderboards_page()
+@app.route('/ladder/<leaderboard_id>')
+def player_leaderboards(leaderboard_id):
+    return pages.player_leaderboard_page(leaderboard_id)
 
 @app.route('/user/<int:user_id>')
 def profile(user_id):
