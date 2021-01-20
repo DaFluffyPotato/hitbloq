@@ -1,0 +1,32 @@
+.song-table {
+    color: rgb(214, 222, 242);
+    width: 100%;
+    color: rgb(214, 222, 242);
+    border-spacing: 0;
+}
+
+.song-table th {
+    text-align: left;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgb(214, 222, 242);
+}
+
+.song-table td {
+    padding: 10px 0;
+    border-bottom: 1px solid rgb(214, 222, 242);
+}
+
+.song-table .picture {
+    display: table-cell !important;
+    justify-content: right;
+}
+
+.song-table img {
+    height: 40px;
+    border-radius: 3px;
+    box-shadow: 0px 0px 18px 0px rgba(0,0,0,0.3);
+}
+
+.song-table-item:hover {
+    background-color: rgb(55, 63, 77);
+}

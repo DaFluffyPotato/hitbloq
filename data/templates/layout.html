@@ -1,0 +1,41 @@
+<html>
+    <head>
+		\@page_header
+		<meta charset="utf-8"/>
+        <link rel="stylesheet" href="/static/css/navbar.css">
+        <link rel="stylesheet" href="/static/css/common.css">
+        <link rel="stylesheet" href="/static/css/song-leaderboard.css">
+		<link rel="stylesheet" href="/static/css/leaderboard.css">
+		<link rel="stylesheet" href="/static/css/ranked-list.css">
+		<link rel="stylesheet" href="/static/css/song-table.css">
+		<link rel="stylesheet" href="/static/css/profile.css">
+		<link rel="stylesheet" href="/static/css/account.css">
+		<link rel="stylesheet" href="/static/css/ranking.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <div class="navbar">
+            <div class="navbar-options">
+                <a class="navbar-brand" href="/">
+                    <img src="/static/hitbloq.png">
+                    <b>Hitbloq</b>
+                </a>
+                <a class="navbar-option" href="/leaderboards">Leaderboards</a>
+                <a class="navbar-option" href="/ranked_lists">Ranked Lists</a>
+                <a class="navbar-option" href="https://discord.gg/pxWwtWJ">Discord</a>
+                <a class="navbar-option" href="/about">About</a>
+                <form class="navbar-search" onsubmit="return submitSearch(this)" autocomplete="off">
+                    <input type="text" placeholder="Search" name="input" autocomplete="off">
+                    <button class="search-control" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+		</div>
+		\@page_content
+		<script src="/static/css/js/header.js"></script>
+		<script src="/static/css/js/main.js"></script>
+    </body>
+</html>

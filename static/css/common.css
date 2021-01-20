@@ -1,0 +1,253 @@
+@font-face {
+    font-family: "Montserrat-Regular";
+    src: url("https://fonts.gstatic.com/s/montserrat/v14/JTUSjIg1_i6t8kCHKm459WlhyyTh89Y.woff2") format("woff2");
+}
+
+html {
+    overflow: hidden;
+    height: 100%;
+}
+
+body {
+	color: rgb(214, 222, 242);
+    height: 100%;
+    overflow: auto;
+    margin: 0;
+    background-color: rgb(36, 41, 49);
+    font-family: Montserrat-Regular;
+}
+
+i {
+	position: relative;
+}
+
+p {
+	color: rgb(214, 222, 242);
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+h2 {
+	color: rgb(214, 222, 242);
+	margin-top: 5px;
+	margin-bottom: 5px;
+	text-shadow: 2px 2px 2px rgb(36, 41, 49); 
+}
+
+a {
+	color: rgb(214, 222, 242);
+}
+
+.div-92 {
+	width: 85%;
+	margin-left: 90px;
+	height: inherit;
+	margin-top: -6px;
+}
+
+.div-8 {
+	width: 8%;
+	float: left;
+	height: inherit;
+}
+
+.div-92-8 {
+	margin: auto;
+	padding: 20px;
+	height: 60px;
+}
+
+.circle-image {
+	border-radius: 50%;
+	height: inherit;
+	box-shadow: 0px 6px 21px 0px rgba(0,0,0,0.28);
+}
+
+.main {
+    margin-top: 55px;
+	margin-bottom: 100px;
+}
+
+.card {
+    background-color: rgb(45, 53, 65);
+    border-radius: 7px;
+    box-shadow: 0px 6px 21px 0px rgba(0,0,0,0.28);
+    margin-bottom: 1.5rem;
+}
+
+.plain-card {
+	padding: 1.5rem;
+	height: inherit;
+	width: 70vw;
+	margin: 0 auto;
+	margin-top: 80px;
+}
+
+.action-button {
+    border:none;
+    background: rgb(64, 89, 119);
+    border-radius: 7px;
+    box-shadow: 0px 6px 21px 0px rgba(0,0,0,0.27);
+}
+
+.action-button:hover {
+    background: #446f92 radial-gradient(circle, transparent 1%, #446f92 1%) center/15000%;
+}
+
+.action-button:active {
+    background-color: rgb(64, 89, 119);
+}
+
+.action-button:focus {
+    outline: 0;
+}
+
+@keyframes fade-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+.footer-contents {
+	width: 80%;
+	margin: auto;
+}
+
+.sticky-footer {
+	text-align: center;
+	position: fixed;
+	bottom: 0%;
+	padding: 20px 0px 30px 0px;
+	background-color: rgb(45, 53, 65);
+	box-shadow: 0px 0px 2px 2px rgba(0,0,0,0.28);
+	width: 100%;
+	-webkit-animation-duration: 1s;
+	animation-duration: 1s;
+	-webkit-animation-fill-mode: both;
+	animation-fill-mode: both;
+	-webkit-animation-delay: 0.5s;
+	-moz-animation-delay: 0.5s;
+	animation-delay: 0.5s;
+	animation-name: fade-in;
+	-webkit-animation-name: fade-in;
+	z-index: 2;
+}
+
+.login-card {
+	position: fixed;
+	top: 30%;
+    left: 50%;
+    width: 300px;
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    transform: translateX(-50%);
+	box-shadow: 0px 0px 5px 10px rgba(0,0,0,0.28);
+	padding: 25px;
+	z-index: 2;
+	display: none;
+}
+
+.default-input {
+	width: 300px;
+	height: 20px;
+	font-size: 10pt;
+	background-color: rgb(29, 33, 44);
+	color: rgb(162, 169, 185);
+	display: block;
+	border: 1px solid transparent;
+	box-shadow: inset 0px 0px 12px 0px rgba(0,0,0,0.16);
+	padding: 1rem;
+	border-radius: 15px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.wide-input {
+	width: 50vw;
+	max-width: 500px;
+}
+
+.login-button {
+	float: right;
+	border-radius: 10px;
+	display: block;
+	background-color: rgb(45, 53, 65);
+	box-shadow: 0px 0px 2px 4px rgba(0,0,0,0.16);
+	border: 1px solid rgba(214, 222, 242, 0.5);
+	color: inherit;
+	font: inherit;
+	font-size: 13pt;
+	padding: 6px;
+	margin-top: 6px;
+	margin-bottom: 6px;
+}
+
+.cancel-button {
+	float: left;
+}
+
+.navbar-button {
+	border: 1px solid transparent;
+	background-color: inherit;
+	font-size: inherit;
+	color: inherit;
+	font: inherit;
+}
+
+.login-links {
+	float: right;
+	font-size: 9pt;
+}
+
+.login-button:hover {
+	border: 1px solid rgb(214, 222, 242);
+}
+
+.signup-card {
+	display: block;
+	padding-bottom: 20px;
+}
+
+.account-card {
+	width: 70vw;
+	max-width: 800px;
+	margin: auto;
+	margin-top: 100px;
+	padding: 27px;
+}
+
+.select {
+	background-color: rgb(29, 33, 44);
+	border: 1px solid transparent;
+	color: rgb(214, 222, 242);
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	font-size: 16px;
+	border-radius: 10px;
+	text-align: center;
+	margin-top: 4px;
+	margin-bottom: 4px;
+	padding: 4px;
+}
+
+.select:hover {
+	border: 1px solid rgb(214, 222, 242);
+}
+
+#login-error, #signup-error, #nom-error, #add-error {
+	background-color: rgb(205, 67, 91);
+	border-radius: 4px;
+	padding: 5px;
+	margin: 12px;
+	border: 1px solid rgb(81, 21, 32);
+	font-size: 10pt;
+	display: none;
+	margin-left: auto;
+	margin-right: auto;
+}

@@ -1,0 +1,71 @@
+.add-account {
+    position: relative;
+    display: inline-block;
+}
+
+.add-account-dropdown {
+    display: none;
+    top: 70px;
+    transform: translateX(-100px);
+    position: fixed;
+    width: fit-content;
+    height: 100px;
+    background-color: rgb(64, 89, 119);
+    border-radius: 5px;
+    box-shadow: 0px 0px 15px 1px rgba(0,0,0,0.50);
+    padding: 0 1rem;
+}
+
+.add-account-dropdown span {
+    display: block;
+    line-height: 50px;
+}
+
+.account-input {
+    position: relative;
+    float: left;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.account-input input {
+    border: 1px solid transparent;
+    height: 30px;
+    width: 100%;
+    border-radius: 15px;
+    font-size: 10pt;
+    padding: 1rem;
+    background-color: rgb(42, 64, 90);
+    box-shadow: inset 0px 0px 12px 0px rgba(0,0,0,0.16);
+    color: rgb(162, 169, 185);
+    padding-right: 30px;
+}
+
+.account-input button {
+    border: 0;
+    padding: 0;
+    position: absolute;
+    top: 11px;
+    right: 13px;
+    font-size: 10pt;
+    background-color: transparent;
+    color: rgb(162, 169, 185);
+    outline: none;
+}
+
+.account-input button:hover {
+    color: rgb(197, 204, 219);
+}
+
+.account-input input::placeholder {
+    color: rgb(162, 169, 185);
+}
+
+.account-input input:hover {
+    box-shadow: inset 0px 0px 15px 0px rgba(0,0,0,0.30);
+}
+
+.account-input input:focus {
+    outline: none;
+}

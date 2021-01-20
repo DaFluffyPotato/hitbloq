@@ -1,0 +1,70 @@
+.ranked-list-page {
+    width: 80vw;
+    height: fit-content;
+    margin: 0 auto;
+    padding-top: 1.5rem;
+    display: grid;
+    grid-template-columns: 60% 1.5rem 1fr;
+}
+
+.ranked-list {
+    width: 60%;
+	padding: 20px;
+	margin: 0 auto;
+}
+
+.playlist-card {
+    grid-column: 3;
+    padding: 1.5rem;
+}
+
+.playlist-query {
+    grid-row: 1;
+}
+
+.playlist-download {
+    grid-row: 2;
+    justify-self: center;
+}
+
+.playlist-download button {
+    margin: 0.7rem;
+    font-size: 18px;
+    color: rgb(214, 222, 242);
+	padding: 20px;
+}
+
+.ranked-list-card {
+	padding: 1.5rem;
+    height: inherit;
+    width: 600px;
+    margin: 0 auto;
+    margin-top: 80px;
+}
+
+.ranked-lists-entry {
+	width: 300px;
+	height: 66px;
+	position: relative;
+	text-align: center;
+}
+
+.ranked-lists-entry-img {
+	width: 300px;
+	height: 66px;
+	border-radius: 15px;
+	box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.32);
+}
+
+.ranked-lists-entry-title {
+	font-size: 22px;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	text-decoration: none;
+}
+
+.ranked-lists-entry-title:hover {
+	font-size: 23px;
+}

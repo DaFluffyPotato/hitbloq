@@ -1,0 +1,45 @@
+<div class="main">
+<div class="song-leaderboard leaderboard">
+		<div class="card song-card">
+			<div class="song-card-background" style="background-image: url('\@song_picture');">
+			</div>
+			<img src="\@song_picture" style="animation-duration: \@pulse_rate;">
+
+			<div class="left-info">
+				<b class="song-title">\@song_name</b>
+				<span class="song-info song-artist">\@artist_name</span>
+				<span class="song-info song-mapper">\@mapper_name</span>
+				<span class="song-info song-difficulty">\@song_difficulty</span>
+				<span class="song-info song-star">\@star_rating</span>
+				<span class="song-info song-nps">\@notes_per_second nps</span>
+			</div>
+
+			<div class="right-info">
+				<a href="https://beatsaver.com/beatmap/\@beatsaver_id"><button class="nav-button" style="float: right;"><i class="fa fa-download" aria-hidden="true"></i></button></a>
+			</div>
+		</div>
+
+		<div class="card leaderboard-card">
+			<div class="leaderboard-header">
+				<button class="nav-button nav-right" onclick="window.location.href = '\@next_page';"><i class="fas fa-arrow-right"></i></button>
+				<button class="nav-button nav-left" onclick="window.location.href = '\@last_page';"><i class="fas fa-arrow-left"></i></button>
+			</div>
+			<table class="leaderboard-table">
+				<thead class="leaderboard-table-header">
+					<th class="picture"></th>
+					<th class="rank">Rank</th>
+					<th class="player">Player</th>
+					<th class="accuracy">Accuracy</th>
+					<th class="cr">CR</th>
+				</thead>
+				<tbody>
+					\@leaderboard_scores
+				</tbody>
+			</table>
+			<div class="leaderboard-footer">
+				<button class="nav-button nav-right" onclick="window.location.href = '\@next_page';"><i class="fas fa-arrow-right"></i></button>
+				<button class="nav-button nav-left" onclick="window.location.href = '\@last_page';"><i class="fas fa-arrow-left"></i></button>
+			</div>
+		</div>
+	</div>
+</div>

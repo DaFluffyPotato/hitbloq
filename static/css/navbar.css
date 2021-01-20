@@ -1,0 +1,93 @@
+.navbar {
+    position: fixed;
+    z-index: 1;
+    display: flex;
+    width: 100%;
+    height: 55px;
+    background-color: rgb(64, 89, 119);
+    color: rgb(214, 222, 242);
+	text-decoration:none;
+    box-shadow: 0px 6px 21px 0px rgba(0,0,0,0.27);
+    overflow: hidden;
+    top: 0;
+	cursor:text;
+}
+
+.navbar-options {
+    height: inherit;
+    margin: auto;
+}
+
+.navbar-option, .navbar-brand {
+    height: inherit;
+    float: left;
+    padding: 0 0.8rem;
+    line-height: 3.4rem;
+    cursor: pointer;
+	text-decoration:none;
+}
+
+.navbar-option:hover {
+    background-color: rgb(71, 96, 126);
+}
+
+.navbar-brand img {
+    height: 60%;
+    margin-top: -0.5rem;
+    vertical-align: middle;
+}
+
+.navbar-brand b {
+    font-size: 18pt;
+    line-height: 3.2rem;
+}
+
+.navbar-search {
+    position: relative;
+    margin-left: 2.5rem;
+    height: inherit;
+    float: left;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-search input {
+    border: 1px solid transparent;
+    height: 30px;
+    width: 200px;
+    border-radius: 15px;
+    font-size: 10pt;
+    padding: 1rem;
+    background-color: rgb(42, 64, 90);
+    box-shadow: inset 0px 0px 12px 0px rgba(0,0,0,0.16);
+    color: rgb(162, 169, 185);
+	padding-right: 30px;
+}
+
+.navbar-search button {
+    border: 0;
+    padding: 0;
+    position: absolute;
+    top: 22px;
+    right: 13px;
+    font-size: 10pt;
+    background-color: transparent;
+    color: rgb(162, 169, 185);
+    outline: none;
+}
+
+.navbar-search button:hover {
+    color: rgb(197, 204, 219);
+}
+
+.navbar-search input::placeholder {
+    color: rgb(162, 169, 185);
+}
+
+.navbar-search input:hover {
+    box-shadow: inset 0px 0px 15px 0px rgba(0,0,0,0.30);
+}
+
+.navbar-search input:focus {
+    outline: none;
+}

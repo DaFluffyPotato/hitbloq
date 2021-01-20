@@ -1,0 +1,109 @@
+.leaderboard {
+    padding-top: 1.5rem;
+    width: 70vw;
+    margin: 0 auto;
+    color: rgb(214, 222, 242);
+}
+
+@media (max-width: 660px) {
+    .leaderboard {
+        width: 465px;
+    }
+}
+
+.leaderboard-header {
+    position: relative;
+    text-align: center;
+    font-size: 18pt;
+    margin-bottom: 15px;
+    margin-top: -5px;
+    height: 26px;
+}
+
+.leaderboard-table-header {
+    text-align: left;
+}
+
+.leaderboard-table {
+    width: 100%;
+    color: rgb(214, 222, 242);
+    border-spacing: 0;
+}
+
+.leaderboard-table-header th {
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgb(214, 222, 242);
+}
+
+.leaderboard-item {
+	height: 41px;
+}
+
+.leaderboard-item td {
+    padding: 10px 0;
+    border-bottom: 1px solid rgb(214, 222, 242);
+}
+
+.leaderboard-item .picture {
+    display: table-cell !important;
+    justify-content: right;
+	padding: 0px;
+}
+
+tbody .player {
+	text-shadow: 2px 2px 2px rgb(36, 41, 49); 
+}
+
+.leaderboard-item img{
+    height: 30px;
+    border-radius: 15px;
+    box-shadow: 0px 0px 18px 0px rgba(0,0,0,0.3);
+	display: block;
+    margin: auto;
+}
+
+.leaderboard-card {
+    padding: 1.5rem;
+}
+
+.leaderboard-footer {
+    position: relative;
+    margin-top: 15px;
+    height: 26px;
+}
+
+ .nav-button {
+    width: 32px;
+    height: 32px;
+    border-radius: 5px;
+    border: 1px solid rgb(214, 222, 242);
+    color: rgb(214, 222, 242);
+    background-color: transparent;
+}
+
+ .nav-button i {
+    font-size: 11pt;
+    color: rgb(214, 222, 242);
+}
+
+ .nav-button:focus {
+    outline: 0;
+}
+
+ .nav-button:hover {
+    box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.69);
+}
+
+ .nav-button:active {
+    top: 2px;
+}
+
+ .nav-right {
+    position: absolute;
+    right: 0;
+}
+
+ .nav-left {
+    position: absolute;
+    left: 0;
+}

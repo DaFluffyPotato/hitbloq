@@ -1,0 +1,100 @@
+.song-leaderboard {
+    
+}
+
+/* SONG CARD */
+
+.song-card {
+    display: grid;
+    align-items: center;
+    grid-template-columns: auto 1fr 200px;
+    height: 230px;
+    overflow-x: hidden;
+    padding: 1.5rem;
+	position: relative;
+	background-color: rgba(45, 53, 65, 0.5);
+}
+
+.song-card img {
+	height: inherit;
+    border-left: 5px solid rgba(214, 222, 242, 0.1);
+	border-right: 5px solid rgba(214, 222, 242, 0.1);
+    border-radius: 7px;
+    box-shadow: 0px 6px 21px 0px rgba(0,0,0,0.28);
+	animation-name: pulse;
+	animation-iteration-count: infinite;
+	position: relative;
+}
+
+@keyframes pulse {
+	0% {
+		border-left: 5px solid rgba(214, 222, 242, 0.1);
+		border-right: 5px solid rgba(214, 222, 242, 0.1);
+	}
+	15% {
+		border-left: 5px solid rgba(214, 222, 242, 0.3);
+		border-right: 5px solid rgba(214, 222, 242, 0.3);
+	}
+	100% {
+		border-left: 5px solid rgba(214, 222, 242, 0.1);
+		border-right: 5px solid rgba(214, 222, 242, 0.1);
+	}
+}
+
+.song-card-background {
+    position: absolute;
+    top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: -1;
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-position: 0% 50%;
+	transition: background-position 8s cubic-bezier(.47,0,.51,.97), width 8s cubic-bezier(.47,0,.51,.97), left 8s cubic-bezier(.47,0,.51,.97);
+}
+
+.song-card:hover > .song-card-background {
+	background-position: 0% 35%;
+	left: -15%;
+	width: 130%;
+}
+
+.left-info {
+    height: 70%;
+    padding: 1.5rem;
+	text-shadow: 0px 0px 0px rgba(215, 222, 242, 0.5);
+	color: rgb(214, 222, 242);
+	transition: text-shadow 0.5s cubic-bezier(.47,0,.51,.97), color 0.5s cubic-bezier(.47,0,.51,.97);
+}
+
+.left-info:hover {
+	text-shadow: 0px 1px 2px rgba(215, 222, 242, 0.35);
+	color: rgb(244, 245, 249);
+}
+
+.song-title {
+    font-size: 18pt;
+    padding-bottom: 0.3rem;
+}
+
+.song-artist {
+    font-size: 16pt;
+}
+
+.song-info {
+    width: 100%;
+    display: block;
+    padding: 0.2rem 0;
+}
+
+.right-info {
+    height: 50%;
+}
+
+.skill-info {
+    display: block;
+    width: 100%;
+    text-align: right;
+    padding: 0.2rem 0;
+}
