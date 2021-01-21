@@ -46,13 +46,14 @@ def ranked_lists_page():
 def ranked_list_page(group_id):
     ranked_list_data = database.get_ranked_list(group_id)
     leaderboard_list = database.get_leaderboards(ranked_list_data['leaderboard_id_list'])
+    leaderboard_list.sort(key=lambda x: x['star_rating'], reverse=True)
     ranked_songs_html = ''
     for leaderboard in leaderboard_list:
         values = {
             'song_img': 'https://beatsaver.com' + leaderboard['cover'],
             'song_name': '<a href="/leaderboard/' + leaderboard['key'] + '_' + shorten_settings(leaderboard['difficulty_settings']) + '">' + leaderboard['name'] + '</a>',
             'song_plays': str(len(leaderboard['score_ids'])),
-            'song_difficulty': str(0.0) + '★',
+            'song_difficulty': str(leaderboard['star_rating']) + '★',
         }
         ranked_songs_html += templates.inject('ranked_song_entry', values)
     ranked_list_html = normal_page(templates.inject('ranked_list_layout', {'table_entries': ranked_songs_html}))
@@ -75,7 +76,7 @@ def leaderboard_page(leaderboard_id, leaderboard_page):
         'artist_name': leaderboard_data['artist'],
         'mapper_name': leaderboard_data['mapper'],
         'song_difficulty': leaderboard_data['difficulty'],
-        'star_rating': str(0.0) + '★',
+        'star_rating': str(leaderboard_data['star_rating']) + '★',
         'notes_per_second': str(round(leaderboard_data['notes'] / leaderboard_data['length'], 2)),
         'pulse_rate': str(1 / leaderboard_data['bpm'] * 60 * 2) + 's',
         'song_picture': 'https://beatsaver.com' + leaderboard_data['cover'],

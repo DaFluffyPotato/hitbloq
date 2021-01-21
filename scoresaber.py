@@ -19,7 +19,7 @@ class ScoresaberInterface():
                 return json.loads(req_content)
             except Exception as e:
                 print(e)
-                time.sleep(10)
+                time.sleep(20)
 
     def fetch_until(self, ss_id, epoch):
         looking = True
@@ -29,7 +29,11 @@ class ScoresaberInterface():
             req_url = 'player/' + ss_id + '/scores/recent/' + str(c)
             print('checking', req_url)
             try:
+                time.sleep(0.3)
                 new_dat = self.ss_req(req_url)
+                if new_dat == None:
+                    print('skipping due to failures')
+                    continue
                 new_dat = new_dat['scores']
             except KeyError:
                 if ('error' not in new_dat) or (new_dat['error'] != 'This user has not set any scores!'):

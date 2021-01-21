@@ -12,6 +12,9 @@ class User():
         # temp values
         self.scores = []
 
+    def refresh_scores(self, database):
+        database.update_user_scores(self)
+
     def create(self, database, username, scoresaber_id):
         self.username = username
         self.id = database.gen_new_user_id()

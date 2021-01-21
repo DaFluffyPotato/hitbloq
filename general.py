@@ -16,6 +16,10 @@ diff_shorten = {
 
 char_shorten = {
     'SoloStandard': 's',
+    'Solo90Degree': 's90',
+    'Solo360Degree': 's360',
+    'SoloOneSaber': 's1s',
+    'SoloStandardHD': 'shd',
 }
 
 diff_lengthen = {v: k for k, v in diff_shorten.items()}

@@ -21,6 +21,9 @@ class HitbloqMongo():
     def get_users(self, users):
         return [user.User().load(user_found) for user_found in self.db['users'].find({'_id': {'$in': users}})]
 
+    def search_users(self, search):
+        return [user.User().load(user_found) for user_found in self.db['users'].find(search)]
+
     def update_user(self, user, update=None):
         if update:
             self.db['users'].update_one({'_id': user.id}, update)
@@ -30,7 +33,8 @@ class HitbloqMongo():
     def update_user_scores(self, user):
         scoresaber_api = scoresaber.ScoresaberInterface(self.db)
         new_scores = scoresaber_api.fetch_until(user.scoresaber_id, user.last_update)
-        for score in new_scores:
+        for i, score in enumerate(new_scores):
+            print('adding score', i, '/', len(new_scores))
             self.add_score(user, score)
         self.update_user(user, {'$set': {'last_update': time.time()}})
 
@@ -90,13 +94,20 @@ class HitbloqMongo():
 
         if beatsaver_data:
             characteristic = leaderboard_difficulty.split('_')[-1]
-            characteristic = config.CHARACTERISTIC_CONVERSION[characteristic]
+            try:
+                characteristic = config.CHARACTERISTIC_CONVERSION[characteristic]
+            except KeyError:
+                print('ERROR:', characteristic, 'is not a known characteristic.')
+                return False
 
             difficulty = leaderboard_difficulty.split('_')[1]
             difficulty = config.DIFFICULTY_CONVERSION[difficulty]
 
             # get the correct difficulty data based on characteristic and difficulty
             difficulty_data = [c['difficulties'] for c in beatsaver_data['metadata']['characteristics'] if c['name'] == characteristic][0][difficulty]
+            if difficulty_data == None:
+                print('ERROR: the', difficulty, 'difficulty may have been deleted from Beat Saver...')
+                return False
 
             leaderboard_data = {
                 '_id': leaderboard_id,
@@ -119,6 +130,7 @@ class HitbloqMongo():
                 'obstacles': difficulty_data['obstacles'],
                 'hash': leaderboard_hash,
                 'score_ids': [],
+                'star_rating': 0.0,
             }
 
             self.db['leaderboards'].insert_one(leaderboard_data)
@@ -134,6 +146,9 @@ class HitbloqMongo():
 
     def search_leaderboards(self, search):
         return list(self.db['leaderboards'].find(search))
+
+    def update_leaderboard_data(self, leaderboard_id, updates):
+        self.db['leaderboards'].update({'_id': leaderboard_id}, updates)
 
     def create_map_pool(self, name, cover='/static/default_pool_cover.png', third_party=False):
         self.db['ranked_lists'].insert_one({
