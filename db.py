@@ -57,6 +57,7 @@ class HitbloqMongo():
             resp = self.db['ladders'].aggregate([{'$match': {'_id': map_pool_id}}, {'$project': {'index': {'$indexOfArray': ['$ladder', {'user': user.id, 'cr': user.cr_totals[map_pool_id]}]}}}])
             return list(resp)[0]['index'] + 1
         else:
+            print('failed user rank lookup', user.id) # this entire function breaks on production (and only on production) if this print statement isn't here and I don't know why >:(
             return 0
 
     def get_ranking_slice(self, map_pool_id, start, end):
