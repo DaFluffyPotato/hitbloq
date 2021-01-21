@@ -78,6 +78,9 @@ def full_cr_update(map_pools):
 
     for user in user_list:
         database.update_user_cr_total(user)
+        # TODO: redo this code to update all the leaderboards in one shot since all the scores must be updated
+        for map_pool_id in map_pools:
+            database.update_user_ranking(user, map_pool_id)
 
     return rankings
 

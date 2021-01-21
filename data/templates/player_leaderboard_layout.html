@@ -1,0 +1,26 @@
+<div class="main">
+	<div class="global-leaderboard leaderboard">
+		<div class="card leaderboard-card">
+			<div class="leaderboard-header">
+				<button class="nav-button nav-right" onclick="window.location.href = '\@next_page';"><i class="fas fa-arrow-right"></i></button>
+				<button class="nav-button nav-left" onclick="window.location.href = '\@last_page';"><i class="fas fa-arrow-left"></i></button>
+				<span>\@map_pool_name Leaderboards</span>
+			</div>
+			<table class="leaderboard-table">
+				<thead class="leaderboard-table-header">
+					<th class="picture"></th>
+					<th class="rank">Rank</th>
+					<th class="player">Player</th>
+					<th class="cr">CR</th>
+				</thead>
+				<tbody>
+					\@leaderboard_scores
+				</tbody>
+			</table>
+				<div class="leaderboard-footer">
+				<button class="nav-button nav-right" onclick="window.location.href = '\@next_page';"><i class="fas fa-arrow-right"></i></button>
+				<button class="nav-button nav-left" onclick="window.location.href = '\@last_page';"><i class="fas fa-arrow-left"></i></button>
+			</div>
+		</div>
+	</div>
+</div>

@@ -39,7 +39,31 @@ class HitbloqMongo():
             print('adding score', i, '/', len(new_scores))
             self.add_score(user, score)
         self.update_user(user, {'$set': {'last_update': time.time()}})
-        self.update_user_cr_total(self.get_users([user.id]))
+        fresh_user = self.get_users([user.id])
+        self.update_user_cr_total(fresh_user)
+        for map_pool_id in fresh_user.cr_totals:
+            self.update_user_ranking(fresh_user, map_pool_id)
+
+    def update_user_ranking(self, user, map_pool_id):
+        if map_pool_id in user.cr_totals:
+            resp = self.db['ladders'].update_one({'_id': map_pool_id, 'ladder.user': user.id}, {'$set': {'ladder.$.cr': user.cr_totals[map_pool_id]}})
+            if not resp.matched_count:
+                self.db['ladders'].update_one({'_id': map_pool_id}, {'$push': {'ladder': {'user': user.id, 'cr': user.cr_totals[map_pool_id]}}})
+        self.sort_ladder(map_pool_id)
+
+    def get_user_ranking(self, user, map_pool_id):
+        # kinda yikes, but I'm not sure how to match just one field for indexOfArray
+        if map_pool_id in user.cr_totals:
+            resp = self.db['ladders'].aggregate([{'$match': {'_id': map_pool_id}}, {'$project': {'index': {'$indexOfArray': ['$ladder', {'user': user.id, 'cr': user.cr_totals[map_pool_id]}]}}}])
+            return list(resp)[0]['index'] + 1
+        else:
+            return 0
+
+    def get_ranking_slice(self, map_pool_id, start, end):
+        return self.db['ladders'].find_one({'_id': map_pool_id}, {'ladder': {'$slice': [start, end]}})
+
+    def sort_ladder(self, map_pool_id):
+        self.db['ladders'].update_one({'_id': map_pool_id}, {'$push': {'ladder': {'$each': [], '$sort': {'cr': -1}}}})
 
     def format_score(self, user, scoresaber_json, leaderboard):
         score_data = {
@@ -196,6 +220,10 @@ class HitbloqMongo():
             'third_party': third_party,
             'cover': cover,
         })
+        self.db['ladders'].insert_one({
+            '_id': name,
+            'ladder': [],
+        })
 
     def rank_song(self, leaderboard_id, map_pool):
         self.db['ranked_lists'].update_one({'_id': map_pool}, {'$push': {'leaderboard_id_list': leaderboard_id}})
@@ -209,8 +237,11 @@ class HitbloqMongo():
     def get_ranked_list(self, group_id):
         return self.db['ranked_lists'].find_one({'_id': group_id})
 
-    def get_pool_ids(self):
-        return [v['_id'] for v in self.db['ranked_lists'].aggregate([{'$match': {'deletedAt': None}}, {'$group': {'_id': '$_id'}}])]
+    def get_pool_ids(self, allow_third_party=True):
+        if allow_third_party:
+            return [v['_id'] for v in self.db['ranked_lists'].aggregate([{'$match': {'deletedAt': None}}, {'$group': {'_id': '$_id'}}])]
+        else:
+            return [v['_id'] for v in self.db['ranked_lists'].aggregate([{'$match': {'deletedAt': None, 'third_party': False}}, {'$group': {'_id': '$_id'}}])]
 
 print('MongoDB requires a password!')
 database = HitbloqMongo(getpass())

@@ -22,6 +22,9 @@ class User():
         self.scoresaber_id = scoresaber_id
         self.score_ids = []
         self.last_update = 0
+
+        self.cr_totals = {pool_id : 0 for pool_id in database.get_pool_ids(False)}
+
         database.add_user(self)
         return self
 

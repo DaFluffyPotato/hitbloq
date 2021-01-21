@@ -6,10 +6,14 @@ from templates import templates
 from general import shorten_settings, lengthen_settings, max_score
 from cr_formulas import *
 
-def normal_page(contents):
+def get_map_pool():
     map_pool = request.cookies.get('map_pool')
     if not map_pool:
         map_pool = 'global_main'
+    return map_pool
+
+def normal_page(contents):
+    map_pool = get_map_pool()
 
     page_html = templates.inject('layout', {'page_content': contents, 'map_pool': map_pool})
     return page_html
@@ -19,15 +23,45 @@ def home_page():
     home_html = normal_page(templates.inject('simple_card_layout', {'page_content': home_content}))
     return home_html
 
-def player_leaderboard_page(leaderboard_id):
-    leaderboards_html = normal_page(templates.inject('simple_card_layout', {'page_content': 'coming soon...'}))
+def player_leaderboard_page(leaderboard_id, page):
+    page = 0 if (page == None) else int(page)
+
+    map_pool = get_map_pool()
+    map_pool = database.get_ranked_list(map_pool)
+
+    values = {
+        'map_pool_name': map_pool['shown_name'],
+        'leaderboard_scores': generate_player_leaderboard_entries(map_pool, page),
+        'next_page': request.path.split('?')[0] + '?page=' + str(page + 1),
+        'last_page': request.path.split('?')[0] + '?page=' + str(max(page - 1, 0)),
+    }
+
+    leaderboards_html = normal_page(templates.inject('player_leaderboard_layout', values))
     return leaderboards_html
+
+def generate_player_leaderboard_entries(map_pool, page):
+    players_per_page = 50
+    player_leaderboard_entries_html = ''
+
+    ladder_data = database.get_ranking_slice(map_pool['_id'], page * players_per_page, (page + 1) * players_per_page)
+    user_id_list = [user['user'] for user in ladder_data['ladder']]
+    user_map = {user.id : user for user in database.get_users(user_id_list)}
+    for i, user in enumerate(user_id_list):
+        values = {
+            'profile_picture': 'https://scoresaber.com/imports/images/usr-avatars/' + user_map[user].scoresaber_id + '.jpg',
+            'user_rank': str(page * players_per_page + i + 1),
+            'user_name': '<a href="/user/' + str(user) + '">' + user_map[user].username + '</a>',
+            'user_cr': str(round(user_map[user].cr_totals[map_pool['_id']], 2)),
+        }
+        player_leaderboard_entries_html += templates.inject('player_leaderboard_entry', values)
+
+    return player_leaderboard_entries_html
+
 
 def ranked_lists_page():
     ranked_list_entry_html = ''
-    map_pool = request.cookies.get('map_pool')
-    if not map_pool:
-        map_pool = 'global_main'
+    map_pool = get_map_pool()
+
     for ranked_list in database.get_ranked_lists():
         if not ranked_list['third_party']:
             select_status = 'select'
@@ -64,15 +98,15 @@ def about_page():
     about_html = normal_page(templates.inject('about_layout', {}))
     return about_html
 
-def leaderboard_page(leaderboard_id, leaderboard_page):
-    if leaderboard_page == None:
-        leaderboard_page = 0
+def leaderboard_page(leaderboard_id, page):
+    if page == None:
+        page = 0
     else:
-        leaderboard_page = int(leaderboard_page)
+        page = int(page)
 
     leaderboard_data = database.search_leaderboards({'key': leaderboard_id.split('_')[0], 'difficulty_settings': lengthen_settings('_'.join(leaderboard_id.split('_')[1:]))})[0]
     leaderboard_insert = {
-        'leaderboard_scores': generate_leaderboard_entries(leaderboard_data, leaderboard_page),
+        'leaderboard_scores': generate_leaderboard_entries(leaderboard_data, page),
         'song_name': leaderboard_data['name'],
         'artist_name': leaderboard_data['artist'],
         'mapper_name': leaderboard_data['mapper'],
@@ -82,17 +116,17 @@ def leaderboard_page(leaderboard_id, leaderboard_page):
         'pulse_rate': str(1 / leaderboard_data['bpm'] * 60 * 2) + 's',
         'song_picture': 'https://beatsaver.com' + leaderboard_data['cover'],
         'beatsaver_id': leaderboard_data['key'],
-        'next_page': request.path.split('?')[0] + '?page=' + str(leaderboard_page + 1),
-        'last_page': request.path.split('?')[0] + '?page=' + str(max(leaderboard_page - 1, 0)),
+        'next_page': request.path.split('?')[0] + '?page=' + str(page + 1),
+        'last_page': request.path.split('?')[0] + '?page=' + str(max(page - 1, 0)),
     }
     leaderboard_html = normal_page(templates.inject('leaderboard_layout', leaderboard_insert))
     return leaderboard_html
 
-def generate_leaderboard_entries(leaderboard_data, leaderboard_page):
+def generate_leaderboard_entries(leaderboard_data, page):
     page_length = 25
     html = ''
 
-    visible_scores = list(database.fetch_scores(leaderboard_data['score_ids']).sort('score', -1))[page_length * leaderboard_page : page_length * (leaderboard_page + 1)]
+    visible_scores = list(database.fetch_scores(leaderboard_data['score_ids']).sort('score', -1))[page_length * page : page_length * (page + 1)]
     user_ids = [score['user'] for score in visible_scores]
     score_users = database.get_users(user_ids)
 
@@ -107,7 +141,7 @@ def generate_leaderboard_entries(leaderboard_data, leaderboard_page):
     for i, score in enumerate(visible_scores):
         entry_values = {
             'profile_picture': 'https://scoresaber.com/imports/images/usr-avatars/' + score['user_obj'].scoresaber_id + '.jpg',
-            'score_rank': str(page_length * leaderboard_page + i + 1),
+            'score_rank': str(page_length * page + i + 1),
             'score_name': '<a href="/user/' + str(score['user']) + '">' + score['user_obj'].username + '</a>',
             'score_accuracy': str(round(score['score'] / max_score(leaderboard_data['notes']) * 100, 2)),
             'score_cr': str(round(score['cr'], 2)),
@@ -117,14 +151,13 @@ def generate_leaderboard_entries(leaderboard_data, leaderboard_page):
     return html
 
 def profile_page(user_id, profile_page):
+    # TODO: switch mongo requests to async
     if profile_page == None:
         profile_page = 0
     else:
         profile_page = int(profile_page)
 
-    map_pool = request.cookies.get('map_pool')
-    if not map_pool:
-        map_pool = 'global_main'
+    map_pool = get_map_pool()
 
     profile_obj = Profile(user_id)
     profile_obj.user.load_pool_scores(database, map_pool)
@@ -137,7 +170,7 @@ def profile_page(user_id, profile_page):
     profile_insert.update(profile_obj.insert_info)
     profile_insert.update({
         'played_songs': generate_profile_entries(profile_obj, profile_page),
-        'player_rank': str(1),
+        'player_rank': str(database.get_user_ranking(profile_obj.user, map_pool)),
         'player_cr': str(round(player_cr_total, 2)),
         'next_page': request.path.split('?')[0] + '?page=' + str(profile_page + 1),
         'last_page': request.path.split('?')[0] + '?page=' + str(max(profile_page - 1, 0)),

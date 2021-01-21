@@ -23,7 +23,7 @@ def ranked_list(group_id):
 
 @app.route('/ladder/<leaderboard_id>')
 def player_leaderboards(leaderboard_id):
-    return pages.player_leaderboard_page(leaderboard_id)
+    return pages.player_leaderboard_page(leaderboard_id, request.args.get('page'))
 
 @app.route('/user/<int:user_id>')
 def profile(user_id):
