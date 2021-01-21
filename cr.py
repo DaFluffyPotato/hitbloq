@@ -1,9 +1,18 @@
 from db import database
 from general import max_score
 from config import LEADERBOARD_VOTE_RANKING_CURVE_CONSTANT
+from cr_formulas import *
 
-def calculate_weight(constant, index):
-    return constant ** index
+def update_leaderboard_cr(leaderboard_id):
+    leaderboard = database.get_leaderboards([leaderboard_id])[0]
+    scores = list(database.fetch_scores(leaderboard['score_ids']))
+    for score in scores:
+        score['cr'] = calculate_cr(score['score'] / max_score(leaderboard['notes']) * 100, leaderboard['star_rating'])
+    database.replace_scores(scores)
+
+def update_leaderboards_cr(leaderboard_ids):
+    for leaderboard_id in leaderboard_ids:
+        update_leaderboard_cr(leaderboard_id)
 
 def calculate_song_rankings(user, leaderboards):
     user.load_scores(database)
@@ -29,8 +38,9 @@ def load_map_pools(map_pools):
     leaderboards = {leaderboard['_id'] : leaderboard for leaderboard in database.get_leaderboards(pool_leaderboard_list)}
     return leaderboards
 
-rankings = []
+
 def full_cr_update(map_pools):
+    rankings = []
     user_list = database.search_users({})
     leaderboards = load_map_pools(map_pools)
     leaderboard_notes = {k : v['notes'] for (k, v) in leaderboards.items()}
@@ -64,10 +74,14 @@ def full_cr_update(map_pools):
 
     rankings.sort(reverse=True)
 
+    update_leaderboards_cr(leaderboards.keys())
+
+    for user in user_list:
+        database.update_user_cr_total(user)
+
     return rankings
 
-
-#calculate_song_rankings(database.get_users([0])[0], ['global_main', 'blank_dummy'])
-rankings = full_cr_update(['global_main', 'blank_dummy'])
-for song in rankings:
-    print(song[1] + ':', song[0])
+if __name__ == "__main__":
+    rankings = full_cr_update(['global_main', 'blank_dummy'])
+    for song in rankings:
+        print(song[1] + ':', song[0])

@@ -3,5 +3,5 @@ from db import database
 
 # just a file for manual user imports
 
-#u = database.get_users([1])[0]
-#u.refresh_scores(database)
+u = database.get_users([0])[0]
+u.refresh_scores(database)

@@ -4,10 +4,8 @@ from db import database
 import pages
 from user import User
 
-me = database.get_users([0])[0]
-print(me)
-database.refresh_score_order('AD547BAA544700AC8936015B54A00A1E1024E793|_ExpertPlus_SoloStandard')
-#database.update_user_scores(me)
+#me = database.get_users([0])[0]
+#database.update_user_cr_total(me)
 
 app = Flask(__name__)
 

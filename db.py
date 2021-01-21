@@ -6,6 +6,8 @@ import pymongo
 import scoresaber, beatsaver
 import user
 import config
+from cr_formulas import *
+from general import max_score
 
 class HitbloqMongo():
     def __init__(self, password):
@@ -37,15 +39,16 @@ class HitbloqMongo():
             print('adding score', i, '/', len(new_scores))
             self.add_score(user, score)
         self.update_user(user, {'$set': {'last_update': time.time()}})
+        self.update_user_cr_total(self.get_users([user.id]))
 
-    def format_score(self, user, scoresaber_json):
+    def format_score(self, user, scoresaber_json, leaderboard):
         score_data = {
             # typo in scoresaber api. lul
             'score': scoresaber_json['unmodififiedScore'],
             'time_set': scoresaber_json['epochTime'],
             'song_hash': scoresaber_json['songHash'],
             'difficulty_settings': scoresaber_json['difficultyRaw'],
-            'cr': 0,
+            'cr': calculate_cr(scoresaber_json['score'] / max_score(leaderboard['notes']) * 100, leaderboard['star_rating']),
             'user': user.id,
         }
         return score_data
@@ -57,11 +60,44 @@ class HitbloqMongo():
     def fetch_scores(self, score_id_list):
         return self.db['scores'].find({'_id': {'$in': score_id_list}}).sort('time_set', -1)
 
+    def replace_scores(self, scores):
+        score_ids = [score['_id'] for score in scores]
+        self.db['scores'].delete_many({'_id': {'$in': score_ids}})
+        self.db['scores'].insert_many(scores)
+
+    def update_user_score_order(self, user):
+        user.load_scores(self)
+        user.scores.sort(key=lambda x: x['cr'], reverse=True)
+        print(user.scores)
+        score_id_list = [score['_id'] for score in user.scores]
+        self.db['users'].update_one({'_id': user.id}, {'$set': {'score_ids': score_id_list}})
+
+    def update_user_cr_total(self, user):
+        user.load_scores(self)
+        user.scores.sort(key=lambda x: x['cr'], reverse=True)
+        map_pool_ids = list(user.cr_totals)
+        map_pools = self.search_ranked_lists({'_id': {'$in': map_pool_ids}})
+        cr_counters = {map_pool_id : 0 for map_pool_id in map_pool_ids}
+        cr_totals = {map_pool_id : 0 for map_pool_id in map_pool_ids}
+        for score in user.scores:
+            for map_pool in map_pools:
+                if score['song_hash'] + '|' + score['difficulty_settings'] in map_pool['leaderboard_id_list']:
+                    cr_totals[map_pool['_id']] += cr_accumulation_curve(cr_counters[map_pool['_id']]) * score['cr']
+                    cr_counters[map_pool['_id']] += 1
+        for pool in cr_totals:
+            user.cr_totals[pool] = cr_totals[pool]
+        self.db['users'].update_one({'_id': user.id}, {'$set': {'total_cr': user.cr_totals}})
+
     def add_score(self, user, scoresaber_json):
         leaderboard_id = scoresaber_json['songHash'] + '|' + scoresaber_json['difficultyRaw']
         valid_leaderboard = True
-        if len(list(self.db['leaderboards'].find({'_id': leaderboard_id}))) == 0:
-            valid_leaderboard = self.create_leaderboard(leaderboard_id, scoresaber_json['songHash'])
+        leaderboard = list(self.db['leaderboards'].find({'_id': leaderboard_id}))
+        if len(leaderboard) == 0:
+            leaderboard = self.create_leaderboard(leaderboard_id, scoresaber_json['songHash'])
+            if not leaderboard:
+                return False
+        else:
+            leaderboard = leaderboard[0]
 
         if valid_leaderboard:
             # delete old score data
@@ -70,11 +106,13 @@ class HitbloqMongo():
             self.delete_scores(leaderboard_id, matching_scores)
 
             # add new score
-            mongo_response = self.db['scores'].insert_one(self.format_score(user, scoresaber_json))
+            score_json = self.format_score(user, scoresaber_json, leaderboard)
+            mongo_response = self.db['scores'].insert_one(score_json)
             inserted_id = mongo_response.inserted_id
             self.update_user(user, {'$push': {'score_ids': inserted_id}})
             self.db['leaderboards'].update_one({'_id': leaderboard_id}, {'$push': {'score_ids': inserted_id}})
             self.refresh_score_order(leaderboard_id)
+            return True
 
     def refresh_score_order(self, leaderboard_id):
         leaderboard_data = self.db['leaderboards'].find_one({'_id': leaderboard_id})
@@ -135,11 +173,11 @@ class HitbloqMongo():
 
             self.db['leaderboards'].insert_one(leaderboard_data)
 
-            return True
+            return leaderboard_data
 
         else:
             print('ERROR:', leaderboard_hash, 'appears to have been deleted from Beat Saver.')
-            return False
+            return None
 
     def get_leaderboards(self, leaderboard_id_list):
         return list(self.db['leaderboards'].find({'_id': {'$in': leaderboard_id_list}}))
@@ -164,6 +202,9 @@ class HitbloqMongo():
 
     def get_ranked_lists(self):
         return list(self.db['ranked_lists'].find({}))
+
+    def search_ranked_lists(self, search):
+        return list(self.db['ranked_lists'].find(search))
 
     def get_ranked_list(self, group_id):
         return self.db['ranked_lists'].find_one({'_id': group_id})

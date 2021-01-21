@@ -4,6 +4,7 @@ from db import database
 from profile import Profile
 from templates import templates
 from general import shorten_settings, lengthen_settings, max_score
+from cr_formulas import *
 
 def normal_page(contents):
     map_pool = request.cookies.get('map_pool')
@@ -109,7 +110,7 @@ def generate_leaderboard_entries(leaderboard_data, leaderboard_page):
             'score_rank': str(page_length * leaderboard_page + i + 1),
             'score_name': '<a href="/user/' + str(score['user']) + '">' + score['user_obj'].username + '</a>',
             'score_accuracy': str(round(score['score'] / max_score(leaderboard_data['notes']) * 100, 2)),
-            'score_cr': str(0.0),
+            'score_cr': str(round(score['cr'], 2)),
         }
         html += templates.inject('leaderboard_entry', entry_values)
 
@@ -121,14 +122,23 @@ def profile_page(user_id, profile_page):
     else:
         profile_page = int(profile_page)
 
+    map_pool = request.cookies.get('map_pool')
+    if not map_pool:
+        map_pool = 'global_main'
+
     profile_obj = Profile(user_id)
-    profile_obj.load_scores()
+    profile_obj.user.load_pool_scores(database, map_pool)
+
+    player_cr_total = 0
+    if map_pool in profile_obj.user.cr_totals:
+        player_cr_total = profile_obj.user.cr_totals[map_pool]
+
     profile_insert = {}
     profile_insert.update(profile_obj.insert_info)
     profile_insert.update({
         'played_songs': generate_profile_entries(profile_obj, profile_page),
         'player_rank': str(1),
-        'player_cr': str(0.00),
+        'player_cr': str(round(player_cr_total, 2)),
         'next_page': request.path.split('?')[0] + '?page=' + str(profile_page + 1),
         'last_page': request.path.split('?')[0] + '?page=' + str(max(profile_page - 1, 0)),
     })
@@ -139,15 +149,16 @@ def generate_profile_entries(profile_obj, profile_page):
     page_length = 10
     html = ''
 
+    profile_obj.user.scores.sort(key=lambda x : x['cr'], reverse=True)
     visible_scores = profile_obj.user.scores[profile_page * page_length : (profile_page + 1) * page_length]
 
     profile_obj.fetch_score_leaderboards(visible_scores)
-    for score in visible_scores:
+    for i, score in enumerate(visible_scores):
         inject_values = {
             'song_rank': str(score['rank']),
             'song_name': '<a href="/leaderboard/' + score['leaderboard']['key'] + '_' + shorten_settings(score['difficulty_settings']) + '">' + score['leaderboard']['name'] + '</a>',
-            'cr_received': '0cr',
-            'weighted_cr': '0cr',
+            'cr_received': str(round(score['cr'], 2)),
+            'weighted_cr': str(round(score['cr'] * cr_accumulation_curve(i + profile_page * page_length), 2)),
             'accuracy': str(score['accuracy']),
             'song_pic': 'https://beatsaver.com' + score['leaderboard']['cover'],
         }
