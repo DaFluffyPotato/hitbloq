@@ -14,5 +14,5 @@ if mode == 'add':
 
 if mode == 'update':
     user_id = sys.argv[2]
-    u = database.get_users([user_id])[0]
+    u = database.get_users([int(user_id)])[0]
     u.refresh_scores(database)
