@@ -166,11 +166,13 @@ def profile_page(user_id, profile_page):
     if map_pool in profile_obj.user.cr_totals:
         player_cr_total = profile_obj.user.cr_totals[map_pool]
 
+    player_rank = database.get_user_ranking(profile_obj.user, map_pool)
+
     profile_insert = {}
     profile_insert.update(profile_obj.insert_info)
     profile_insert.update({
         'played_songs': generate_profile_entries(profile_obj, profile_page),
-        'player_rank': str(database.get_user_ranking(profile_obj.user, map_pool)),
+        'player_rank': str(player_rank),
         'player_cr': str(round(player_cr_total, 2)),
         'next_page': request.path.split('?')[0] + '?page=' + str(profile_page + 1),
         'last_page': request.path.split('?')[0] + '?page=' + str(max(profile_page - 1, 0)),
