@@ -137,19 +137,32 @@ class HitbloqMongo():
             self.refresh_score_order(leaderboard_id)
             return True
 
+    def delete_user_scores(self, user_id):
+        score_list = list(self.db['scores'].find({'user': user_id}))
+        score_ids = [score['_id'] for score in score_list]
+
+        for score in score_list:
+            self.db['leaderboards'].update_one({'_id': score['song_id']}, {'$pull': {'score_ids': score['_id']}})
+
+        self.db['scores'].delete_many({'_id': {'$in': score_ids}})
+
     def refresh_score_order(self, leaderboard_id):
         leaderboard_data = self.db['leaderboards'].find_one({'_id': leaderboard_id})
         new_score_order = [score['_id'] for score in self.fetch_scores(leaderboard_data['score_ids']).sort('score', -1)]
         self.db['leaderboards'].update_one({'_id': leaderboard_id}, {'$set': {'score_ids': new_score_order}})
 
-    def create_leaderboard(self, leaderboard_id, leaderboard_hash):
-        print('Creating leaderboard:', leaderboard_id)
-
+    def get_full_ranked_list(self):
         map_pools = self.get_ranked_lists()
         ranked_maps = []
         for pool in map_pools:
             ranked_maps += pool['leaderboard_id_list']
         ranked_maps = list(set(ranked_maps))
+        return ranked_maps
+
+    def create_leaderboard(self, leaderboard_id, leaderboard_hash):
+        print('Creating leaderboard:', leaderboard_id)
+
+        ranked_maps = self.get_full_ranked_list()
 
         # create dummy leaderboard
         if leaderboard_id not in ranked_maps:
