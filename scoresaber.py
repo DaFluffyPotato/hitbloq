@@ -15,7 +15,9 @@ class ScoresaberInterface():
     def ss_req(self, url):
         for i in range(3):
             try:
+                print('request start!')
                 req = requests.get(self.scoresaber_url + url, headers=self.headers)
+                print('req received!')
                 req_content = req.text
                 print(req.headers['X-RateLimit-Limit'], req.headers['X-RateLimit-Remaining'], req.headers['X-RateLimit-Reset'])
                 return json.loads(req_content)
