@@ -195,16 +195,20 @@ class HitbloqMongo():
                 characteristic = config.CHARACTERISTIC_CONVERSION[characteristic]
             except KeyError:
                 print('ERROR:', characteristic, 'is not a known characteristic.')
-                return False
+                return None
 
             difficulty = leaderboard_difficulty.split('_')[1]
             difficulty = config.DIFFICULTY_CONVERSION[difficulty]
 
             # get the correct difficulty data based on characteristic and difficulty
-            difficulty_data = [c['difficulties'] for c in beatsaver_data['metadata']['characteristics'] if c['name'] == characteristic][0][difficulty]
-            if difficulty_data == None:
-                print('ERROR: the', difficulty, 'difficulty may have been deleted from Beat Saver...')
-                return False
+            try:
+                difficulty_data = [c['difficulties'] for c in beatsaver_data['metadata']['characteristics'] if c['name'] == characteristic][0][difficulty]
+                if difficulty_data == None:
+                    print('ERROR: the', difficulty, 'difficulty may have been deleted from Beat Saver...')
+                    return None
+            except IndexError:
+                print('ERROR: the', characteristic, 'characteristic may have been deleted from Beat Saver...')
+                return None
 
             leaderboard_data = {
                 '_id': leaderboard_id,
