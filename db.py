@@ -39,7 +39,7 @@ class HitbloqMongo():
             print('adding score', i, '/', len(new_scores))
             self.add_score(user, score)
         self.update_user(user, {'$set': {'last_update': time.time()}})
-        fresh_user = self.get_users([user.id])
+        fresh_user = self.get_users([user.id])[0]
         self.update_user_cr_total(fresh_user)
         for map_pool_id in fresh_user.cr_totals:
             self.update_user_ranking(fresh_user, map_pool_id)

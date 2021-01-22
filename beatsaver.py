@@ -13,6 +13,7 @@ class BeatSaverInterface():
         for i in range(3):
             req_content = None
             try:
+                time.sleep(0.3)
                 req_content = requests.get(self.beatsaver_url + url, headers=self.headers).text
                 return json.loads(req_content)
             except Exception as e:
