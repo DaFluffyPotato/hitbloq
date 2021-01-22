@@ -70,8 +70,7 @@ class HitbloqMongo():
             # typo in scoresaber api. lul
             'score': scoresaber_json['unmodififiedScore'],
             'time_set': scoresaber_json['epochTime'],
-            'song_hash': scoresaber_json['songHash'],
-            'difficulty_settings': scoresaber_json['difficultyRaw'],
+            'song_id': scoresaber_json['songHash'] + '|' + scoresaber_json['difficultyRaw'],
             'cr': calculate_cr(scoresaber_json['score'] / max_score(leaderboard['notes']) * 100, leaderboard['star_rating']),
             'user': user.id,
         }
@@ -105,7 +104,7 @@ class HitbloqMongo():
         cr_totals = {map_pool_id : 0 for map_pool_id in map_pool_ids}
         for score in user.scores:
             for map_pool in map_pools:
-                if score['song_hash'] + '|' + score['difficulty_settings'] in map_pool['leaderboard_id_list']:
+                if score['song_id'] in map_pool['leaderboard_id_list']:
                     cr_totals[map_pool['_id']] += cr_accumulation_curve(cr_counters[map_pool['_id']]) * score['cr']
                     cr_counters[map_pool['_id']] += 1
         for pool in cr_totals:
@@ -125,7 +124,7 @@ class HitbloqMongo():
 
         if valid_leaderboard:
             # delete old score data
-            matching_scores = self.db['scores'].find({'user': user.id, 'song_hash': scoresaber_json['songHash'], 'difficulty_settings': scoresaber_json['difficultyRaw']})
+            matching_scores = self.db['scores'].find({'user': user.id, 'song_id': scoresaber_json['songHash'] + '|' + scoresaber_json['difficultyRaw']})
             matching_scores = [score['_id'] for score in matching_scores]
             self.delete_scores(leaderboard_id, matching_scores)
 

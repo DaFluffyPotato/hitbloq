@@ -189,7 +189,7 @@ def generate_profile_entries(profile_obj, profile_page):
     for i, score in enumerate(visible_scores):
         inject_values = {
             'song_rank': str(score['rank']),
-            'song_name': '<a href="/leaderboard/' + score['leaderboard']['key'] + '_' + shorten_settings(score['difficulty_settings']) + '">' + score['leaderboard']['name'] + '</a>',
+            'song_name': '<a href="/leaderboard/' + score['leaderboard']['key'] + '_' + shorten_settings(score['song_id'].split('|')[1]) + '">' + score['leaderboard']['name'] + '</a>',
             'cr_received': str(round(score['cr'], 2)),
             'weighted_cr': str(round(score['cr'] * cr_accumulation_curve(i + profile_page * page_length), 2)),
             'accuracy': str(score['accuracy']),

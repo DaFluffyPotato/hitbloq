@@ -56,6 +56,6 @@ class User():
         map_pool = database.get_ranked_list(map_pool_id)
         new_scores = []
         for score in self.scores:
-            if score['song_hash'] + '|' + score['difficulty_settings'] in map_pool['leaderboard_id_list']:
+            if score['song_id'] in map_pool['leaderboard_id_list']:
                 new_scores.append(score)
         self.scores = new_scores
