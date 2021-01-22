@@ -29,7 +29,7 @@ class ScoresaberInterface():
             req_url = 'player/' + ss_id + '/scores/recent/' + str(c)
             print('checking', req_url)
             try:
-                time.sleep(0.3)
+                time.sleep(0.5)
                 new_dat = self.ss_req(req_url)
                 if new_dat == None:
                     print('skipping due to failures')
