@@ -145,6 +145,42 @@ class HitbloqMongo():
     def create_leaderboard(self, leaderboard_id, leaderboard_hash):
         print('Creating leaderboard:', leaderboard_id)
 
+        map_pools = self.get_ranked_lists()
+        ranked_maps = []
+        for pool in map_pools:
+            ranked_maps += pool['leaderboard_id_list']
+        ranked_maps = list(set(ranked_maps))
+
+        # create dummy leaderboard
+        if leaderboard_id not in ranked_maps:
+            leaderboard_data = {
+                '_id': leaderboard_id,
+                'key': None,
+                'cover': None,
+                'name': None,
+                'sub_name': None,
+                'artist': None,
+                'mapper': None,
+                'bpm': -1,
+                'difficulty_settings': leaderboard_id.split('|')[-1],
+                'difficulty': None,
+                'characteristic': None,
+                'duration': -1,
+                'difficulty_duration': -1,
+                'length': -1,
+                'njs': -1,
+                'bombs': -1,
+                'notes': 99999,
+                'obstacles': -1,
+                'hash': leaderboard_hash,
+                'score_ids': [],
+                'star_rating': 0.0,
+            }
+
+            self.db['leaderboards'].insert_one(leaderboard_data)
+
+            return leaderboard_data
+
         # remove old instances
         self.db['leaderboards'].delete_many({'_id': leaderboard_id})
 
