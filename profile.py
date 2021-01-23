@@ -6,7 +6,7 @@ class Profile:
         self.user = database.get_users([user_id])[0]
         self.insert_info = {
             'player_name': self.user.username,
-            'player_pic': 'https://scoresaber.com/imports/images/usr-avatars/' + self.user.scoresaber_id + '.jpg',
+            'player_pic': self.user.profile_pic,
         }
 
     def load_scores(self):

@@ -7,9 +7,8 @@ from db import database
 
 mode = sys.argv[1]
 if mode == 'add':
-    username = sys.argv[2]
-    scoresaber_id = sys.argv[3]
-    u = User().create(database, username, scoresaber_id)
+    scoresaber_id = sys.argv[2]
+    u = User().create(database, scoresaber_id)
     u.refresh_scores(database)
 
 if mode == 'update':

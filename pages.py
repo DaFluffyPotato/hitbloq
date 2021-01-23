@@ -48,7 +48,7 @@ def generate_player_leaderboard_entries(map_pool, page):
     user_map = {user.id : user for user in database.get_users(user_id_list)}
     for i, user in enumerate(user_id_list):
         values = {
-            'profile_picture': 'https://scoresaber.com/imports/images/usr-avatars/' + user_map[user].scoresaber_id + '.jpg',
+            'profile_picture': user_map[user].profile_pic,
             'user_rank': str(page * players_per_page + i + 1),
             'user_name': '<a href="/user/' + str(user) + '">' + user_map[user].username + '</a>',
             'user_cr': str(round(user_map[user].cr_totals[map_pool['_id']], 2)),
@@ -140,7 +140,7 @@ def generate_leaderboard_entries(leaderboard_data, page):
     # generate html
     for i, score in enumerate(visible_scores):
         entry_values = {
-            'profile_picture': 'https://scoresaber.com/imports/images/usr-avatars/' + score['user_obj'].scoresaber_id + '.jpg',
+            'profile_picture': score['user_obj'].profile_pic,
             'score_rank': str(page_length * page + i + 1),
             'score_name': '<a href="/user/' + str(score['user']) + '">' + score['user_obj'].username + '</a>',
             'score_accuracy': str(round(score['score'] / max_score(leaderboard_data['notes']) * 100, 2)),
