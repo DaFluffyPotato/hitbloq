@@ -54,7 +54,7 @@ class HitbloqMongo():
     def get_user_ranking(self, user, map_pool_id):
         # kinda yikes, but I'm not sure how to match just one field for indexOfArray
         if map_pool_id in user.cr_totals:
-            resp = self.db['ladders'].aggregate([{'$match': {'_id': map_pool_id}}, {'$project': {'index': {'$indexOfArray': ['$ladder', {'user': user.id, 'cr': user.cr_totals[map_pool_id]}]}}}])
+            resp = self.db['ladders'].aggregate([{'$match': {'_id': map_pool_id}}, {'$project': {'index': {'$indexOfArray': ['$ladder.user', user.id]}}}])
             return list(resp)[0]['index'] + 1
         else:
             return 0

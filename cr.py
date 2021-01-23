@@ -6,9 +6,10 @@ from cr_formulas import *
 def update_leaderboard_cr(leaderboard_id):
     leaderboard = database.get_leaderboards([leaderboard_id])[0]
     scores = list(database.fetch_scores(leaderboard['score_ids']))
-    for score in scores:
-        score['cr'] = calculate_cr(score['score'] / max_score(leaderboard['notes']) * 100, leaderboard['star_rating'])
-    database.replace_scores(scores)
+    if len(scores) != 0:
+        for score in scores:
+            score['cr'] = calculate_cr(score['score'] / max_score(leaderboard['notes']) * 100, leaderboard['star_rating'])
+        database.replace_scores(scores)
 
 def update_leaderboards_cr(leaderboard_ids):
     for leaderboard_id in leaderboard_ids:
@@ -65,6 +66,9 @@ def full_cr_update(map_pools):
                 difficulty_vote_weight_total += vote_weight
                 difficulty_vote_total += leaderboard['votes'][score_id] * vote_weight
                 i += 1
+
+        if difficulty_vote_weight_total == 0:
+            continue
 
         difficulty_rating = round(difficulty_vote_total / difficulty_vote_weight_total * 19 + 1, 2)
 
