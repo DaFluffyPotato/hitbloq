@@ -6,16 +6,31 @@ from templates import templates
 from general import shorten_settings, lengthen_settings, max_score
 from cr_formulas import *
 
+def generate_header(image, title, description):
+    header = '<title>' + title + '</title>\n'
+    header += '<link rel="icon" href="https://hitbloq.com/static/hitbloq/hitbloq.png">\n'
+    header += '<meta property="og:image" content="https://hitbloq.com/static/hitbloq/hitbloq.png">\n'
+    header += '<meta property="og:image:secure_url" content="' + image + '">\n'
+    header += '<meta property="og:title" content="' + title + '">\n'
+    header += '<meta property="og:description" content="' + description + '">\n'
+    header += '<meta property="og:type" content="website">\n'
+    header += '<meta property="og:url" content="' + request.path + '">\n'
+    header += '<meta property="og:site_name" content="Hitbloq">\n'
+    return header
+
 def get_map_pool():
     map_pool = request.cookies.get('map_pool')
     if not map_pool:
         map_pool = 'global_main'
     return map_pool
 
-def normal_page(contents):
+def normal_page(contents, title='Hitbloq', desc='a competitive beat saber service', image='https://hitbloq.com/static/hitbloq/hitbloq.png'):
+    if title != 'Hitbloq':
+        title = 'Hitbloq - ' + title
+
     map_pool = get_map_pool()
 
-    page_html = templates.inject('layout', {'page_content': contents, 'map_pool': map_pool})
+    page_html = templates.inject('layout', {'page_content': contents, 'map_pool': map_pool, 'page_header': generate_header(image, title, desc)})
     return page_html
 
 def home_page():
@@ -24,7 +39,7 @@ def home_page():
     return home_html
 
 def actions_page():
-    actions_html = normal_page(templates.inject('actions_layout', {}))
+    actions_html = normal_page(templates.inject('actions_layout', {}), 'Action Queue', 'action queue')
     return actions_html
 
 def player_leaderboard_page(leaderboard_id, page):
@@ -40,7 +55,7 @@ def player_leaderboard_page(leaderboard_id, page):
         'last_page': request.path.split('?')[0] + '?page=' + str(max(page - 1, 0)),
     }
 
-    leaderboards_html = normal_page(templates.inject('player_leaderboard_layout', values))
+    leaderboards_html = normal_page(templates.inject('player_leaderboard_layout', values), map_pool['shown_name'] + ' Leaderboard', 'player leaderboard for the ' + map_pool['shown_name'] + ' map pool')
     return leaderboards_html
 
 def generate_player_leaderboard_entries(map_pool, page):
@@ -79,7 +94,7 @@ def ranked_lists_page():
                 'map_pool_id': ranked_list['_id'],
             }
             ranked_list_entry_html += templates.inject('ranked_list_entry_layout', values)
-    ranked_lists_html = normal_page(templates.inject('ranked_lists_layout', {'ranked_lists': ranked_list_entry_html}))
+    ranked_lists_html = normal_page(templates.inject('ranked_lists_layout', {'ranked_lists': ranked_list_entry_html}), 'Map Pools', 'map pools')
     return ranked_lists_html
 
 def ranked_list_page(group_id):
@@ -95,7 +110,7 @@ def ranked_list_page(group_id):
             'song_difficulty': str(leaderboard['star_rating']) + '★',
         }
         ranked_songs_html += templates.inject('ranked_song_entry', values)
-    ranked_list_html = normal_page(templates.inject('ranked_list_layout', {'table_entries': ranked_songs_html}))
+    ranked_list_html = normal_page(templates.inject('ranked_list_layout', {'table_entries': ranked_songs_html}), group_id + ' Ranked List', 'all ranked songs for the ' + group_id + ' map pool')
     return ranked_list_html
 
 def about_page():
@@ -123,7 +138,7 @@ def leaderboard_page(leaderboard_id, page):
         'next_page': request.path.split('?')[0] + '?page=' + str(page + 1),
         'last_page': request.path.split('?')[0] + '?page=' + str(max(page - 1, 0)),
     }
-    leaderboard_html = normal_page(templates.inject('leaderboard_layout', leaderboard_insert))
+    leaderboard_html = normal_page(templates.inject('leaderboard_layout', leaderboard_insert), leaderboard_data['name'] + ' Leaderboard', 'song leaderboard for ' + leaderboard_data['name'], 'https://beatsaver.com' + leaderboard_data['cover'])
     return leaderboard_html
 
 def generate_leaderboard_entries(leaderboard_data, page):
@@ -181,7 +196,7 @@ def profile_page(user_id, profile_page):
         'next_page': request.path.split('?')[0] + '?page=' + str(profile_page + 1),
         'last_page': request.path.split('?')[0] + '?page=' + str(max(profile_page - 1, 0)),
     })
-    profile_html = normal_page(templates.inject('profile_layout', profile_insert))
+    profile_html = normal_page(templates.inject('profile_layout', profile_insert), profile_obj.user.username + '\'s Profile', profile_obj.user.username + '\'s Hitbloq profile', profile_obj.user.profile_pic)
     return profile_html
 
 def generate_profile_entries(profile_obj, profile_page):
