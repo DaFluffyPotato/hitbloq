@@ -7,7 +7,10 @@ import cr
 def process_action(action):
     if action['type'] == 'add_user':
         u = User().create(database, action['user_id'])
-        u.refresh_scores(database, action['_id'])
+        if u:
+            u.refresh_scores(database, action['_id'])
+        else:
+            print('error on user add', action['user_id'])
 
     if action['type'] == 'update_user':
         try:
