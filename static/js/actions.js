@@ -33,7 +33,7 @@ function updateActions(status, action_data) {
     }
 
     if (i == 0) {
-      new_html += '<div class="action-entry" style="box-shadow: -1px 0px 0px 0px rgb(86, 221, 145), 0px 0px 6px 0px rgba(0, 0, 0, 0.28) inset;"><div class="action-progress-container"><div class="action-progress" style="width: ' + (action['progress'] * 100) + '%"></div></div>' + action['type'] + ' <i>(created ' + time_passed_str + ' ago)</i><br><br>';
+      new_html += '<div class="action-entry" style="box-shadow: -1px 0px 0px 0px rgb(86, 221, 145), 0px 0px 6px 0px rgba(0, 0, 0, 0.28) inset;">' + action['type'] + ' <i>(created ' + time_passed_str + ' ago)</i><br><div class="action-progress-container"><div class="action-progress" style="width: ' + (action['progress'] * 100) + '%"></div></div>';
     } else {
       new_html += '<div class="action-entry">' + action['type'] + ' <i>(created ' + time_passed_str + ' ago)</i><br>';
     }
