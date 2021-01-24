@@ -40,7 +40,7 @@ async def on_message(message):
             await message.channel.send(message.author.mention + ' user ' + scoresaber_id + ' has been added to the action queue.\nhttps://hitbloq.com/actions')
     if message.channel.name == 'admin-commands':
         if message_args[0] == '!recalculate_cr':
-            map_pools = args[1].split(',')
+            map_pools = message_args[1].split(',')
             create_action.recalculate_cr(map_pools)
             await message.channel.send(message.author.mention + ' a cr recalculation for', map_pools, 'has been added to the action queue.\nhttps://hitbloq.com/actions')
 
