@@ -7,6 +7,10 @@
   position: relative;
 }
 
+.actions-card {
+  font-size: 12pt;
+}
+
 .action-progress-container {
   box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.28), 0 0 1px 2px rgb(214, 222, 242);
   background-color: transparent;
