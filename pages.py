@@ -8,8 +8,8 @@ from cr_formulas import *
 
 def generate_header(image, title, description):
     header = '<title>' + title + '</title>\n'
-    header += '<link rel="icon" href="https://hitbloq.com/static/hitbloq/hitbloq.png">\n'
-    header += '<meta property="og:image" content="https://hitbloq.com/static/hitbloq/hitbloq.png">\n'
+    header += '<link rel="icon" href="https://hitbloq.com/static/hitbloq.png">\n'
+    header += '<meta property="og:image" content="' + image + '">\n'
     header += '<meta property="og:image:secure_url" content="' + image + '">\n'
     header += '<meta property="og:title" content="' + title + '">\n'
     header += '<meta property="og:description" content="' + description + '">\n'
@@ -24,7 +24,7 @@ def get_map_pool():
         map_pool = 'global_main'
     return map_pool
 
-def normal_page(contents, title='Hitbloq', desc='a competitive beat saber service', image='https://hitbloq.com/static/hitbloq/hitbloq.png'):
+def normal_page(contents, title='Hitbloq', desc='a competitive beat saber service', image='https://hitbloq.com/static/hitbloq.png'):
     if title != 'Hitbloq':
         title = 'Hitbloq - ' + title
 
