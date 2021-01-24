@@ -9,8 +9,10 @@
 
 .ranked-list {
     width: 60%;
-	padding: 20px;
-	margin: 0 auto;
+    padding: 20px;
+	  margin: 0px auto;
+    position: relative;
+    top: 24px;
 }
 
 .playlist-card {
