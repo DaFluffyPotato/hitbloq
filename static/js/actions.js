@@ -25,10 +25,17 @@ function refreshActions() {
 function updateActions(status, action_data) {
   var new_html = '';
   action_data.forEach((action, i) => {
+    var time_passed = Math.round(epoch() - action['time'])
+    var hours_passed = Math.floor(time_passed / (60 * 60))
+    var time_passed_str = Math.floor((time_passed % (60 * 60)) / 60) + 'm ' + (time_passed % 60) + 's';
+    if (hours_passed > 0.5) {
+      time_passed_str = hours_passed + 'h ' + time_passed_str;
+    }
+
     if (i == 0) {
-      new_html += '<div class="action-entry" style="box-shadow: -1px 0px 0px 0px rgb(86, 221, 145), 0px 0px 6px 0px rgba(0, 0, 0, 0.28) inset;"><div class="action-progress-container"><div class="action-progress" style="width: ' + (action['progress'] * 100) + '%"></div></div>' + action['type'] + ' <i>(created ' + Math.round(epoch() - action['time']) + 's ago)</i><br><br>';
+      new_html += '<div class="action-entry" style="box-shadow: -1px 0px 0px 0px rgb(86, 221, 145), 0px 0px 6px 0px rgba(0, 0, 0, 0.28) inset;"><div class="action-progress-container"><div class="action-progress" style="width: ' + (action['progress'] * 100) + '%"></div></div>' + action['type'] + ' <i>(created ' + time_passed_str + ' ago)</i><br><br>';
     } else {
-      new_html += '<div class="action-entry">' + action['type'] + ' <i>(created ' + Math.round(epoch() - action['time']) + 's ago)</i><br>';
+      new_html += '<div class="action-entry">' + action['type'] + ' <i>(created ' + time_passed_str + ' ago)</i><br>';
     }
     Object.keys(action).forEach((key) => {
       if (!['progress', 'type', 'time'].includes(key)) {
