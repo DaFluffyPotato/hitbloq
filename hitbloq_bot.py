@@ -42,6 +42,6 @@ async def on_message(message):
         if message_args[0] == '!recalculate_cr':
             map_pools = message_args[1].split(',')
             create_action.recalculate_cr(map_pools)
-            await message.channel.send(message.author.mention + ' a cr recalculation for' + str(map_pools) + 'has been added to the action queue.\nhttps://hitbloq.com/actions')
+            await message.channel.send(message.author.mention + ' a cr recalculation for `' + str(map_pools) + '` has been added to the action queue.\nhttps://hitbloq.com/actions')
 
 client.run(token)
