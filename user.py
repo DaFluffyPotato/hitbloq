@@ -13,12 +13,17 @@ class User():
         # temp values
         self.scores = []
 
-    def refresh_scores(self, database):
-        database.update_user_scores(self)
+    def refresh_scores(self, database, action_id=None):
+        database.update_user_scores(self, action_id)
 
     def create(self, database, scoresaber_id):
         ss_profile = scoresaber.ScoresaberInterface(database).ss_req('player/' + scoresaber_id + '/basic')
-        self.username = ss_profile['playerInfo']['playerName']
+        try:
+            self.username = ss_profile['playerInfo']['playerName']
+        except KeyError:
+            print('attempted to create invalid user', scoresaber_id)
+            return None
+
         self.profile_pic = 'https://new.scoresaber.com' + ss_profile['playerInfo']['avatar']
         self.id = database.gen_new_user_id()
         self.scoresaber_id = scoresaber_id

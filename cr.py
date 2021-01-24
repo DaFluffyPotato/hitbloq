@@ -40,18 +40,24 @@ def load_map_pools(map_pools):
     return leaderboards
 
 
-def full_cr_update(map_pools):
+def full_cr_update(map_pools, action_id=None):
     rankings = []
     user_list = database.search_users({})
+
     leaderboards = load_map_pools(map_pools)
     leaderboard_notes = {k : v['notes'] for (k, v) in leaderboards.items()}
 
+    database.set_action_progress(action_id, 0.1)
+
     for leaderboard in leaderboards:
         leaderboards[leaderboard]['votes'] = {}
-    for user in user_list:
+    for j, user in enumerate(user_list):
         votes = calculate_song_rankings(user, leaderboard_notes)
         for i, vote in enumerate(votes):
             leaderboards[vote[1]]['votes'][vote[2]] = i / (len(votes) - 1)
+
+        if j % 10 == 0:
+            database.set_action_progress(action_id, 0.1 + j / len(user_list) * 0.6)
 
     for leaderboard in leaderboards:
         leaderboard = leaderboards[leaderboard]
@@ -76,15 +82,19 @@ def full_cr_update(map_pools):
 
         rankings.append([difficulty_rating, leaderboard['name']])
 
+    database.set_action_progress(action_id, 0.8)
+
     rankings.sort(reverse=True)
 
     update_leaderboards_cr(leaderboards.keys())
 
-    for user in user_list:
+    for i, user in enumerate(user_list):
         database.update_user_cr_total(user)
         # TODO: redo this code to update all the leaderboards in one shot since all the scores must be updated
         for map_pool_id in map_pools:
             database.update_user_ranking(user, map_pool_id)
+
+        database.set_action_progress(action_id, 0.8 + i / len(user_list) * 0.2)
 
     return rankings
 

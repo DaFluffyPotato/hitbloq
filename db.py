@@ -17,6 +17,9 @@ class HitbloqMongo():
     def gen_new_user_id(self):
         return self.db['counters'].find_and_modify(query={'type': 'user_id'}, update={'$inc': {'count': 1}})['count']
 
+    def get_counter(self, type):
+        return self.db['counters'].find_one({'type': type})
+
     def add_user(self, user):
         self.db['users'].insert_one(user.jsonify())
 
@@ -32,12 +35,15 @@ class HitbloqMongo():
         else:
             self.db['users'].replace_one({'_id': user.id}, user.jsonify())
 
-    def update_user_scores(self, user):
+    def update_user_scores(self, user, action_id=None):
         scoresaber_api = scoresaber.ScoresaberInterface(self.db)
         new_scores = scoresaber_api.fetch_until(user.scoresaber_id, user.last_update)
         for i, score in enumerate(new_scores):
             print('adding score', i, '/', len(new_scores))
             self.add_score(user, score)
+            if i % 10 == 0:
+                self.set_action_progress(action_id, i / len(new_scores))
+
         self.update_user(user, {'$set': {'last_update': time.time()}})
         fresh_user = self.get_users([user.id])[0]
         self.update_user_cr_total(fresh_user)
@@ -123,6 +129,9 @@ class HitbloqMongo():
             leaderboard = leaderboard[0]
 
         if valid_leaderboard:
+            if scoresaber_json['mods'] != '':
+                return False
+
             # delete old score data
             matching_scores = self.db['scores'].find({'user': user.id, 'song_id': scoresaber_json['songHash'] + '|' + scoresaber_json['difficultyRaw']})
             matching_scores = [score['_id'] for score in matching_scores]
@@ -294,6 +303,33 @@ class HitbloqMongo():
             return [v['_id'] for v in self.db['ranked_lists'].aggregate([{'$match': {'deletedAt': None}}, {'$group': {'_id': '$_id'}}])]
         else:
             return [v['_id'] for v in self.db['ranked_lists'].aggregate([{'$match': {'deletedAt': None, 'third_party': False}}, {'$group': {'_id': '$_id'}}])]
+
+    def add_action(self, action):
+        action['progress'] = 0
+        action['time'] = time.time()
+        self.db['actions'].insert_one(action)
+
+    def add_actions(self, actions):
+        for action in actions:
+            action['progress'] = 0
+            action['time'] = time.time()
+        self.db['actions'].insert_many(actions)
+
+    def get_actions(self):
+        return self.db['actions'].find({}).sort([('time', pymongo.ASCENDING)])
+
+    def get_next_action(self):
+        try:
+            return self.get_actions().limit(1).next()
+        except StopIteration:
+            return None
+
+    def clear_action(self, action_id):
+        self.db['actions'].delete_one({'_id': action_id})
+
+    def set_action_progress(self, action_id, progress):
+        if action_id:
+            self.db['actions'].update_one({'_id': action_id}, {'$set': {'progress': progress}})
 
 print('MongoDB requires a password!')
 database = HitbloqMongo(getpass())
