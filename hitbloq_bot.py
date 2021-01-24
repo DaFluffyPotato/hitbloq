@@ -16,6 +16,7 @@ guild_id = 'Hitbloq'
 client = discord.Client()
 
 GENERAL_COMMANDS_CHANNEL = 'general-commands'
+ADMIN_COMMANDS_CHANNEL = 'admin-commands'
 channels = []
 
 @client.event
@@ -37,6 +38,10 @@ async def on_message(message):
             scoresaber_id = message_args[1]
             create_action.create_user(scoresaber_id)
             await message.channel.send(message.author.mention + ' user ' + scoresaber_id + ' has been added to the action queue.\nhttps://hitbloq.com/actions')
-
+    if message.channel.name == 'admin-commands':
+        if message_args[0] == '!recalculate_cr':
+            map_pools = args[1].split(',')
+            create_action.recalculate_cr(map_pools)
+            await message.channel.send(message.author.mention + ' a cr recalculation for', map_pools, 'has been added to the action queue.\nhttps://hitbloq.com/actions')
 
 client.run(token)
