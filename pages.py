@@ -23,6 +23,10 @@ def home_page():
     home_html = normal_page(templates.inject('simple_card_layout', {'page_content': home_content}))
     return home_html
 
+def actions_page():
+    actions_html = normal_page(templates.inject('actions_layout', {}))
+    return actions_html
+
 def player_leaderboard_page(leaderboard_id, page):
     page = 0 if (page == None) else int(page)
 

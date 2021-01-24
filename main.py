@@ -2,6 +2,7 @@ from flask import Flask, request, make_response
 
 from db import database
 import pages
+import api
 from user import User
 
 #me = database.get_users([0])[0]
@@ -36,6 +37,14 @@ def leaderboard(leaderboard_id):
 @app.route('/about')
 def about():
     return pages.about_page()
+
+@app.route('/actions')
+def actions_ui():
+    return pages.actions_page()
+
+@app.route('/api/actions')
+def actions():
+    return api.action_list()
 
 if __name__ == "__main__":
     app.run()

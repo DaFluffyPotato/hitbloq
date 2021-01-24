@@ -36,7 +36,7 @@ async def on_message(message):
         if message_args[0] == '!add':
             scoresaber_id = message_args[1]
             create_action.create_user(scoresaber_id)
-            await message.channel.send(message.author.mention + ' user ' + scoresaber_id + ' has been added to the action queue.')
+            await message.channel.send(message.author.mention + ' user ' + scoresaber_id + ' has been added to the action queue.\nhttps://hitbloq.com/actions')
 
 
 client.run(token)
