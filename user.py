@@ -17,6 +17,16 @@ class User():
         database.update_user_scores(self, action_id)
 
     def create(self, database, scoresaber_id):
+        try:
+            a = int(scoresaber_id)
+        except:
+            print('scoresaber_id invalid')
+            return None
+
+        if len(list(database.db['users'].find({'scoresaber_id': scoresaber_id}))):
+            print('user', scoresaber_id, 'is a duplicate!')
+            return None
+
         ss_profile = scoresaber.ScoresaberInterface(database).ss_req('player/' + scoresaber_id + '/basic')
         try:
             self.username = ss_profile['playerInfo']['playerName']
