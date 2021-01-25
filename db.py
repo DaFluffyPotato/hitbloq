@@ -293,11 +293,13 @@ class HitbloqMongo():
             '_id': name,
             'ladder': [],
         })
+        if not third_party:
+            self.db['users'].update_many({}, {'$set': {'total_cr.' + name : 0}})
 
     def rank_song(self, leaderboard_id, map_pool):
         # ensure that it wasn't previously added
         self.db['ranked_lists'].update_one({'_id': map_pool}, {'$pull': {'leaderboard_id_list': leaderboard_id}})
-        
+
         self.db['ranked_lists'].update_one({'_id': map_pool}, {'$push': {'leaderboard_id_list': leaderboard_id}})
         current_leaderboard = self.db['leaderboards'].find_one({'_id': leaderboard_id})
         if not current_leaderboard:

@@ -65,10 +65,9 @@ def generate_search_entries(search_str):
 
     return search_leaderboard_entries_html
 
-def player_leaderboard_page(leaderboard_id, page):
+def player_leaderboard_page(map_pool, page):
     page = 0 if (page == None) else int(page)
 
-    map_pool = get_map_pool()
     map_pool = database.get_ranked_list(map_pool)
 
     values = {
