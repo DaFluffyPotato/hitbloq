@@ -3,6 +3,7 @@ from flask import request
 from db import database
 from profile import Profile
 from templates import templates
+from user import User
 from general import shorten_settings, lengthen_settings, max_score
 from cr_formulas import *
 
@@ -41,6 +42,28 @@ def home_page():
 def actions_page():
     actions_html = normal_page(templates.inject('actions_layout', {}), 'Action Queue', 'action queue')
     return actions_html
+
+def search_page(search_str):
+    search_html = normal_page(templates.inject('search_results_layout', {'search_results': generate_search_entries(search_str)}), search_str + ' Search Results', 'player search results for ' + search_str)
+    return search_html
+
+def generate_search_entries(search_str):
+    player_limit = 50
+    search_leaderboard_entries_html = ''
+
+    map_pool = get_map_pool()
+
+    users = [User().load(user) for user in list(database.db['users'].find({'username': {'$regex': search_str, '$options': 'i'}}).sort('total_cr.' + map_pool, -1).limit(50))]
+
+    for user in users:
+        values = {
+            'profile_picture': user.profile_pic,
+            'user_name': '<a href="/user/' + str(user.id) + '">' + user.username + '</a>',
+            'user_cr': str(round(user.cr_totals[map_pool], 2)),
+        }
+        search_leaderboard_entries_html += templates.inject('search_leaderboard_entry', values)
+
+    return search_leaderboard_entries_html
 
 def player_leaderboard_page(leaderboard_id, page):
     page = 0 if (page == None) else int(page)

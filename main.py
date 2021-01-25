@@ -34,6 +34,10 @@ def profile(user_id):
 def leaderboard(leaderboard_id):
     return pages.leaderboard_page(leaderboard_id, request.args.get('page'))
 
+@app.route('/search/<search_str>')
+def search(search_str):
+    return pages.search_page(search_str)
+
 @app.route('/about')
 def about():
     return pages.about_page()
