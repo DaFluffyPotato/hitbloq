@@ -24,7 +24,9 @@ def calculate_song_rankings(user, leaderboards):
     for score in user.scores:
         leaderboard_id = score['song_id']
         if leaderboard_id in pool_leaderboard_list:
-                scores_for_sort.append([score['score'] / max_score(leaderboards[leaderboard_id]), leaderboard_id, score['_id']])
+            acc = score['score'] / max_score(leaderboards[leaderboard_id])
+            if acc > 0.15:
+                scores_for_sort.append([acc, leaderboard_id, score['_id']])
     scores_for_sort.sort(reverse=True)
     return scores_for_sort
 
