@@ -168,10 +168,12 @@ class HitbloqMongo():
         ranked_maps = list(set(ranked_maps))
         return ranked_maps
 
-    def create_leaderboard(self, leaderboard_id, leaderboard_hash):
+    def create_leaderboard(self, leaderboard_id, leaderboard_hash, transfer=False):
         print('Creating leaderboard:', leaderboard_id)
 
         ranked_maps = self.get_full_ranked_list()
+
+        new_scores = []
 
         # create dummy leaderboard
         if leaderboard_id not in ranked_maps:
@@ -202,6 +204,12 @@ class HitbloqMongo():
             self.db['leaderboards'].insert_one(leaderboard_data)
 
             return leaderboard_data
+
+        elif transfer:
+            print('transferring scores on leaderboard', leaderboard_id)
+            old_leaderboard_data = self.db['leaderboards'].find_one({'_id': leaderboard_id})
+            new_scores = old_leaderboard_data['score_ids']
+            print(len(new_scores), 'scores being transferred...')
 
         # remove old instances
         self.db['leaderboards'].delete_many({'_id': leaderboard_id})
@@ -252,7 +260,7 @@ class HitbloqMongo():
                 'notes': difficulty_data['notes'],
                 'obstacles': difficulty_data['obstacles'],
                 'hash': leaderboard_hash,
-                'score_ids': [],
+                'score_ids': new_scores,
                 'star_rating': 0.0,
             }
 
@@ -287,7 +295,15 @@ class HitbloqMongo():
         })
 
     def rank_song(self, leaderboard_id, map_pool):
+        # ensure that it wasn't previously added
+        self.db['ranked_lists'].update_one({'_id': map_pool}, {'$pull': {'leaderboard_id_list': leaderboard_id}})
+        
         self.db['ranked_lists'].update_one({'_id': map_pool}, {'$push': {'leaderboard_id_list': leaderboard_id}})
+        current_leaderboard = self.db['leaderboards'].find_one({'_id': leaderboard_id})
+        if not current_leaderboard:
+            self.create_leaderboard(leaderboard_id, leaderboard_id.split('|')[0])
+        elif current_leaderboard['key'] == None:
+            self.create_leaderboard(leaderboard_id, leaderboard_id.split('|')[0], True)
 
     def get_ranked_lists(self):
         return list(self.db['ranked_lists'].find({}))

@@ -54,7 +54,7 @@ def full_cr_update(map_pools, action_id=None):
     for j, user in enumerate(user_list):
         votes = calculate_song_rankings(user, leaderboard_notes)
         for i, vote in enumerate(votes):
-            leaderboards[vote[1]]['votes'][vote[2]] = i / (len(votes) - 1)
+            leaderboards[vote[1]]['votes'][vote[2]] = (i + 1) / len(votes)
 
         if j % 10 == 0:
             database.set_action_progress(action_id, 0.1 + j / len(user_list) * 0.6)
