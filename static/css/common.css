@@ -9,7 +9,7 @@ html {
 }
 
 body {
-	color: rgb(214, 222, 242);
+	color: rgb(242, 245, 251);
     height: 100%;
     overflow: auto;
     margin: 0;
@@ -22,20 +22,20 @@ i {
 }
 
 p {
-	color: rgb(214, 222, 242);
+	color: rgb(242, 245, 251);
 	margin-top: 0;
 	margin-bottom: 0;
 }
 
 h2 {
-	color: rgb(214, 222, 242);
+	color: rgb(242, 245, 251);
 	margin-top: 5px;
 	margin-bottom: 5px;
 	text-shadow: 2px 2px 2px rgb(36, 41, 49);
 }
 
 a {
-	color: rgb(214, 222, 242);
+	color: rgb(242, 245, 251);
   text-decoration: underline;
   text-decoration-color: rgba(224, 53, 53, 0.55);
 }
@@ -211,7 +211,7 @@ a:hover {
 }
 
 .login-button:hover {
-	border: 1px solid rgb(214, 222, 242);
+	border: 1px solid rgb(242, 245, 251);
 }
 
 .signup-card {
@@ -230,7 +230,7 @@ a:hover {
 .select {
 	background-color: rgb(29, 33, 44);
 	border: 1px solid transparent;
-	color: rgb(214, 222, 242);
+	color: rgb(242, 245, 251);
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
@@ -243,7 +243,7 @@ a:hover {
 }
 
 .select:hover {
-	border: 1px solid rgb(214, 222, 242);
+	border: 1px solid rgb(242, 245, 251);
 }
 
 #login-error, #signup-error, #nom-error, #add-error {

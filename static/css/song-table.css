@@ -1,19 +1,19 @@
 .song-table {
-    color: rgb(214, 222, 242);
+    color: rgb(242, 245, 251);
     width: 100%;
-    color: rgb(214, 222, 242);
+    color: rgb(242, 245, 251);
     border-spacing: 0;
 }
 
 .song-table th {
     text-align: left;
     padding-bottom: 10px;
-    border-bottom: 1px solid rgb(214, 222, 242);
+    border-bottom: 1px solid rgb(242, 245, 251);
 }
 
 .song-table td {
     padding: 10px 0;
-    border-bottom: 1px solid rgb(214, 222, 242);
+    border-bottom: 1px solid rgb(242, 245, 251);
 }
 
 .song-table .picture {

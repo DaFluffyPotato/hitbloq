@@ -1,5 +1,5 @@
 .song-leaderboard {
-    
+
 }
 
 /* SONG CARD */
@@ -64,7 +64,7 @@
     height: 70%;
     padding: 1.5rem;
 	text-shadow: 0px 0px 0px rgba(215, 222, 242, 0.5);
-	color: rgb(214, 222, 242);
+	color: rgb(242, 245, 251);
 	transition: text-shadow 0.5s cubic-bezier(.47,0,.51,.97), color 0.5s cubic-bezier(.47,0,.51,.97);
 }
 

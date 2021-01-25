@@ -2,7 +2,7 @@
     padding-top: 1.5rem;
     width: 70vw;
     margin: 0 auto;
-    color: rgb(214, 222, 242);
+    color: rgb(242, 245, 251);
 }
 
 @media (max-width: 660px) {
@@ -26,13 +26,13 @@
 
 .leaderboard-table {
     width: 100%;
-    color: rgb(214, 222, 242);
+    color: rgb(242, 245, 251);
     border-spacing: 0;
 }
 
 .leaderboard-table-header th {
     padding-bottom: 10px;
-    border-bottom: 1px solid rgb(214, 222, 242);
+    border-bottom: 1px solid rgb(242, 245, 251);
 }
 
 .leaderboard-item {
@@ -41,7 +41,7 @@
 
 .leaderboard-item td {
     padding: 10px 0;
-    border-bottom: 1px solid rgb(214, 222, 242);
+    border-bottom: 1px solid rgb(242, 245, 251);
 }
 
 .leaderboard-item .picture {
@@ -51,7 +51,7 @@
 }
 
 tbody .player {
-	text-shadow: 2px 2px 2px rgb(36, 41, 49); 
+	text-shadow: 2px 2px 2px rgb(36, 41, 49);
 }
 
 .leaderboard-item img{
@@ -76,14 +76,14 @@ tbody .player {
     width: 32px;
     height: 32px;
     border-radius: 5px;
-    border: 1px solid rgb(214, 222, 242);
-    color: rgb(214, 222, 242);
+    border: 1px solid rgb(242, 245, 251);
+    color: rgb(242, 245, 251);
     background-color: transparent;
 }
 
  .nav-button i {
     font-size: 11pt;
-    color: rgb(214, 222, 242);
+    color: rgb(242, 245, 251);
 }
 
  .nav-button:focus {
