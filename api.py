@@ -1,6 +1,7 @@
 from flask import jsonify
 
 from db import database
+from general import mongo_clean
 import create_action
 
 def action_list():
@@ -17,3 +18,6 @@ def add_user(request_json, ip_address):
         return jsonify({'status': 'success'})
     else:
         return jsonify({'status': 'ratelimit'})
+
+def ranked_list(pool_id):
+    return jsonify(database.get_ranked_list(mongo_clean(pool_id)))

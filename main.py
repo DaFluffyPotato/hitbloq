@@ -58,5 +58,9 @@ def actions():
 def add_user():
     return api.add_user(request.json, request.remote_addr)
 
+@app.route('/api/ranked_list/<pool_id>')
+def ranked_list_api(pool_id):
+    return api.ranked_list(pool_id)
+
 if __name__ == "__main__":
     app.run()

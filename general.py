@@ -34,3 +34,8 @@ def lengthen_settings(settings_str):
     diff = settings_str.split('_')[0]
     char = settings_str.split('_')[1]
     return '_' + diff_lengthen[diff] + '_' + char_lengthen[char]
+
+def mongo_clean(string):
+    for char in ['{', '}', '.', '$']:
+        string = string.replace(char, '')
+    return string
