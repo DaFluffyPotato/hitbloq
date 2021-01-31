@@ -8,10 +8,11 @@ import user
 import config
 from cr_formulas import *
 from general import max_score
+from config_loader import config
 
 class HitbloqMongo():
     def __init__(self, password):
-        self.client = pymongo.MongoClient('mongodb://dafluffypotato:' + password + '@dafluffypotato-db-shard-00-00-b1wgg.mongodb.net:27017,dafluffypotato-db-shard-00-01-b1wgg.mongodb.net:27017,dafluffypotato-db-shard-00-02-b1wgg.mongodb.net:27017/test?ssl=true&replicaSet=DaFluffyPotato-DB-shard-0&authSource=admin&retryWrites=true&w=majority', connectTimeoutMS=30000, socketTimeoutMS=None, connect=False, maxPoolsize=1)
+        self.client = pymongo.MongoClient('mongodb://' + config['mongo_username'] + ':' + password + '@' + config['mongo_host'] + ':' + config['mongo_port'] + '/?authSource=admin', connectTimeoutMS=30000, socketTimeoutMS=None, connect=False, maxPoolsize=1)
         self.db = self.client['hitbloq_com']
 
     def gen_new_user_id(self):
