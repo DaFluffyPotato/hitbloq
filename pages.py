@@ -126,14 +126,23 @@ def ranked_lists_page():
 def ranked_list_page(group_id):
     ranked_list_data = database.get_ranked_list(group_id)
     leaderboard_list = database.get_leaderboards(ranked_list_data['leaderboard_id_list'])
-    leaderboard_list.sort(key=lambda x: x['star_rating'], reverse=True)
+
+    # fix missing values for lambda search
+    for leaderboard in leaderboard_list:
+        if group_id not in leaderboard['star_rating']:
+            leaderboard['star_rating'][group_id] = 0
+
+    leaderboard_list.sort(key=lambda x: x['star_rating'][group_id], reverse=True)
     ranked_songs_html = ''
     for leaderboard in leaderboard_list:
+        star_rating = 0
+        if group_id in leaderboard['star_rating']:
+            star_rating = leaderboard['star_rating'][group_id]
         values = {
             'song_img': 'https://beatsaver.com' + leaderboard['cover'],
             'song_name': '<a href="/leaderboard/' + leaderboard['key'] + '_' + shorten_settings(leaderboard['difficulty_settings']) + '">' + leaderboard['name'] + '</a>',
             'song_plays': str(len(leaderboard['score_ids'])),
-            'song_difficulty': str(leaderboard['star_rating']) + '★',
+            'song_difficulty': str(star_rating) + '★',
         }
         ranked_songs_html += templates.inject('ranked_song_entry', values)
     ranked_list_html = normal_page(templates.inject('ranked_list_layout', {'table_entries': ranked_songs_html}), group_id + ' Ranked List', 'all ranked songs for the ' + group_id + ' map pool')
@@ -149,14 +158,19 @@ def leaderboard_page(leaderboard_id, page):
     else:
         page = int(page)
 
+    map_pool = get_map_pool()
+
     leaderboard_data = database.search_leaderboards({'key': leaderboard_id.split('_')[0], 'difficulty_settings': lengthen_settings('_'.join(leaderboard_id.split('_')[1:]))})[0]
+    star_rating = 0
+    if map_pool in leaderboard_data['star_rating']:
+        star_rating = leaderboard_data['star_rating'][map_pool]
     leaderboard_insert = {
         'leaderboard_scores': generate_leaderboard_entries(leaderboard_data, page),
         'song_name': leaderboard_data['name'],
         'artist_name': leaderboard_data['artist'],
         'mapper_name': leaderboard_data['mapper'],
         'song_difficulty': leaderboard_data['difficulty'],
-        'star_rating': str(leaderboard_data['star_rating']) + '★',
+        'star_rating': str(star_rating) + '★',
         'notes_per_second': str(round(leaderboard_data['notes'] / leaderboard_data['length'], 2)),
         'pulse_rate': str(1 / leaderboard_data['bpm'] * 60 * 2) + 's',
         'song_picture': 'https://beatsaver.com' + leaderboard_data['cover'],
@@ -182,14 +196,20 @@ def generate_leaderboard_entries(leaderboard_data, page):
     for user in score_users:
         score_dict[user.id]['user_obj'] = user
 
+    map_pool = get_map_pool()
+
     # generate html
     for i, score in enumerate(visible_scores):
+        cr_given = 0
+        if map_pool in score['cr']:
+            cr_given = score['cr'][map_pool]
+
         entry_values = {
             'profile_picture': score['user_obj'].profile_pic,
             'score_rank': str(page_length * page + i + 1),
             'score_name': '<a href="/user/' + str(score['user']) + '">' + score['user_obj'].username + '</a>',
             'score_accuracy': str(round(score['score'] / max_score(leaderboard_data['notes']) * 100, 2)),
-            'score_cr': str(round(score['cr'], 2)),
+            'score_cr': str(round(cr_given, 2)),
         }
         html += templates.inject('leaderboard_entry', entry_values)
 
@@ -229,7 +249,9 @@ def generate_profile_entries(profile_obj, profile_page):
     page_length = 10
     html = ''
 
-    profile_obj.user.scores.sort(key=lambda x : x['cr'], reverse=True)
+    map_pool = get_map_pool()
+
+    profile_obj.user.scores.sort(key=lambda x : x['cr'][map_pool], reverse=True)
     visible_scores = profile_obj.user.scores[profile_page * page_length : (profile_page + 1) * page_length]
 
     profile_obj.fetch_score_leaderboards(visible_scores)
@@ -237,8 +259,8 @@ def generate_profile_entries(profile_obj, profile_page):
         inject_values = {
             'song_rank': str(score['rank']),
             'song_name': '<a href="/leaderboard/' + score['leaderboard']['key'] + '_' + shorten_settings(score['song_id'].split('|')[1]) + '">' + score['leaderboard']['name'] + '</a>',
-            'cr_received': str(round(score['cr'], 2)),
-            'weighted_cr': str(round(score['cr'] * cr_accumulation_curve(i + profile_page * page_length), 2)),
+            'cr_received': str(round(score['cr'][map_pool], 2)),
+            'weighted_cr': str(round(score['cr'][map_pool] * cr_accumulation_curve(i + profile_page * page_length), 2)),
             'accuracy': str(score['accuracy']),
             'song_pic': 'https://beatsaver.com' + score['leaderboard']['cover'],
         }

@@ -77,12 +77,15 @@ class HitbloqMongo():
         self.db['ladders'].update_one({'_id': map_pool_id}, {'$push': {'ladder': {'$each': [], '$sort': {'cr': -1}}}})
 
     def format_score(self, user, scoresaber_json, leaderboard):
+        cr_data = {}
+        for pool_id in leaderboard['star_rating']:
+            cr_data[pool_id] = calculate_cr(scoresaber_json['score'] / max_score(leaderboard['notes']) * 100, leaderboard['star_rating'][pool_id])
         score_data = {
             # typo in scoresaber api. lul
             'score': scoresaber_json['unmodififiedScore'],
             'time_set': scoresaber_json['epochTime'],
             'song_id': scoresaber_json['songHash'] + '|' + scoresaber_json['difficultyRaw'],
-            'cr': calculate_cr(scoresaber_json['score'] / max_score(leaderboard['notes']) * 100, leaderboard['star_rating']),
+            'cr': cd_data,
             'user': user.id,
         }
         return score_data
@@ -99,6 +102,7 @@ class HitbloqMongo():
         self.db['scores'].delete_many({'_id': {'$in': score_ids}})
         self.db['scores'].insert_many(scores)
 
+    # no longer used since scores must be dynamically sorted on a per-pool basis
     def update_user_score_order(self, user):
         user.load_scores(self)
         user.scores.sort(key=lambda x: x['cr'], reverse=True)
@@ -108,15 +112,16 @@ class HitbloqMongo():
 
     def update_user_cr_total(self, user):
         user.load_scores(self)
-        user.scores.sort(key=lambda x: x['cr'], reverse=True)
         map_pool_ids = list(user.cr_totals)
         map_pools = self.search_ranked_lists({'_id': {'$in': map_pool_ids}})
         cr_counters = {map_pool_id : 0 for map_pool_id in map_pool_ids}
         cr_totals = {map_pool_id : 0 for map_pool_id in map_pool_ids}
-        for score in user.scores:
-            for map_pool in map_pools:
+        for map_pool in map_pools:
+            valid_scores = [score for score in user.scores if map_pool['_id'] in score['cr']]
+            valid_scores.sort(key=lambda x: x['cr'][map_pool['_id']], reverse=True)
+            for score in valid_scores:
                 if score['song_id'] in map_pool['leaderboard_id_list']:
-                    cr_totals[map_pool['_id']] += cr_accumulation_curve(cr_counters[map_pool['_id']]) * score['cr']
+                    cr_totals[map_pool['_id']] += cr_accumulation_curve(cr_counters[map_pool['_id']]) * score['cr'][map_pool['_id']]
                     cr_counters[map_pool['_id']] += 1
         for pool in cr_totals:
             user.cr_totals[pool] = cr_totals[pool]
@@ -309,8 +314,15 @@ class HitbloqMongo():
         current_leaderboard = self.db['leaderboards'].find_one({'_id': leaderboard_id})
         if not current_leaderboard:
             self.create_leaderboard(leaderboard_id, leaderboard_id.split('|')[0])
+            current_leaderboard = self.db['leaderboards'].find_one({'_id': leaderboard_id})
         elif current_leaderboard['key'] == None:
             self.create_leaderboard(leaderboard_id, leaderboard_id.split('|')[0], True)
+            current_leaderboard = self.db['leaderboards'].find_one({'_id': leaderboard_id})
+        self.db['leaderboards'].update_one({'_id': leaderboard_id}, {'$set': {'star_rating.' + map_pool: 0}})
+        scores = self.fetch_scores(current_leaderboard['score_ids'])
+        for score in scores:
+            score['cr'][map_pool] = 0
+        self.replace_scores(scores)
 
     def get_ranked_lists(self):
         return list(self.db['ranked_lists'].find({}))

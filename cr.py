@@ -3,17 +3,18 @@ from general import max_score
 from config import LEADERBOARD_VOTE_RANKING_CURVE_CONSTANT
 from cr_formulas import *
 
-def update_leaderboard_cr(leaderboard_id):
+def update_leaderboard_cr(leaderboard_id, map_pools):
     leaderboard = database.get_leaderboards([leaderboard_id])[0]
     scores = list(database.fetch_scores(leaderboard['score_ids']))
     if len(scores) != 0:
         for score in scores:
-            score['cr'] = calculate_cr(score['score'] / max_score(leaderboard['notes']) * 100, leaderboard['star_rating'])
+            for map_pool in map_pools:
+                score['cr'][map_pool] = calculate_cr(score['score'] / max_score(leaderboard['notes']) * 100, leaderboard['star_rating'][map_pool])
         database.replace_scores(scores)
 
-def update_leaderboards_cr(leaderboard_ids):
+def update_leaderboards_cr(leaderboard_ids, map_pools):
     for leaderboard_id in leaderboard_ids:
-        update_leaderboard_cr(leaderboard_id)
+        update_leaderboard_cr(leaderboard_id, map_pools)
 
 def calculate_song_rankings(user, leaderboards):
     user.load_scores(database)
@@ -80,7 +81,8 @@ def full_cr_update(map_pools, action_id=None):
 
         difficulty_rating = round(difficulty_vote_total / difficulty_vote_weight_total * 19 + 1, 2)
 
-        database.update_leaderboard_data(leaderboard['_id'], {'$set': {'star_rating': difficulty_rating}})
+        for map_pool in map_pools:
+            database.update_leaderboard_data(leaderboard['_id'], {'$set': {'star_rating.' + map_pool: difficulty_rating}})
 
         rankings.append([difficulty_rating, leaderboard['name']])
 
@@ -88,7 +90,7 @@ def full_cr_update(map_pools, action_id=None):
 
     rankings.sort(reverse=True)
 
-    update_leaderboards_cr(leaderboards.keys())
+    update_leaderboards_cr(leaderboards.keys(), map_pools)
 
     for i, user in enumerate(user_list):
         database.update_user_cr_total(user)
