@@ -48,4 +48,4 @@ function updateActions(status, action_data) {
 }
 
 refreshActions();
-setInterval(refreshActions, 1000);
+setInterval(refreshActions, 2000);
