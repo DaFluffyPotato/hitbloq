@@ -17,10 +17,11 @@
 
 .song-card img {
 	height: inherit;
-    border-left: 5px solid rgba(214, 222, 242, 0.1);
+  width: 230px;
+  border-left: 5px solid rgba(214, 222, 242, 0.1);
 	border-right: 5px solid rgba(214, 222, 242, 0.1);
-    border-radius: 7px;
-    box-shadow: 0px 6px 21px 0px rgba(0,0,0,0.28);
+  border-radius: 7px;
+  box-shadow: 0px 6px 21px 0px rgba(0,0,0,0.28);
 	animation-name: pulse;
 	animation-iteration-count: infinite;
 	position: relative;
