@@ -46,9 +46,17 @@ def about():
 def actions_ui():
     return pages.actions_page()
 
+@app.route('/add_user')
+def add_user_page():
+    return pages.add_user()
+
 @app.route('/api/actions')
 def actions():
     return api.action_list()
+
+@app.route('/api/add_user', methods=['POST'])
+def add_user():
+    return api.add_user(request.json, request.remote_addr)
 
 if __name__ == "__main__":
     app.run()

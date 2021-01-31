@@ -1,5 +1,6 @@
 import time
 from getpass import getpass
+from hashlib import sha256
 
 import pymongo
 
@@ -9,6 +10,9 @@ import config
 from cr_formulas import *
 from general import max_score
 from config_loader import config
+
+def hash_ip(ip_address):
+    return sha256(ip_address.encode('utf-8')).hexdigest()
 
 class HitbloqMongo():
     def __init__(self, password):
@@ -349,6 +353,21 @@ class HitbloqMongo():
     def set_action_progress(self, action_id, progress):
         if action_id:
             self.db['actions'].update_one({'_id': action_id}, {'$set': {'progress': progress}})
+
+    def get_rate_limits(self, ip_address):
+        ip_hash = hash_ip(ip_address)
+        ratelimits = self.db['ratelimits'].find_one({'_id': ip_hash})
+        if not ratelimits:
+            ratelimits = {
+                '_id': ip_hash,
+                'user_additions': 0,
+            }
+            self.db['ratelimits'].insert_one(ratelimits)
+        return ratelimits
+
+    def ratelimit_add(self, ip_address, field):
+        ip_hash = hash_ip(ip_address)
+        self.db['ratelimits'].update_one({'_id': ip_hash}, {'$inc': {field: 1}})
 
 print('MongoDB requires a password!')
 database = HitbloqMongo(getpass())

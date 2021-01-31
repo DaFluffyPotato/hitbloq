@@ -43,6 +43,10 @@ def actions_page():
     actions_html = normal_page(templates.inject('actions_layout', {}), 'Action Queue', 'action queue')
     return actions_html
 
+def add_user():
+    add_user_html = normal_page(templates.inject('add_user_layout', {}), 'Add User', 'add a user to Hitbloq')
+    return add_user_html
+
 def search_page(search_str):
     search_html = normal_page(templates.inject('search_results_layout', {'search_results': generate_search_entries(search_str)}), search_str + ' Search Results', 'player search results for ' + search_str)
     return search_html

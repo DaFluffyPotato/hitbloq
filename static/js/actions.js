@@ -9,9 +9,9 @@ function getJSON(url, callback) {
       } else {
         callback(status, xhr.response);
       }
-    };
+    }
     xhr.send();
-};
+}
 
 function epoch() {
   current_date = new Date();

@@ -17,6 +17,7 @@ class User():
         database.update_user_scores(self, action_id)
 
     def create(self, database, scoresaber_id):
+        scoresaber_id = scoresaber_id.split('/')[-1]
         try:
             a = int(scoresaber_id)
         except:

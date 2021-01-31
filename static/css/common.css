@@ -283,3 +283,17 @@ a:hover {
   margin-bottom: 0px;
   background-color: rgba(45, 53, 65, 0.7);
 }
+
+.simple-input {
+  border: 1px solid transparent;
+  height: 30px;
+  width: 200px;
+  border-radius: 15px;
+  font-size: 10pt;
+  padding: 1rem;
+  margin-right: 20px;
+  background-color: rgb(36, 41, 49);
+  box-shadow: inset 0px 0px 12px 0px rgba(0,0,0,0.16);
+  color: rgb(162, 169, 185);
+  padding-right: 30px;
+}
