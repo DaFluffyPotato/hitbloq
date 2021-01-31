@@ -85,7 +85,7 @@ class HitbloqMongo():
             'score': scoresaber_json['unmodififiedScore'],
             'time_set': scoresaber_json['epochTime'],
             'song_id': scoresaber_json['songHash'] + '|' + scoresaber_json['difficultyRaw'],
-            'cr': cd_data,
+            'cr': cr_data,
             'user': user.id,
         }
         return score_data
