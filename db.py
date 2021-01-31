@@ -67,7 +67,7 @@ class HitbloqMongo():
             return 0
 
     def get_ranking_slice(self, map_pool_id, start, end):
-        return self.db['ladders'].find_one({'_id': map_pool_id}, {'ladder': {'$slice': [start, end]}})
+        return self.db['ladders'].find_one({'_id': map_pool_id}, {'ladder': {'$slice': [start, end - start]}})
 
     def sort_ladder(self, map_pool_id):
         self.db['ladders'].update_one({'_id': map_pool_id}, {'$push': {'ladder': {'$each': [], '$sort': {'cr': -1}}}})
