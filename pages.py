@@ -27,6 +27,18 @@ def get_map_pool():
         map_pool = request.args.get('pool')
     return map_pool
 
+def rebuild_args(updates):
+    new_args = dict(request.args.copy())
+    new_args.update(updates)
+    arg_str = ''
+    for i, arg in enumerate(new_args):
+        if i == 0:
+            arg_str += '?'
+        else:
+            arg_str += '&'
+        arg_str += arg + '=' + new_args[arg]
+    return arg_str
+
 def normal_page(contents, title='Hitbloq', desc='a competitive beat saber service', image='https://hitbloq.com/static/hitbloq.png'):
     if title != 'Hitbloq':
         title = 'Hitbloq - ' + title
@@ -177,8 +189,8 @@ def leaderboard_page(leaderboard_id, page):
         'pulse_rate': str(1 / leaderboard_data['bpm'] * 60 * 2) + 's',
         'song_picture': 'https://beatsaver.com' + leaderboard_data['cover'],
         'beatsaver_id': leaderboard_data['key'],
-        'next_page': request.path.split('?')[0] + '?page=' + str(page + 1),
-        'last_page': request.path.split('?')[0] + '?page=' + str(max(page - 1, 0)),
+        'next_page': request.path.split('?')[0] + rebuild_args({'page': str(page + 1)}),
+        'last_page': request.path.split('?')[0] + rebuild_args({'page': str(max(page - 1, 0))}),
     }
     leaderboard_html = normal_page(templates.inject('leaderboard_layout', leaderboard_insert), leaderboard_data['name'] + ' Leaderboard', 'song leaderboard for ' + leaderboard_data['name'], 'https://beatsaver.com' + leaderboard_data['cover'])
     return leaderboard_html
@@ -241,8 +253,8 @@ def profile_page(user_id, profile_page):
         'played_songs': generate_profile_entries(profile_obj, profile_page),
         'player_rank': str(player_rank),
         'player_cr': str(round(player_cr_total, 2)),
-        'next_page': request.path.split('?')[0] + '?page=' + str(profile_page + 1),
-        'last_page': request.path.split('?')[0] + '?page=' + str(max(profile_page - 1, 0)),
+        'next_page': request.path.split('?')[0] + rebuild_args({'page': str(profile_page + 1)}),
+        'last_page': request.path.split('?')[0] + rebuild_args({'page': str(max(profile_page - 1, 0))}),
     })
     profile_html = normal_page(templates.inject('profile_layout', profile_insert), profile_obj.user.username + '\'s Profile', profile_obj.user.username + '\'s Hitbloq profile', profile_obj.user.profile_pic)
     return profile_html
