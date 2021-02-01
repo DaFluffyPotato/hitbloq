@@ -23,6 +23,8 @@ def get_map_pool():
     map_pool = request.cookies.get('map_pool')
     if not map_pool:
         map_pool = 'global_main'
+    if request.args.get('pool'):
+        map_pool = request.args.get('pool')
     return map_pool
 
 def normal_page(contents, title='Hitbloq', desc='a competitive beat saber service', image='https://hitbloq.com/static/hitbloq.png'):
