@@ -36,7 +36,10 @@ def rebuild_args(updates):
             arg_str += '?'
         else:
             arg_str += '&'
-        arg_str += arg + '=' + new_args[arg]
+        if type(new_args[arg]) == list:
+            arg_str += arg + '=' + new_args[arg][0]
+        else:
+            arg_str += arg + '=' + new_args[arg]
     return arg_str
 
 def normal_page(contents, title='Hitbloq', desc='a competitive beat saber service', image='https://hitbloq.com/static/hitbloq.png'):
