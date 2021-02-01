@@ -6,7 +6,7 @@ import pymongo
 
 import scoresaber, beatsaver
 import user
-import config
+import config as old_config
 from cr_formulas import *
 from general import max_score
 from config_loader import config
@@ -232,13 +232,13 @@ class HitbloqMongo():
         if beatsaver_data:
             characteristic = leaderboard_difficulty.split('_')[-1]
             try:
-                characteristic = config.CHARACTERISTIC_CONVERSION[characteristic]
+                characteristic = old_config.CHARACTERISTIC_CONVERSION[characteristic]
             except KeyError:
                 print('ERROR:', characteristic, 'is not a known characteristic.')
                 return None
 
             difficulty = leaderboard_difficulty.split('_')[1]
-            difficulty = config.DIFFICULTY_CONVERSION[difficulty]
+            difficulty = old_config.DIFFICULTY_CONVERSION[difficulty]
 
             # get the correct difficulty data based on characteristic and difficulty
             try:
