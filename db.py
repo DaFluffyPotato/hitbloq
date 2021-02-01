@@ -99,8 +99,11 @@ class HitbloqMongo():
 
     def replace_scores(self, scores):
         score_ids = [score['_id'] for score in scores]
-        self.db['scores'].delete_many({'_id': {'$in': score_ids}})
-        self.db['scores'].insert_many(scores)
+        if score_ids != []:
+            self.db['scores'].delete_many({'_id': {'$in': score_ids}})
+            self.db['scores'].insert_many(scores)
+        else:
+            print('warning: no scores to replace')
 
     # no longer used since scores must be dynamically sorted on a per-pool basis
     def update_user_score_order(self, user):
