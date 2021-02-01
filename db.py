@@ -271,7 +271,7 @@ class HitbloqMongo():
                 'obstacles': difficulty_data['obstacles'],
                 'hash': leaderboard_hash,
                 'score_ids': new_scores,
-                'star_rating': 0.0,
+                'star_rating': {},
             }
 
             self.db['leaderboards'].insert_one(leaderboard_data)
