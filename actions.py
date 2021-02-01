@@ -22,6 +22,12 @@ def process_action(action):
     if action['type'] == 'recalculate_cr':
         cr.full_cr_update(action['map_pools'], action['_id'])
 
+    if action['type'] == 'rank_song':
+        database.rank_song(action['song_id'], action['map_pool'])
+
+    if action['type'] == 'unrank_song':
+        database.unrank_song(action['song_id'], action['map_pool'])
+
     database.clear_action(action['_id'])
 
 if __name__ == "__main__":

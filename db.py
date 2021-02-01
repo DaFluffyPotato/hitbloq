@@ -306,6 +306,21 @@ class HitbloqMongo():
         if not third_party:
             self.db['users'].update_many({}, {'$set': {'total_cr.' + name : 0}})
 
+    def unrank_song(self, leaderboard_id, map_pool):
+        self.db['ranked_lists'].update_one({'_id': map_pool}, {'$pull': {'leaderboard_id_list': leaderboard_id}})
+
+        current_leaderboard = self.db['leaderboards'].find_one({'_id': leaderboard_id})
+        if current_leaderboard:
+            print('found leaderboard')
+            self.db['leaderboards'].update_one({'_id': leaderboard_id}, {'$unset': {'star_rating.' + map_pool: 1}})
+
+            scores = list(self.fetch_scores(current_leaderboard['score_ids']))
+            for score in scores:
+                if map_pool in score['cr']:
+                    del score['cr'][map_pool]
+            print('replacing', len(scores), 'scores')
+            self.replace_scores(scores)
+
     def rank_song(self, leaderboard_id, map_pool):
         # ensure that it wasn't previously added
         self.db['ranked_lists'].update_one({'_id': map_pool}, {'$pull': {'leaderboard_id_list': leaderboard_id}})
@@ -319,7 +334,7 @@ class HitbloqMongo():
             self.create_leaderboard(leaderboard_id, leaderboard_id.split('|')[0], True)
             current_leaderboard = self.db['leaderboards'].find_one({'_id': leaderboard_id})
         self.db['leaderboards'].update_one({'_id': leaderboard_id}, {'$set': {'star_rating.' + map_pool: 0}})
-        scores = self.fetch_scores(current_leaderboard['score_ids'])
+        scores = list(self.fetch_scores(current_leaderboard['score_ids']))
         for score in scores:
             score['cr'][map_pool] = 0
         self.replace_scores(scores)

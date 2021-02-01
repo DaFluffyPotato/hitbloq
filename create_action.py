@@ -12,3 +12,9 @@ def update_users(user_ids):
 
 def recalculate_cr(map_pools):
     database.add_action({'type': 'recalculate_cr', 'map_pools': map_pools})
+
+def rank_song(song_id, map_pool):
+    database.add_action({'type': 'rank_song', 'song_id': song_id, 'map_pool': map_pool})
+
+def unrank_song(song_id, map_pool):
+    database.add_action({'type': 'unrank_song', 'song_id': song_id, 'map_pool': map_pool})
