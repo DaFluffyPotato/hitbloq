@@ -402,5 +402,8 @@ class HitbloqMongo():
         ip_hash = hash_ip(ip_address)
         self.db['ratelimits'].update_one({'_id': ip_hash}, {'$inc': {field: 1}})
 
+    def set_pool_curve(self, pool_id, curve_data):
+        self.db['ranked_lists'].update_one({'_id': pool_id}, {'$set': {'cr_curve': curve_data}})
+
 print('MongoDB requires a password!')
 database = HitbloqMongo(getpass())

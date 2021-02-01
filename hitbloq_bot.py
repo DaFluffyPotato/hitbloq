@@ -1,10 +1,12 @@
 import asyncio
+import json
 
 import discord
 
 import create_action
 from db import database
 import beatsaver
+from cr_formulas import curves
 
 beatsaver_interface = beatsaver.BeatSaverInterface()
 
@@ -85,6 +87,22 @@ async def on_message(message):
                     await message.channel.send(message.author.mention + ' you don\'t have permissions to modify this pool')
             else:
                 await message.channel.send(message.author.mention + ' that pool ID appears to be invalid')
-
+        if message_args[0] == '!set_curve':
+            pool_id = message_args[1]
+            if pool_id in database.get_pool_ids(True):
+                if pool_id in [role.name for role in message.author.roles]:
+                    try:
+                        json_data = json.loads(' '.join(message_args[2:]))
+                        if json_data['type'] in curves:
+                            database.set_pool_curve(pool_id, json_data)
+                            await message.channel.send(message.author.mention + ' the curve for ' + pool_id + ' has been updated. You may want to run `!recalculate_cr ' + pool_id + '`.')
+                        else:
+                            await message.channel.send(message.author.mention + ' the specified curve does not exist.')
+                    except:
+                        await message.channel.send(message.author.mention + ' the JSON formatting is invalid.')
+                else:
+                    await message.channel.send(message.author.mention + ' you don\'t have permissions to modify this pool')
+            else:
+                await message.channel.send(message.author.mention + ' that pool ID appears to be invalid')
 
 client.run(token)
