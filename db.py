@@ -77,9 +77,12 @@ class HitbloqMongo():
         self.db['ladders'].update_one({'_id': map_pool_id}, {'$push': {'ladder': {'$each': [], '$sort': {'cr': -1}}}})
 
     def format_score(self, user, scoresaber_json, leaderboard):
+        cr_curve_data = {}
+        if leaderboard['star_rating'] != {}:
+            cr_curve_data = {rl['_id']: rl['cr_curve'] for rl in self.search_ranked_lists({'_id': {'$in': list(leaderboard['star_rating'])}})}
         cr_data = {}
         for pool_id in leaderboard['star_rating']:
-            cr_data[pool_id] = calculate_cr(scoresaber_json['score'] / max_score(leaderboard['notes']) * 100, leaderboard['star_rating'][pool_id])
+            cr_data[pool_id] = calculate_cr(scoresaber_json['score'] / max_score(leaderboard['notes']) * 100, leaderboard['star_rating'][pool_id], cr_curve_data[pool_id])
         score_data = {
             # typo in scoresaber api. lul
             'score': scoresaber_json['unmodififiedScore'],

@@ -3,18 +3,19 @@ from general import max_score
 from config import LEADERBOARD_VOTE_RANKING_CURVE_CONSTANT
 from cr_formulas import *
 
-def update_leaderboard_cr(leaderboard_id, map_pools):
+def update_leaderboard_cr(leaderboard_id, map_pools, curve_data):
     leaderboard = database.get_leaderboards([leaderboard_id])[0]
     scores = list(database.fetch_scores(leaderboard['score_ids']))
     if len(scores) != 0:
         for score in scores:
             for map_pool in map_pools:
-                score['cr'][map_pool] = calculate_cr(score['score'] / max_score(leaderboard['notes']) * 100, leaderboard['star_rating'][map_pool])
+                score['cr'][map_pool] = calculate_cr(score['score'] / max_score(leaderboard['notes']) * 100, leaderboard['star_rating'][map_pool], curve_data[map_pool])
         database.replace_scores(scores)
 
 def update_leaderboards_cr(leaderboard_ids, map_pools):
+    cr_curve_data = {rl['_id']: rl['cr_curve'] for rl in database.search_ranked_lists({'_id': {'$in': map_pools}})}
     for leaderboard_id in leaderboard_ids:
-        update_leaderboard_cr(leaderboard_id, map_pools)
+        update_leaderboard_cr(leaderboard_id, map_pools, cr_curve_data)
 
 def calculate_song_rankings(user, leaderboards):
     user.load_scores(database)
