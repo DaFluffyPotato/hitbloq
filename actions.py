@@ -44,7 +44,7 @@ def process_action(action):
                 'image': BASE_64_LOGO,
                 'songs': [{'hash': hash} for hash in map_lists[pool]],
             }
-            f = open('static/hashlists/' + pool, 'w')
+            f = open('static/hashlists/' + pool + '.bplist', 'w')
             json.dump(hash_list_json, f)
             f.close()
 
