@@ -36,7 +36,4 @@ def calculate_cr(accuracy, difficulty, curve_data):
 
 def cr_accumulation_curve(index):
     accumulation_constant = 0.94
-    if index > 50:
-        return 0
-    else:
-        return accumulation_constant ** index
+    return accumulation_constant ** index
