@@ -35,7 +35,7 @@ def process_action(action):
         database.update_rank_histories(action['map_pool'], action['_id'])
 
     if action['type'] == 'regenerate_playlists':
-        map_lists = {ranked_list['_id'] : [hash.split('|') for hash in ranked_list['leaderboard_id_list']] for ranked_list in database.get_ranked_lists()}
+        map_lists = {ranked_list['_id'] : [hash.split('|')[0] for hash in ranked_list['leaderboard_id_list']] for ranked_list in database.get_ranked_lists()}
         for pool in map_lists:
             hash_list_json = {
                 'playlistTitle': pool,
