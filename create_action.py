@@ -21,3 +21,6 @@ def unrank_song(song_id, map_pool):
 
 def update_rank_histories(map_pool):
     database.add_action({'type': 'update_rank_histories', 'map_pool': map_pool})
+
+def regenerate_playlists():
+    database.add_action({'type': 'regenerate_playlists'})

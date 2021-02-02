@@ -54,6 +54,8 @@ async def on_message(message):
             for pool_id in database.get_pool_ids(False):
                 create_action.update_rank_histories(pool_id)
             await message.channel.send(message.author.mention + ' a full player history update has been added to the action queue.\nhttps://hitbloq.com/actions')
+        if message_args[0] == '!regenerate_playlists':
+            create_action.regenerate_playlists()
     if message.channel.name == POOL_ADMIN_COMMANDS_CHANNEL:
         if message_args[0] == '!recalculate_cr':
             pool_id = message_args[1]
