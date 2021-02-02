@@ -95,13 +95,14 @@
 }
 
 .song-hash {
-  font-size: 11.5pt;
+  font-size: 14pt;
   overflow: hidden;
   height: 36pt;
   padding: 8px;
 }
 
 .song-hash:hover {
+  font-size: 11.5pt;
   overflow: visible;
   overflow-wrap: break-word;
 }

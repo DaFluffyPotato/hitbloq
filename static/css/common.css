@@ -306,3 +306,17 @@ a:hover {
   color: rgb(162, 169, 185);
   padding-right: 30px;
 }
+
+.gradient-text {
+    background-color: rgba(242, 245, 251, 0);
+    background-image: linear-gradient(-45deg, rgba(242, 245, 251, 1), rgba(242, 245, 251, 0));
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+}
+
+.gradient-text:hover {
+  background-color: rgba(242, 245, 251, 1);
+}
