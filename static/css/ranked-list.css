@@ -103,3 +103,9 @@
 .ranked-lists-entry-title:hover {
 	font-size: 23px;
 }
+
+.hashlist-download {
+  position: absolute;
+  right: 0px;
+  top: 24px;
+}
