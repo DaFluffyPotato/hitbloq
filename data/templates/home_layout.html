@@ -1,0 +1,33 @@
+<div class="main">
+	<div class="card plain-card overlayed-card">
+		<h2>Hitbloq is in Active Development!</h2>
+		You can check watch my progress <a href="https://github.com/DaFluffyPotato/hitbloq/commits/main">in the GitHub Repository</a> or the <a href="https://discord.gg/pxWwtWJ">Discord Server</a>.<br><br>
+		If you wan't to support Hitbloq development, contribute to prize pools, or if you just want shiny rewards, please consider supporting Hitbloq <b><a href="https://www.patreon.com/hitbloq">on Patreon!</a></b>
+	</div>
+	<div class="card plain-card" style="margin-top: 45px;">
+		<h2>Why Hitbloq?</h2>
+		<h3>Hitbloq offers a unique competitive experience for Beat Saber through its use of map pools and the relative ranking algorithm.</h3><br><br>
+
+		<h2>Map Pools</h2>
+		The map pools are collections of maps and each pool has its own curves (for cr tweaks) and ranked ladder. In the future, anybody should be able to make a third party pool, but at the moment, I (DaFluffyPotato) have to approve the creation of pools. After the pool has been set up, the pool managers are fully autonomous. They can rank, unrank, and configure the pool without my input.<br><br>
+		Since each map pool has its own leaderboards, curves, and cr, almost every page of the website changes depending on your selected pool (profiles, leaderboards, etc.). By default, the <a href="/ranked_list/global_main">Global Main</a> map pool is selected, but you can change your selection on the <a href="/map_pools">Map Pools</a> page.<br>
+		<img class="image-embed" src="https://i.imgur.com/jayLLWJ.gif"><br>
+		Your current map pool selection can be seen on the bottom left.<br>
+		<img class="image-embed" src="https://i.imgur.com/xOTA5KX.png"><br>
+		<i>Remember: you will see different CR rewards, difficulty ratings, player leaderboards, and even profiles depending on your selected map pool.</i><br><br><br>
+
+		<h2>Relative Ranking</h2>
+		Instead of generating map difficulty ratings from map data, Hitbloq generates map difficulty ratings from player data. This means that it works on <i>any</i> map. 90/360 degree maps can be ranked and maps that require mods can even be ranked. The algorithm works by comparing a player's scores against their own scores within the map pool to determine the "hardest" maps on a per-player basis. For each map, the rankings on the per-player basis are combined with the difficulty rankings from the highest scoring players within the leaderboard having their rankings weighted the heaviest. This implementation corrects for the issue where bad players are unable to pass a map, which prevents their data from being considered. Map difficulty ratings are very dynamic since the algorithm is rerun every day (at the moment) or more, which updates the difficulty ratings.<br><br>
+		For the time being, difficulty ratings are being assigned even with small sample sizes, which results in some very innaccurate ratings until the map has enough scores. In the future, difficulty ratings will be turned off for maps with too few scores.<br><br>
+		<b>As the system gets more data, the difficulty ratings will become more accurate.</b><br><br>
+		In some cases, if a difficulty rating is way off (with a low-ish sample size), the top players can manipulate it. If a map is overrated, the top players can grind it and the difficulty rating will be pulled down if they do well. If a map is underrated, the top players can get good scores on easy maps to reduce the difficulty on the easy maps and raise the difficulty on the hard maps. (Essentially, the top players just have to play all ranked maps to the best of their ability to get accurate map difficulties.) These effects get reduced with larger sample sizes (more scores) and the manipulation power of an individual will be reduced.<br><br>
+		This is a simplified explanation of the ranking system. Since Hitbloq is open source, anybody can take a look at the <a href="https://github.com/DaFluffyPotato/hitbloq/blob/main/cr.py">code for ranking</a> to get a better understanding of how the system actually works (it's only ~100 lines!).<br><br>
+		<i>Scores should be synced from ScoreSaber every 15 minutes.</i><br><br><br>
+
+		<h2>Future Plans</h2>
+		The future plans for Hitbloq are very open at the moment. Feel free to suggest what you'd like to see in the <a href="https://discord.gg/pxWwtWJ">Discord Server</a>.<br><br><br>
+
+		<h3>Have Fun!</h3>
+		<i>You can <a href="/add_user">add yourself here</a> if you haven't already.</i>
+	</div>
+</div>
