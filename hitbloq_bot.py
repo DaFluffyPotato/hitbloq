@@ -56,6 +56,7 @@ async def on_message(message):
             await message.channel.send(message.author.mention + ' a full player history update has been added to the action queue.\nhttps://hitbloq.com/actions')
         if message_args[0] == '!regenerate_playlists':
             create_action.regenerate_playlists()
+            await message.channel.send(message.author.mention + ' hashlist generation has been added to the action queue.\nhttps://hitbloq.com/actions')
     if message.channel.name == POOL_ADMIN_COMMANDS_CHANNEL:
         if message_args[0] == '!recalculate_cr':
             pool_id = message_args[1]
