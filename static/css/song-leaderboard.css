@@ -7,7 +7,7 @@
 .song-card {
     display: grid;
     align-items: center;
-    grid-template-columns: auto 1fr 200px;
+    grid-template-columns: auto 1fr 150px;
     height: 230px;
     overflow-x: hidden;
     padding: 1.5rem;
@@ -91,6 +91,19 @@
 
 .right-info {
     height: 50%;
+    text-align: right;
+}
+
+.song-hash {
+  font-size: 11.5pt;
+  overflow: hidden;
+  height: 36pt;
+  padding: 8px;
+}
+
+.song-hash:hover {
+  overflow: visible;
+  overflow-wrap: break-word;
 }
 
 .skill-info {

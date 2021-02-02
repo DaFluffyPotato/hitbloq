@@ -89,6 +89,7 @@ class User():
         self.load_scores(database)
         map_pool = database.get_ranked_list(map_pool_id)
         new_scores = []
+        self.scores_total = len(self.scores)
         for score in self.scores:
             if score['song_id'] in map_pool['leaderboard_id_list']:
                 new_scores.append(score)

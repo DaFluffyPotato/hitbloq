@@ -1,3 +1,5 @@
+import datetime
+
 def max_score(notes):
     if notes >= 13:
         max_score = (notes - 13) * 8 * 115 + 4715
@@ -39,3 +41,9 @@ def mongo_clean(string):
     for char in ['{', '}', '.', '$']:
         string = string.replace(char, '')
     return string
+
+def epoch_to_date(epoch):
+    ts = datetime.datetime.fromtimestamp(epoch)
+    months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    day_extensions = ['th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th']
+    return months[ts.month - 1] + ' ' + str(ts.day) + day_extensions[ts.day % 10] + ', ' + str(ts.year)

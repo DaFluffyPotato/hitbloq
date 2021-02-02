@@ -7,7 +7,7 @@
     row-gap: 1.5em;
     column-gap: 1.5em;
     grid-template-columns: 65% 35%;
-    grid-template-rows: 260px auto;
+    grid-template-rows: 320px auto;
 }
 
 /* USER CARD */
@@ -42,6 +42,7 @@
     display: block;
     width: 100%;
     padding: 10px;
+    line-height: 8pt;
 }
 
 .user-name {
@@ -107,7 +108,7 @@
 }
 
 .fetchpage-input input:hover {
-    box-shadow: inset 0px 0px 15px 0px rgba(0,0,0,0.30);
+    box-shadow: inset 0px 0px 15px 0px rgba(0, 0, 0, 0.30);
 }
 
 .fetchpage-input input:focus {
@@ -133,12 +134,17 @@
 
 .rank-graph {
     width: 100%;
-    height: 100%;
+    height: 80%;
     position: relative;
+    box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.3) inset;
+    background-color: rgb(36, 41, 49);
+    border-radius: 7px;
+    margin-top: 8px;
 }
 
 .rank-canvas {
     width: 100%;
+    height: 80%;
 }
 
 .rank-line {
@@ -146,7 +152,7 @@
     top: 0px;
     width: 2px;
     height: 100%;
-    background-color: #00BFFF;
+    background-color: #E03535;
     display: none;
 }
 
@@ -156,7 +162,7 @@
     display: none;
     height: 12px;
     border-radius: 9px;
-    border: 3px solid #00BFFF;
+    border: 3px solid #E03535;
     background-color: rgb(45, 53, 65);
 }
 
@@ -182,7 +188,7 @@
 
 .rank-info-time {
     font-size: 10pt;
-    color: rgb(116, 216, 255);
+    color: #E03535;
 }
 
 /* PROFILE SONGS */

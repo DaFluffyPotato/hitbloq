@@ -4,7 +4,7 @@ from db import database
 from profile import Profile
 from templates import templates
 from user import User
-from general import shorten_settings, lengthen_settings, max_score
+from general import shorten_settings, lengthen_settings, max_score, epoch_to_date
 from cr_formulas import *
 
 def generate_header(image, title, description):
@@ -191,7 +191,7 @@ def leaderboard_page(leaderboard_id, page):
         'notes_per_second': str(round(leaderboard_data['notes'] / leaderboard_data['length'], 2)),
         'pulse_rate': str(1 / leaderboard_data['bpm'] * 60 * 2) + 's',
         'song_picture': 'https://beatsaver.com' + leaderboard_data['cover'],
-        'beatsaver_id': leaderboard_data['key'],
+        'song_hash': leaderboard_data['hash'],
         'next_page': request.path.split('?')[0] + rebuild_args({'page': str(page + 1)}),
         'last_page': request.path.split('?')[0] + rebuild_args({'page': str(max(page - 1, 0))}),
     }
@@ -248,14 +248,30 @@ def profile_page(user_id, profile_page):
     if map_pool in profile_obj.user.cr_totals:
         player_cr_total = profile_obj.user.cr_totals[map_pool]
 
+    player_max_rank = 0
+    if map_pool in profile_obj.user.max_rank:
+        player_max_rank = profile_obj.user.max_rank[map_pool]
+
     player_rank = database.get_user_ranking(profile_obj.user, map_pool)
+
+    player_rank_history = []
+    if map_pool in profile_obj.user.rank_history:
+        player_rank_history = profile_obj.user.rank_history[map_pool]
+    if len(player_rank_history) == 1:
+        player_rank_history.append(player_rank_history[0])
+    player_rank_history.append(player_rank)
 
     profile_insert = {}
     profile_insert.update(profile_obj.insert_info)
     profile_insert.update({
         'played_songs': generate_profile_entries(profile_obj, profile_page),
-        'player_rank': str(player_rank),
-        'player_cr': str(round(player_cr_total, 2)),
+        'player_rank': '{:,}'.format(player_rank),
+        'player_cr': '{:,}'.format(round(player_cr_total, 2)),
+        'peak_rank': '{:,}'.format(player_max_rank),
+        'scores_set': '{:,}'.format(profile_obj.user.scores_total),
+        'ranked_scores_set': '{:,}'.format(len(profile_obj.user.scores)),
+        'date_joined': epoch_to_date(profile_obj.user.date_created),
+        'rank_history': ','.join([str(v) for v in player_rank_history]),
         'next_page': request.path.split('?')[0] + rebuild_args({'page': str(profile_page + 1)}),
         'last_page': request.path.split('?')[0] + rebuild_args({'page': str(max(profile_page - 1, 0))}),
     })
