@@ -50,6 +50,10 @@ async def on_message(message):
             map_pools = message_args[1].split(',')
             create_action.recalculate_cr(map_pools)
             await message.channel.send(message.author.mention + ' a cr recalculation for `' + str(map_pools) + '` has been added to the action queue.\nhttps://hitbloq.com/actions')
+        if message_args[0] == '!update_rank_histories':
+            for pool_id in database.get_pool_ids(False):
+                create_action.update_rank_histories(pool_id)
+            await message.channel.send(message.author.mention + ' a full player history update has been added to the action queue.\nhttps://hitbloq.com/actions')
     if message.channel.name == POOL_ADMIN_COMMANDS_CHANNEL:
         if message_args[0] == '!recalculate_cr':
             pool_id = message_args[1]
