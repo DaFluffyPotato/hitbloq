@@ -409,7 +409,7 @@ class HitbloqMongo():
         ranked_ladder = self.db['ladders'].find_one({'_id': pool_id})['ladder']
         # this will need to be bundled into one request somehow later on
         for rank, user in enumerate(ranked_ladder):
-            self.db['users'].update_one({'_id': user['user']}, {'$push': {'rank_history.' + pool_id: rank + 1, '$slice': -60}}, {'$min': {'max_rank.' + pool_id: rank + 1}})
+            self.db['users'].update_one({'_id': user['user']}, {'$push': {'rank_history.' + pool_id: rank + 1, '$slice': -60}, '$min': {'max_rank.' + pool_id: rank + 1}})
             if action_id:
                 if rank % 20 == 0:
                     self.set_action_progress(action_id, rank / len(ranked_ladder))
