@@ -28,6 +28,9 @@ def process_action(action):
     if action['type'] == 'unrank_song':
         database.unrank_song(action['song_id'], action['map_pool'])
 
+    if action['type'] == 'update_rank_histories':
+        database.update_rank_histories(action['map_pool'], action['_id'])
+
     database.clear_action(action['_id'])
 
 if __name__ == "__main__":

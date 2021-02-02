@@ -405,5 +405,14 @@ class HitbloqMongo():
     def set_pool_curve(self, pool_id, curve_data):
         self.db['ranked_lists'].update_one({'_id': pool_id}, {'$set': {'cr_curve': curve_data}})
 
+    def update_rank_histories(self, pool_id, action_id=None):
+        ranked_ladder = self.db['ladders'].find_one({'_id': pool_id})['ladder']
+        # this will need to be bundled into one request somehow later on
+        for rank, user in enumerate(ranked_ladder):
+            self.db['users'].update_one({'_id': user['user']}, {'$push': {'rank_history.' + pool_id: rank + 1, '$slice': -60}}, {'$min': {'max_rank': rank + 1}})
+            if action_id:
+                if rank % 20 == 0:
+                    self.set_action_progress(action_id, rank / len(ranked_ladder))
+
 print('MongoDB requires a password!')
 database = HitbloqMongo(getpass())

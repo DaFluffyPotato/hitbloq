@@ -1,3 +1,5 @@
+import time
+
 import scoresaber
 
 class User():
@@ -9,6 +11,9 @@ class User():
         self.score_ids = []
         self.last_update = 0
         self.cr_totals = {}
+        self.date_created = 0
+        self.max_rank = {}
+        self.rank_history = {}
 
         # temp values
         self.scores = []
@@ -40,6 +45,9 @@ class User():
         self.scoresaber_id = scoresaber_id
         self.score_ids = []
         self.last_update = 0
+        self.date_created = time.time()
+        self.max_rank = {}
+        self.rank_history = {}
 
         self.cr_totals = {pool_id : 0 for pool_id in database.get_pool_ids(False)}
 
@@ -54,6 +62,9 @@ class User():
         self.last_update = json_data['last_update']
         self.cr_totals = json_data['total_cr']
         self.profile_pic = json_data['profile_pic']
+        self.date_created = json_data['date_created']
+        self.max_rank = json_data['max_rank']
+        self.rank_history = json_data['rank_history']
         return self
 
     def jsonify(self):
@@ -65,6 +76,9 @@ class User():
             'last_update': self.last_update,
             'total_cr': self.cr_totals,
             'profile_pic': self.profile_pic,
+            'date_created': self.date_created,
+            'max_rank': self.max_rank,
+            'rank_history': self.rank_history,
         }
         return json_data
 

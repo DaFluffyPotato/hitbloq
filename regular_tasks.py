@@ -16,5 +16,6 @@ while True:
     if timer % (DAY) == 0:
         for pool_id in database.get_pool_ids(False):
             create_action.recalculate_cr([pool_id])
+            create_action.update_rank_histories(pool_id)
     time.sleep(1)
     timer += 1
