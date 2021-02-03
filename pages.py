@@ -109,11 +109,16 @@ def generate_player_leaderboard_entries(map_pool, page):
     user_id_list = [user['user'] for user in ladder_data['ladder']]
     user_map = {user.id : user for user in database.get_users(user_id_list)}
     for i, user in enumerate(user_id_list):
+        extra_css = ''
+        if user_map[user].score_banner:
+            extra_css = 'style="background: linear-gradient(to right, rgba(45, 53, 65, 1) 0%, rgba(45, 53, 65, 0.65) 10%, rgba(45, 53, 65, 0.85) 80%, rgba(45, 53, 65, 1) 100%), url(\'' + user_map[user].score_banner + '\') no-repeat; background-size:1200px 100%;"'
+
         values = {
             'profile_picture': user_map[user].profile_pic,
             'user_rank': str(page * players_per_page + i + 1),
             'user_name': '<a href="/user/' + str(user) + '">' + user_map[user].username + '</a>',
             'user_cr': str(round(user_map[user].cr_totals[map_pool['_id']], 2)),
+            'entry_extras': extra_css,
         }
         player_leaderboard_entries_html += templates.inject('player_leaderboard_entry', values)
 
@@ -221,12 +226,17 @@ def generate_leaderboard_entries(leaderboard_data, page):
         if map_pool in score['cr']:
             cr_given = score['cr'][map_pool]
 
+        extra_css = ''
+        if score['user_obj'].score_banner:
+            extra_css = 'style="background: linear-gradient(to right, rgba(45, 53, 65, 1) 0%, rgba(45, 53, 65, 0.65) 10%, rgba(45, 53, 65, 0.85) 80%, rgba(45, 53, 65, 1) 100%), url(\'' + score['user_obj'].score_banner + '\') no-repeat; background-size:1200px 100%;"'
+
         entry_values = {
             'profile_picture': score['user_obj'].profile_pic,
             'score_rank': str(page_length * page + i + 1),
             'score_name': '<a href="/user/' + str(score['user']) + '">' + score['user_obj'].username + '</a>',
             'score_accuracy': str(round(score['score'] / max_score(leaderboard_data['notes']) * 100, 2)),
             'score_cr': str(round(cr_given, 2)),
+            'entry_extras': extra_css,
         }
         html += templates.inject('leaderboard_entry', entry_values)
 
