@@ -273,6 +273,11 @@ def profile_page(user_id, profile_page):
         player_rank_history.append(player_rank_history[0])
     player_rank_history.append(player_rank)
 
+    sort_mode = request.args.get('sort')
+    cr_sort_css = 'box-shadow: 0px 2px 0px 0px #E03535;' if sort_mode in [None, 'cr'] else ''
+    newest_sort_css = 'box-shadow: 0px 2px 0px 0px #E03535;' if sort_mode == 'newest' else ''
+    oldest_sort_css = 'box-shadow: 0px 2px 0px 0px #E03535;' if sort_mode == 'oldest' else ''
+
     profile_insert = {}
     profile_insert.update(profile_obj.insert_info)
     profile_insert.update({
@@ -286,6 +291,12 @@ def profile_page(user_id, profile_page):
         'rank_history': ','.join([str(v) for v in player_rank_history]),
         'next_page': request.path.split('?')[0] + rebuild_args({'page': str(profile_page + 1)}),
         'last_page': request.path.split('?')[0] + rebuild_args({'page': str(max(profile_page - 1, 0))}),
+        'sort_newest_link': request.path.split('?')[0] + rebuild_args({'sort': 'newest'}),
+        'sort_cr_link': request.path.split('?')[0] + rebuild_args({'sort': 'cr'}),
+        'sort_oldest_link': request.path.split('?')[0] + rebuild_args({'sort': 'oldest'}),
+        'sort_oldest_style': oldest_sort_css,
+        'sort_cr_style': cr_sort_css,
+        'sort_newest_style': newest_sort_css,
     })
     profile_html = normal_page(templates.inject('profile_layout', profile_insert), profile_obj.user.username + '\'s Profile', profile_obj.user.username + '\'s Hitbloq profile', profile_obj.user.profile_pic)
     return profile_html
@@ -296,7 +307,14 @@ def generate_profile_entries(profile_obj, profile_page):
 
     map_pool = get_map_pool()
 
-    profile_obj.user.scores.sort(key=lambda x : x['cr'][map_pool], reverse=True)
+    sort_mode = request.args.get('sort')
+
+    if sort_mode == 'newest':
+        profile_obj.user.scores.sort(key=lambda x : x['time_set'], reverse=True)
+    elif sort_mode == 'oldest':
+        profile_obj.user.scores.sort(key=lambda x : x['time_set'])
+    else:
+        profile_obj.user.scores.sort(key=lambda x : x['cr'][map_pool], reverse=True)
     visible_scores = profile_obj.user.scores[profile_page * page_length : (profile_page + 1) * page_length]
 
     profile_obj.fetch_score_leaderboards(visible_scores)
