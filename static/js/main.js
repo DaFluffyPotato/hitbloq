@@ -60,7 +60,7 @@ function set_map_pool_cookie(map_pool) {
 function set_announcement(status, json_response) {
   if (json_response['html'] != null) {
     document.getElementById('announcement-card').innerHTML = json_response['html'];
-    document.getElementById('announcement-card').style.display + 'block';
+    document.getElementById('announcement-card').style.display = 'block';
   }
 }
 
