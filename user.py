@@ -96,5 +96,7 @@ class User():
         self.scores_total = len(self.scores)
         for score in self.scores:
             if score['song_id'] in map_pool['leaderboard_id_list']:
+                if map_pool_id not in score['cr']:
+                    score['cr'][map_pool_id] = 0
                 new_scores.append(score)
         self.scores = new_scores
