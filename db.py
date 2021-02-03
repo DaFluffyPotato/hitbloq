@@ -25,6 +25,9 @@ class HitbloqMongo():
     def get_counter(self, type):
         return self.db['counters'].find_one({'type': type})
 
+    def inc_counter(self, counter_id, amt=1):
+        self.db['counters'].update_many({'type': counter_id}, {'$inc': {'count': amt}})
+
     def add_user(self, user):
         self.db['users'].insert_one(user.jsonify())
 

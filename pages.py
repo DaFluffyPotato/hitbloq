@@ -47,6 +47,7 @@ def normal_page(contents, title='Hitbloq', desc='a competitive beat saber servic
         title = 'Hitbloq - ' + title
 
     map_pool = get_map_pool()
+    database.inc_counter('views')
 
     page_html = templates.inject('layout', {'page_content': contents, 'map_pool': map_pool, 'page_header': generate_header(image, title, desc)})
     return page_html
