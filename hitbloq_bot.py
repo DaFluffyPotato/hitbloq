@@ -24,6 +24,7 @@ client = discord.Client()
 GENERAL_COMMANDS_CHANNEL = 'general-commands'
 ADMIN_COMMANDS_CHANNEL = 'admin-commands'
 POOL_ADMIN_COMMANDS_CHANNEL = 'pool-admin-commands'
+PATRON_COMMANDS_CHANNEL = 'patron-commands'
 channels = []
 
 @client.event
@@ -40,6 +41,17 @@ async def on_ready():
 async def on_message(message):
     global channels, active_guild
     message_args = message.content.split(' ')
+    if message.channel.name == PATRON_COMMANDS_CHANNEL:
+        if message_args[0] == '!set_banner':
+            banner_url = message_args[1]
+            if (banner_url[:20] == 'https://i.imgur.com/') and (banner_url.split('.')[-1] in ['png', 'jpeg', 'jpg']):
+                user_id = int(message_args[1])
+                user = database.db['users'].find_one({'_id': user_id})
+                if user:
+                    database.update_user(user, {'$set': {'score_banner': banner_url}})
+                    await message.channel.send(message.author.mention + ' a new score banner has been set!')
+            else:
+                await message.channel.send(message.author.mention + ' banner URLs must be https://i.imgur.com links and they must be png or jpeg/jpg. You can get these by right clicking the image and clicking "open image in new tab".')
     if message.channel.name == GENERAL_COMMANDS_CHANNEL:
         if message_args[0] == '!add':
             scoresaber_id = message_args[1]
