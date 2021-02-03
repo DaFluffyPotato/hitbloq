@@ -22,6 +22,21 @@ function sendJSON(url, json_data, callback) {
   }
 }
 
+function getJSON(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.responseType = 'json';
+    xhr.onload = function() {
+      var status = xhr.status;
+      if (status === 200) {
+        callback(null, xhr.response);
+      } else {
+        callback(status, xhr.response);
+      }
+    }
+    xhr.send();
+}
+
 function postAddUser(status, json_response) {
   if (json_response['status'] == 'success') {
     document.getElementById('user-addition-card').innerHTML = '<p>Added to the <a href="/actions">Action Queue</a>! After the Score Saber data has been downloaded, you can search for your Score Saber username.</p>';
@@ -41,3 +56,12 @@ function set_map_pool_cookie(map_pool) {
   document.cookie = "map_pool=" + map_pool + ";";
   window.location.reload(true);
 }
+
+function set_announcement(status, json_response) {
+  if (json_response['html'] != null) {
+    document.getElementById('announcement-card').innerHTML = json_response['html'];
+    document.getElementById('announcement-card').style.display + 'block';
+  }
+}
+
+getJSON('/api/announcement', set_announcement);

@@ -69,6 +69,12 @@ async def on_message(message):
         if message_args[0] == '!regenerate_playlists':
             create_action.regenerate_playlists()
             await message.channel.send(message.author.mention + ' hashlist generation has been added to the action queue.\nhttps://hitbloq.com/actions')
+        if message_args[0] == '!set_announcement':
+            announcement_html = ' '.join(message_args[1:])
+            if announcement_html == '':
+                database.db['config'].update_one({'_id': 'announcement'}, {'$set': {'html': None})
+            else:
+                database.db['config'].update_one({'_id': 'announcement'}, {'$set': {'html': announcement_html}})
     if message.channel.name == POOL_ADMIN_COMMANDS_CHANNEL:
         if message_args[0] == '!recalculate_cr':
             pool_id = message_args[1]
