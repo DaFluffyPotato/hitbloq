@@ -72,7 +72,7 @@ async def on_message(message):
         if message_args[0] == '!set_announcement':
             announcement_html = ' '.join(message_args[1:])
             if announcement_html == '':
-                database.db['config'].update_one({'_id': 'announcement'}, {'$set': {'html': None})
+                database.db['config'].update_one({'_id': 'announcement'}, {'$set': {'html': None}})
             else:
                 database.db['config'].update_one({'_id': 'announcement'}, {'$set': {'html': announcement_html}})
     if message.channel.name == POOL_ADMIN_COMMANDS_CHANNEL:
