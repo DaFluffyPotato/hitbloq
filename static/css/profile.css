@@ -275,7 +275,7 @@
   box-shadow: 0px 2px 0px 0px #E03535;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 11in) {
   .rank-graph-card {
       display: none;
   }
