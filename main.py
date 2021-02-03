@@ -62,6 +62,10 @@ def add_user():
 def ranked_list_api(pool_id):
     return api.ranked_list(pool_id)
 
+@app.route('/api/map_pools')
+def map_pools_api():
+    return api.ranked_lists()
+
 @app.route('/api/announcement')
 def announcement_api():
     return api.get_announcement()

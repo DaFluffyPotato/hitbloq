@@ -22,5 +22,8 @@ def add_user(request_json, ip_address):
 def ranked_list(pool_id):
     return jsonify(database.get_ranked_list(mongo_clean(pool_id)))
 
+def ranked_lists():
+    return jsonify(database.get_pool_ids(False))
+
 def get_announcement():
     return jsonify(database.db['config'].find_one({'_id': 'announcement'}))

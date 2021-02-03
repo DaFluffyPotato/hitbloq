@@ -174,6 +174,22 @@ class HitbloqMongo():
 
         self.db['scores'].delete_many({'_id': {'$in': score_ids}})
 
+    def delete_user(self, user_id):
+        self.delete_user_scores(user_id)
+        for ladder in self.db['ladders'].find({}):
+            for user in ladder['ladder']:
+                if 'user' not in user:
+                    print('user with no user?')
+                    ladder['ladder'].remove(user)
+                    continue
+                if user['user'] == user_id:
+                    print('removed', user, 'from', ladder['_id'])
+                    ladder['ladder'].remove(user)
+                    break
+            self.db['ladders'].update_one({'_id': ladder['_id']}, {'$set': {'ladder': ladder['ladder']}})
+        self.db['users'].delete_one({'_id': user_id})
+        print('deleted user', user_id)
+
     def refresh_score_order(self, leaderboard_id):
         leaderboard_data = self.db['leaderboards'].find_one({'_id': leaderboard_id})
         new_score_order = [score['_id'] for score in self.fetch_scores(leaderboard_data['score_ids']).sort('score', -1)]
