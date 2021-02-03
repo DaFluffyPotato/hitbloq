@@ -114,11 +114,22 @@ def generate_player_leaderboard_entries(map_pool, page):
         if user_map[user].score_banner:
             extra_css = 'style="background: linear-gradient(to right, rgba(45, 53, 65, 1) 0%, rgba(45, 53, 65, 0.65) 10%, rgba(45, 53, 65, 0.85) 80%, rgba(45, 53, 65, 1) 100%), url(\'' + user_map[user].score_banner + '\') no-repeat; background-size:1200px 100%;"'
 
+        if not len(user_map[user].rank_history[map_pool['_id']]):
+            user_map[user].rank_history[map_pool['_id']].append(page * players_per_page + i + 1)
+        user_map[user].rank_history[map_pool['_id']].append(page * players_per_page + i + 1)
+        user_change = str(user_map[user].rank_history[map_pool['_id']][max(-7, -len(user_map[user].rank_history[map_pool['_id']]))] - user_map[user].rank_history[map_pool['_id']][-1])
+        if user_change[0] != '-':
+            if user_change != '0':
+                user_change = '<span style="color: #42B129">+' + user_change + '</span>'
+        else:
+            user_change = '<span style="color: #E03535">' + user_change + '</span>'
+
         values = {
             'profile_picture': user_map[user].profile_pic,
             'user_rank': str(page * players_per_page + i + 1),
             'user_name': '<a href="/user/' + str(user) + '">' + user_map[user].username + '</a>',
             'user_cr': str(round(user_map[user].cr_totals[map_pool['_id']], 2)),
+            'user_change': user_change,
             'entry_extras': extra_css,
         }
         player_leaderboard_entries_html += templates.inject('player_leaderboard_entry', values)
