@@ -43,6 +43,7 @@ def process_action(action):
                 'playlistDescription': 'Hitbloq',
                 'image': BASE_64_LOGO,
                 'songs': [{'hash': hash} for hash in map_lists[pool]],
+                'syncURL': 'https://hitbloq.com/static/hashlists/' + pool + '.bplist',
             }
             f = open('static/hashlists/' + pool + '.bplist', 'w')
             json.dump(hash_list_json, f)
