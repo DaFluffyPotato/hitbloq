@@ -217,6 +217,14 @@
     width: 3rem;
 }
 
+.profile-songs-table .date-set {
+    width: 6rem;
+}
+
+.profile-songs-table .score {
+    padding-left: 5rem;
+}
+
 .profile-songs-table td.song div {
     display: grid;
     grid-template-columns: 60px 1fr;

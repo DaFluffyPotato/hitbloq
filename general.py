@@ -1,4 +1,7 @@
 import datetime
+import time
+
+DAY = 60 * 60 * 24
 
 def max_score(notes):
     if notes >= 13:
@@ -47,3 +50,34 @@ def epoch_to_date(epoch):
     months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     day_extensions = ['th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th']
     return months[ts.month - 1] + ' ' + str(ts.day) + day_extensions[ts.day % 10] + ', ' + str(ts.year)
+
+def epoch_ago(epoch):
+    time_ago = time.time() - epoch
+    years_ago = int(time_ago // (DAY * 365))
+    if years_ago:
+        added_s = 's' if years_ago > 1 else ''
+        return str(years_ago) + ' year' + added_s
+
+    months_ago = int(time_ago // (DAY * 30))
+    if months_ago:
+        added_s = 's' if months_ago > 1 else ''
+        return str(months_ago) + ' month' + added_s
+
+    days_ago = int(time_ago // DAY)
+    if days_ago:
+        added_s = 's' if days_ago > 1 else ''
+        return str(days_ago) + ' day' + added_s
+
+    hours_ago = int(time_ago // (60 * 60))
+    if hours_ago:
+        added_s = 's' if hours_ago > 1 else ''
+        return str(hours_ago) + ' hour' + added_s
+
+    minutes_ago = int(time_ago // 60)
+    if minutes_ago:
+        added_s = 's' if minutes_ago > 1 else ''
+        return str(minutes_ago) + ' minute' + added_s
+
+    seconds_ago = int(time_ago)
+    added_s = 's' if seconds_ago > 1 else ''
+    return str(seconds_ago) + ' second' + added_s

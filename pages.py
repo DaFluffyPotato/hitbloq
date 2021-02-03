@@ -4,7 +4,7 @@ from db import database
 from profile import Profile
 from templates import templates
 from user import User
-from general import shorten_settings, lengthen_settings, max_score, epoch_to_date
+from general import shorten_settings, lengthen_settings, max_score, epoch_to_date, epoch_ago
 from cr_formulas import *
 
 def generate_header(image, title, description):
@@ -237,6 +237,7 @@ def generate_leaderboard_entries(leaderboard_data, page):
             'score_name': '<a href="/user/' + str(score['user']) + '">' + score['user_obj'].username + '</a>',
             'score_accuracy': str(round(score['score'] / max_score(leaderboard_data['notes']) * 100, 2)),
             'score_cr': str(round(cr_given, 2)),
+            'date_set': epoch_ago(score['time_set']) + ' ago',
             'entry_extras': extra_css,
         }
         html += templates.inject('leaderboard_entry', entry_values)
@@ -307,6 +308,7 @@ def generate_profile_entries(profile_obj, profile_page):
             'weighted_cr': str(round(score['cr'][map_pool] * cr_accumulation_curve(i + profile_page * page_length), 2)),
             'accuracy': str(score['accuracy']),
             'song_pic': 'https://beatsaver.com' + score['leaderboard']['cover'],
+            'date_set': epoch_ago(score['time_set']) + ' ago',
         }
         html += templates.inject('profile_entry_layout', inject_values)
     return html
