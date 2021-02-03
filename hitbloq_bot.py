@@ -46,9 +46,9 @@ async def on_message(message):
             banner_url = message_args[1]
             if (banner_url[:20] == 'https://i.imgur.com/') and (banner_url.split('.')[-1] in ['png', 'jpeg', 'jpg']):
                 user_id = int(message_args[2])
-                user = database.db['users'].find_one({'_id': user_id})
-                if user:
-                    database.update_user(user, {'$set': {'score_banner': banner_url}})
+                users = database.get_users([user_id])
+                if len(users):
+                    database.update_user(users[0], {'$set': {'score_banner': banner_url}})
                     await message.channel.send(message.author.mention + ' a new score banner has been set!')
             else:
                 await message.channel.send(message.author.mention + ' banner URLs must be https://i.imgur.com links and they must be png or jpeg/jpg. You can get these by right clicking the image and clicking "open image in new tab".')
