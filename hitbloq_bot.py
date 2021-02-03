@@ -45,7 +45,7 @@ async def on_message(message):
         if message_args[0] == '!set_banner':
             banner_url = message_args[1]
             if (banner_url[:20] == 'https://i.imgur.com/') and (banner_url.split('.')[-1] in ['png', 'jpeg', 'jpg']):
-                user_id = int(message_args[1])
+                user_id = int(message_args[2])
                 user = database.db['users'].find_one({'_id': user_id})
                 if user:
                     database.update_user(user, {'$set': {'score_banner': banner_url}})
