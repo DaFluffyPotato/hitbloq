@@ -41,17 +41,18 @@ class User():
             print('attempted to create invalid user', scoresaber_id)
             return None
 
+        pool_ids = database.get_pool_ids(False)
+
         self.profile_pic = 'https://new.scoresaber.com' + ss_profile['playerInfo']['avatar']
         self.id = database.gen_new_user_id()
         self.scoresaber_id = scoresaber_id
         self.score_ids = []
         self.last_update = 0
         self.date_created = time.time()
-        self.max_rank = {}
-        self.rank_history = {}
+        self.rank_history = {pool_id : [] for pool_id in pool_ids}
         self.score_banner = None
 
-        self.cr_totals = {pool_id : 0 for pool_id in database.get_pool_ids(False)}
+        self.cr_totals = {pool_id : 0 for pool_id in pool_ids}
 
         database.add_user(self)
         return self
