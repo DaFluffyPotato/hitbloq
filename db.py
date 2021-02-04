@@ -53,10 +53,11 @@ class HitbloqMongo():
                 self.set_action_progress(action_id, i / len(new_scores))
 
         self.update_user(user, {'$set': {'last_update': time.time()}})
-        fresh_user = self.get_users([user.id])[0]
-        self.update_user_cr_total(fresh_user)
-        for map_pool_id in fresh_user.cr_totals:
-            self.update_user_ranking(fresh_user, map_pool_id)
+        if len(new_scores):
+            fresh_user = self.get_users([user.id])[0]
+            self.update_user_cr_total(fresh_user)
+            for map_pool_id in fresh_user.cr_totals:
+                self.update_user_ranking(fresh_user, map_pool_id)
 
     def update_user_ranking(self, user, map_pool_id):
         if map_pool_id in user.cr_totals:
