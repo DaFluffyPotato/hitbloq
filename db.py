@@ -324,6 +324,7 @@ class HitbloqMongo():
             'shown_name': name,
             'third_party': third_party,
             'cover': cover,
+            'cr_curve': {'type': 'basic'},
         })
         self.db['ladders'].insert_one({
             '_id': name,
