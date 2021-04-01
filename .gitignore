@@ -2,3 +2,4 @@ promo/
 __pycache__/
 data/token.txt
 data/config.json
+backups/
