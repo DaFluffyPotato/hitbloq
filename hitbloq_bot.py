@@ -81,7 +81,7 @@ async def on_message(message):
                     database.db['config'].update_one({'_id': 'announcement'}, {'$set': {'html': announcement_html}})
             if message_args[0] == '!rewind':
                 rewind_id = int(message_args[1])
-                rewind_amount = message_args[2]
+                rewind_amount = int(message_args[2])
                 rewind_amount = max(0, rewind_amount)
                 rewind_to = time.time() - rewind_amount
                 database.db['users'].update_one({'_id': rewind_id}, {'$set': {'last_update': rewind_to}})
