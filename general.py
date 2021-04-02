@@ -49,6 +49,8 @@ def epoch_to_date(epoch):
     ts = datetime.datetime.fromtimestamp(epoch)
     months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     day_extensions = ['th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th']
+    if ts.day in [11, 12, 13]:
+        day_extensions = ['th', 'th', 'th', 'th', 'th', 'th', 'th', 'th', 'th', 'th']
     return months[ts.month - 1] + ' ' + str(ts.day) + day_extensions[ts.day % 10] + ', ' + str(ts.year)
 
 def epoch_ago(epoch):
