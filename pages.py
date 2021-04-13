@@ -322,21 +322,29 @@ def generate_profile_entries(profile_obj, profile_page):
 
     sort_mode = request.args.get('sort')
 
+    scores_by_cr = None
     if sort_mode == 'newest':
         profile_obj.user.scores.sort(key=lambda x : x['time_set'], reverse=True)
     elif sort_mode == 'oldest':
         profile_obj.user.scores.sort(key=lambda x : x['time_set'])
     else:
         profile_obj.user.scores.sort(key=lambda x : x['cr'][map_pool], reverse=True)
+        scores_by_cr = profile_obj.user.scores
+
+    # a copy of the scores ordered by CR is necessary to calculate the weighted cr for each score since it's based on index
+    if not scores_by_cr:
+        scores_by_cr = sorted(profile_obj.user.scores, key=lambda x : x['cr'][map_pool], reverse=True)
+
     visible_scores = profile_obj.user.scores[profile_page * page_length : (profile_page + 1) * page_length]
 
     profile_obj.fetch_score_leaderboards(visible_scores)
     for i, score in enumerate(visible_scores):
+        player_score_index = scores_by_cr.index(score)
         inject_values = {
             'song_rank': str(score['rank']),
             'song_name': '<a href="/leaderboard/' + score['leaderboard']['key'] + '_' + shorten_settings(score['song_id'].split('|')[1]) + '">' + score['leaderboard']['name'] + '</a>',
             'cr_received': str(round(score['cr'][map_pool], 2)),
-            'weighted_cr': str(round(score['cr'][map_pool] * cr_accumulation_curve(i + profile_page * page_length), 2)),
+            'weighted_cr': str(round(score['cr'][map_pool] * cr_accumulation_curve(player_score_index + profile_page * page_length), 2)),
             'accuracy': str(score['accuracy']),
             'song_pic': 'https://beatsaver.com' + score['leaderboard']['cover'],
             'date_set': epoch_ago(score['time_set']) + ' ago',
