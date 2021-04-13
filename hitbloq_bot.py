@@ -109,6 +109,7 @@ async def on_message(message):
                     else:
                         if pool_id in [role.name for role in message.author.roles]:
                             database.db['leaderboards'].update_one({'_id': song_id}, {'$set': {'forced_star_rating.' + pool_id: forced_rating}})
+                            await message.channel.send(message.author.mention + ' switched the leaderboard to manual star ratings (' + str(forced_rating) + ').')
                         else:
                             await message.channel.send(message.author.mention + ' you don\'t have permissions to modify this pool')
                 else:
@@ -123,6 +124,7 @@ async def on_message(message):
                     else:
                         if pool_id in [role.name for role in message.author.roles]:
                             database.db['leaderboards'].update_one({'_id': song_id}, {'$unset': {'forced_star_rating.' + pool_id: 1}})
+                            await message.channel.send(message.author.mention + ' switched the leaderboard to automatic star ratings.')
                         else:
                             await message.channel.send(message.author.mention + ' you don\'t have permissions to modify this pool')
                 else:
