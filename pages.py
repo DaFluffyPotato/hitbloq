@@ -21,7 +21,8 @@ def generate_header(image, title, description):
 
 def get_map_pool():
     map_pool = request.cookies.get('map_pool')
-    if not map_pool:
+    # a temp hack to get around people with global_main as their cached pool
+    if (not map_pool) or (map_pool == 'global_main'):
         map_pool = 'bbbear'
     if request.args.get('pool'):
         map_pool = request.args.get('pool')
