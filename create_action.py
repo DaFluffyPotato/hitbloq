@@ -24,3 +24,6 @@ def update_rank_histories(map_pool):
 
 def regenerate_playlists():
     database.add_action({'type': 'regenerate_playlists'})
+
+def refresh_profiles():
+    database.add_action({'type': 'refresh_profiles'})

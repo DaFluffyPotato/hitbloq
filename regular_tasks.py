@@ -18,5 +18,6 @@ while True:
             create_action.recalculate_cr([pool_id])
             create_action.update_rank_histories(pool_id)
             create_action.regenerate_playlists()
+            create_action.refresh_profiles()
     time.sleep(1)
     timer += 1

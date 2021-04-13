@@ -49,6 +49,10 @@ def process_action(action):
             json.dump(hash_list_json, f)
             f.close()
 
+    if action['type'] == 'refresh_profiles':
+        for user in database.get_all_users():
+            user.refresh(database)
+
     database.clear_action(action['_id'])
 
 if __name__ == "__main__":

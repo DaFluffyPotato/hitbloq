@@ -22,6 +22,12 @@ class User():
     def refresh_scores(self, database, action_id=None):
         database.update_user_scores(self, action_id)
 
+    def refresh(self, database):
+        ss_profile = scoresaber.ScoresaberInterface(database).ss_req('player/' + self.scoresaber_id + '/basic')
+        self.username = ss_profile['playerInfo']['playerName']
+        self.profile_pic = 'https://new.scoresaber.com' + ss_profile['playerInfo']['avatar']
+        database.db['users'].update_one({'_id': self.id}, {'$set': {'profile_pic': self.profile_pic, 'username': self.username}})
+
     def create(self, database, scoresaber_id):
         scoresaber_id = scoresaber_id.split('/')[-1]
         try:

@@ -31,6 +31,9 @@ class HitbloqMongo():
     def add_user(self, user):
         self.db['users'].insert_one(user.jsonify())
 
+    def get_all_users(self):
+        return [user.User().load(user_found) for user_found in self.db['users'].find({})]
+
     def get_users(self, users):
         return [user.User().load(user_found) for user_found in self.db['users'].find({'_id': {'$in': users}})]
 
@@ -58,6 +61,10 @@ class HitbloqMongo():
             self.update_user_cr_total(fresh_user)
             for map_pool_id in fresh_user.cr_totals:
                 self.update_user_ranking(fresh_user, map_pool_id)
+
+    def update_user_profile(self, user):
+        scoresaber_api = scoresaber.ScoresaberInterface(self.db)
+
 
     def update_user_ranking(self, user, map_pool_id):
         if map_pool_id in user.cr_totals:
@@ -454,4 +461,3 @@ class HitbloqMongo():
 
 print('MongoDB requires a password!')
 database = HitbloqMongo(getpass())
-database.delete_map_pool('global_main')
