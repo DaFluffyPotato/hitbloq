@@ -178,6 +178,7 @@ def ranked_list_page(group_id):
             'song_name': '<a href="/leaderboard/' + leaderboard['key'] + '_' + shorten_settings(leaderboard['difficulty_settings']) + '">' + leaderboard['name'] + '</a>',
             'song_plays': str(len(leaderboard['score_ids'])),
             'song_difficulty': str(star_rating) + '★',
+            'song_game_difficulty': leaderboard['difficulty'][0].upper() + leaderboard['difficulty'][1:],
         }
         ranked_songs_html += templates.inject('ranked_song_entry', values)
     ranked_list_html = normal_page(templates.inject('ranked_list_layout', {'table_entries': ranked_songs_html}), group_id + ' Ranked List', 'all ranked songs for the ' + group_id + ' map pool')
@@ -339,6 +340,7 @@ def generate_profile_entries(profile_obj, profile_page):
             'accuracy': str(score['accuracy']),
             'song_pic': 'https://beatsaver.com' + score['leaderboard']['cover'],
             'date_set': epoch_ago(score['time_set']) + ' ago',
+            'difficulty': score['leaderboard']['difficulty'][0].upper() + score['leaderboard']['difficulty'][1:],
         }
         html += templates.inject('profile_entry_layout', inject_values)
     return html

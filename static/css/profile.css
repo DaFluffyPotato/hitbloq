@@ -245,6 +245,14 @@
     white-space: nowrap;
 }
 
+.profile-songs-table .song-table-difficulty {
+    width: 6rem;
+}
+.profile-songs-table td.song-table-difficulty {
+    font-size: 12px;
+    font-weight: bold;
+}
+
 .profile-songs-table .accuracy {
     font-size: 11pt;
 }
