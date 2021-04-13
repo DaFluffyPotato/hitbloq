@@ -101,7 +101,7 @@ async def on_message(message):
             if message_args[0] == '!set_manual':
                 song_id = message_args[1]
                 pool_id = message_args[2]
-                forced_rating = message_args[3]
+                forced_rating = float(message_args[3])
                 if pool_id in database.get_pool_ids(True):
                     matched_leaderboards = database.get_leaderboards([song_id])
                     if not len(matched_leaderboards):
