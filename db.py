@@ -157,7 +157,7 @@ class HitbloqMongo():
             leaderboard = leaderboard[0]
 
         if valid_leaderboard:
-            if scoresaber_json['mods'] != '':
+            if scoresaber_json['mods'] not in ['', 'FS']:
                 return False
 
             # delete old score data
@@ -342,6 +342,14 @@ class HitbloqMongo():
         if not third_party:
             self.db['users'].update_many({}, {'$set': {'total_cr.' + name : 0}})
 
+    def delete_map_pool(self, name):
+        self.db['users'].update_many({}, {'$unset': {'rank_history.' + name: 1, 'max_rank.' + name: 1, 'total_cr.' + name: 1}})
+        self.db['leaderboards'].update_many({}, {'$unset': {'star_rating.' + name: 1}})
+        self.db['scores'].update_many({}, {'$unset': {'cr.' + name: 1}})
+        self.db['ladders'].delete_one({'_id': name})
+        self.db['ranked_lists'].delete_one({'_id': name})
+        print('successfully deleted map pool:', name)
+
     def unrank_song(self, leaderboard_id, map_pool):
         self.db['ranked_lists'].update_one({'_id': map_pool}, {'$pull': {'leaderboard_id_list': leaderboard_id}})
 
@@ -446,3 +454,4 @@ class HitbloqMongo():
 
 print('MongoDB requires a password!')
 database = HitbloqMongo(getpass())
+database.delete_map_pool('global_main')
