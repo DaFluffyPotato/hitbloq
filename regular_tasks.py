@@ -16,8 +16,9 @@ while True:
     if timer % (DAY) == 0:
         for pool_id in database.get_pool_ids(False):
             create_action.recalculate_cr([pool_id])
-            create_action.update_rank_histories(pool_id)
-            create_action.regenerate_playlists()
+            if timer != 0: # skip player history updates if rebooting regular tasks
+                create_action.update_rank_histories(pool_id)
+        create_action.regenerate_playlists()
         create_action.refresh_profiles()
     time.sleep(1)
     timer += 1
