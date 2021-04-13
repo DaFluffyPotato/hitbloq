@@ -35,14 +35,15 @@ def process_action(action):
         database.update_rank_histories(action['map_pool'], action['_id'])
 
     if action['type'] == 'regenerate_playlists':
-        map_lists = {ranked_list['_id'] : [hash.split('|')[0] for hash in ranked_list['leaderboard_id_list']] for ranked_list in database.get_ranked_lists()}
+        map_lists = {ranked_list['_id'] : [hash.split('|') for hash in ranked_list['leaderboard_id_list']] for ranked_list in database.get_ranked_lists()}
         for pool in map_lists:
+            # there are a few unstable string hacks for the char/diff settings...
             hash_list_json = {
                 'playlistTitle': pool,
                 'playlistAuthor': 'Hitbloq',
                 'playlistDescription': 'Hitbloq',
                 'image': BASE_64_LOGO,
-                'songs': [{'hash': hash} for hash in map_lists[pool]],
+                'songs': [{'hash': hash[0], 'difficulties': {'characteristic': hash[1].split('_')[2].replace('Solo', ''), 'name': hash[1].split('_')[0].lower() + hash[1].split('_')[1][1:]}} for hash in map_lists[pool]],
                 'syncURL': 'https://hitbloq.com/static/hashlists/' + pool + '.bplist',
             }
             f = open('static/hashlists/' + pool + '.bplist', 'w')
