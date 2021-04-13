@@ -43,7 +43,7 @@ def process_action(action):
                 'playlistAuthor': 'Hitbloq',
                 'playlistDescription': 'Hitbloq',
                 'image': BASE_64_LOGO,
-                'songs': [{'hash': hash[0], 'difficulties': {'characteristic': hash[1].split('_')[2].replace('Solo', ''), 'name': hash[1].split('_')[0].lower() + hash[1].split('_')[1][1:]}} for hash in map_lists[pool]],
+                'songs': [{'hash': hash[0], 'difficulties': [{'characteristic': hash[1].split('_')[2].replace('Solo', ''), 'name': hash[1].split('_')[1][0].lower() + hash[1].split('_')[1][1:]}]} for hash in map_lists[pool]],
                 'syncURL': 'https://hitbloq.com/static/hashlists/' + pool + '.bplist',
             }
             f = open('static/hashlists/' + pool + '.bplist', 'w')
