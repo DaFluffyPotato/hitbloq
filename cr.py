@@ -83,7 +83,11 @@ def full_cr_update(map_pools, action_id=None):
         difficulty_rating = round(difficulty_vote_total / difficulty_vote_weight_total * 19 + 1, 2)
 
         for map_pool in map_pools:
-            database.update_leaderboard_data(leaderboard['_id'], {'$set': {'star_rating.' + map_pool: difficulty_rating}})
+            used_rating = difficulty_rating
+            # apply manual rating override if set
+            if map_pool in leaderboard['forced_star_rating']:
+                used_rating = leaderboard['forced_star_rating'][map_pool]
+            database.update_leaderboard_data(leaderboard['_id'], {'$set': {'star_rating.' + map_pool: used_rating}})
 
         rankings.append([difficulty_rating, leaderboard['name']])
 

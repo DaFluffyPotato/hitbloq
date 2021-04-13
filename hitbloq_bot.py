@@ -98,6 +98,35 @@ async def on_message(message):
                         await message.channel.send(message.author.mention + ' you don\'t have permissions to modify this pool')
                 else:
                     await message.channel.send(message.author.mention + ' that pool ID appears to be invalid')
+            if message_args[0] == '!set_manual':
+                song_id = message_args[1]
+                pool_id = message_args[2]
+                forced_rating = message_args[3]
+                if pool_id in database.get_pool_ids(True):
+                    matched_leaderboards = database.get_leaderboards([song_id])
+                    if not len(matched_leaderboards):
+                        await message.channel.send(message.author.mention + ' that song ID appears to be invalid')
+                    else:
+                        if pool_id in [role.name for role in message.author.roles]:
+                            database.db['leaderboards'].update_one({'_id': song_id}, {'$set': {'forced_star_rating.' + pool_id: forced_rating}})
+                        else:
+                            await message.channel.send(message.author.mention + ' you don\'t have permissions to modify this pool')
+                else:
+                    await message.channel.send(message.author.mention + ' that pool ID appears to be invalid')
+            if message_args[0] == '!set_automatic':
+                song_id = message_args[1]
+                pool_id = message_args[2]
+                if pool_id in database.get_pool_ids(True):
+                    matched_leaderboards = database.get_leaderboards([song_id])
+                    if not len(matched_leaderboards):
+                        await message.channel.send(message.author.mention + ' that song ID appears to be invalid')
+                    else:
+                        if pool_id in [role.name for role in message.author.roles]:
+                            database.db['leaderboards'].update_one({'_id': song_id}, {'$unset': {'forced_star_rating.' + pool_id: 1}})
+                        else:
+                            await message.channel.send(message.author.mention + ' you don\'t have permissions to modify this pool')
+                else:
+                    await message.channel.send(message.author.mention + ' that pool ID appears to be invalid')
             if message_args[0] == '!rank':
                 song_id = message_args[1]
                 pool_id = message_args[2]

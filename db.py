@@ -251,6 +251,7 @@ class HitbloqMongo():
                 'hash': leaderboard_hash,
                 'score_ids': [],
                 'star_rating': {},
+                'forced_star_rating': {},
             }
 
             self.db['leaderboards'].insert_one(leaderboard_data)
@@ -314,6 +315,7 @@ class HitbloqMongo():
                 'hash': leaderboard_hash,
                 'score_ids': new_scores,
                 'star_rating': {},
+                'forced_star_rating': {},
             }
 
             self.db['leaderboards'].insert_one(leaderboard_data)
