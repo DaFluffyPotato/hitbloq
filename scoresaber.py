@@ -13,7 +13,7 @@ class ScoresaberInterface():
         self.scoresaber_url = 'https://new.scoresaber.com/api/'
 
     def ss_req(self, url):
-        for i in range(3):
+        for i in range(5):
             try:
                 print('request start!')
                 req = requests.get(self.scoresaber_url + url, headers=self.headers)
