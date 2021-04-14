@@ -343,6 +343,7 @@ class HitbloqMongo():
             'third_party': third_party,
             'cover': cover,
             'cr_curve': {'type': 'basic'},
+            'player_count': 0,
         })
         self.db['ladders'].insert_one({
             '_id': name,

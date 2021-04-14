@@ -55,8 +55,13 @@ def full_cr_update(map_pools, action_id=None):
 
     for leaderboard in leaderboards:
         leaderboards[leaderboard]['votes'] = {}
+
+    players_with_scores = 0
+
     for j, user in enumerate(user_list):
         votes = calculate_song_rankings(user, leaderboard_notes)
+        if votes != []:
+            players_with_scores += 1
         for i, vote in enumerate(votes):
             leaderboards[vote[1]]['votes'][vote[2]] = (i + 1) / len(votes)
 
@@ -93,6 +98,8 @@ def full_cr_update(map_pools, action_id=None):
 
     database.set_action_progress(action_id, 0.8)
 
+    database.db['ranked_lists'].update_many({'_id': {'$in': map_pools}}, {'$set': {'player_count': players_with_scores}})
+
     rankings.sort(reverse=True)
 
     update_leaderboards_cr(leaderboards.keys(), map_pools)
@@ -108,6 +115,6 @@ def full_cr_update(map_pools, action_id=None):
     return rankings
 
 if __name__ == "__main__":
-    rankings = full_cr_update(['global_main', 'blank_dummy'])
+    rankings = full_cr_update(['paul'])
     for song in rankings:
         print(song[1] + ':', song[0])
