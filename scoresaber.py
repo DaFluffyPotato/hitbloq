@@ -23,7 +23,7 @@ class ScoresaberInterface():
                 return json.loads(req_content)
             except Exception as e:
                 print(e)
-                time.sleep(20)
+                time.sleep(25)
 
     def fetch_until(self, ss_id, epoch):
         looking = True
