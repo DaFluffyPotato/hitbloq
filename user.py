@@ -107,3 +107,4 @@ class User():
                     score['cr'][map_pool_id] = 0
                 new_scores.append(score)
         self.scores = new_scores
+        return map_pool

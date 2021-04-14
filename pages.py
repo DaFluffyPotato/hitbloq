@@ -267,7 +267,7 @@ def profile_page(user_id, profile_page):
     map_pool = get_map_pool()
 
     profile_obj = Profile(user_id)
-    profile_obj.user.load_pool_scores(database, map_pool)
+    pool_data = profile_obj.user.load_pool_scores(database, map_pool)
 
     player_cr_total = 0
     if map_pool in profile_obj.user.cr_totals:
@@ -278,6 +278,24 @@ def profile_page(user_id, profile_page):
         player_max_rank = profile_obj.user.max_rank[map_pool]
 
     player_rank = database.get_user_ranking(profile_obj.user, map_pool)
+
+    player_rank_ratio = (player_rank - 1) / pool_data['player_count']
+    if profile_obj.user.scores == []:
+        player_tier = 'none'
+    elif player_rank_ratio < 0.001:
+        player_tier = 'myth'
+    elif player_rank_ratio < 0.01:
+        player_tier = 'master'
+    elif player_rank_ratio < 0.05:
+        player_tier = 'diamond'
+    elif player_rank_ratio < 0.1:
+        player_tier = 'platinum'
+    elif player_rank_ratio < 0.2:
+        player_tier = 'gold'
+    elif player_rank_ratio < 0.5:
+        player_tier = 'silver'
+    else:
+        player_tier = 'bronze'
 
     player_rank_history = []
     if map_pool in profile_obj.user.rank_history:
@@ -295,6 +313,7 @@ def profile_page(user_id, profile_page):
     profile_insert.update(profile_obj.insert_info)
     profile_insert.update({
         'played_songs': generate_profile_entries(profile_obj, profile_page),
+        'player_tier_img': player_tier,
         'player_rank': '{:,}'.format(player_rank),
         'player_cr': '{:,}'.format(round(player_cr_total, 2)),
         'peak_rank': '{:,}'.format(player_max_rank),

@@ -28,6 +28,15 @@
     grid-template-columns: 120px 1fr;
 }
 
+.user-rank-img {
+  margin-top: 10px;
+  width: 120px;
+}
+
+.rank-info-rank, .rank-info-peak-rank {
+  margin-left: 130px;
+}
+
 .user-card .user-info span {
     align-self: center;
     font-size: 16pt;
