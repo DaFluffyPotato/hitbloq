@@ -70,5 +70,9 @@ def map_pools_api():
 def announcement_api():
     return api.get_announcement()
 
+@app.route('/api/map_pools_detailed')
+def map_pools_detailed_api():
+    return api.get_map_pools_detailed()
+
 if __name__ == "__main__":
     app.run()
