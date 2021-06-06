@@ -344,6 +344,7 @@ class HitbloqMongo():
             'cover': cover,
             'cr_curve': {'type': 'basic'},
             'player_count': 0,
+            'priority': 0,
         })
         self.db['ladders'].insert_one({
             '_id': name,
@@ -394,7 +395,7 @@ class HitbloqMongo():
         self.replace_scores(scores)
 
     def get_ranked_lists(self):
-        return list(self.db['ranked_lists'].find({}))
+        return list(self.db['ranked_lists'].find({}).sort('priority', -1))
 
     def search_ranked_lists(self, search):
         return list(self.db['ranked_lists'].find(search))
