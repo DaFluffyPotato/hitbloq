@@ -38,10 +38,11 @@ def get_map_pools_detailed():
         response.append({
             'title': pool['shown_name'],
             'author': 'Hitbloq',
-            'image': pool['cover'],
+            #'image': pool['cover'],
+            'image': 'https://hitbloq.com/static/hitbloq.png',
             'id': pool['_id'],
             'description': RANKED_LIST_DESCRIPTION.replace('<map_pool_name>', pool['shown_name']),
-            'download_url': 'https://hitbloq.com/api/ranked_list/' + pool['_id'],
+            'download_url': 'https://hitbloq.com/static/hashlists/' + pool['_id'] + '.bplist'
         })
 
     return jsonify(response)
