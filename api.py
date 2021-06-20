@@ -1,3 +1,5 @@
+import json
+
 from flask import jsonify
 
 from db import database
@@ -53,3 +55,11 @@ def get_leaderboard_info(leaderboard_id):
     del leaderboard_data['score_ids']
     print(leaderboard_data)
     return jsonify(leaderboard_data)
+
+def get_leaderboard_scores(leaderboard_id, offset=0, count=30):
+    leaderboard_data = list(database.get_leaderboards([leaderboard_id]))[0]
+    score_ids = leaderboard_data['score_ids']
+    score_data = list(database.fetch_scores(score_ids).sort('score', -1))[offset:offset + count]
+    for score in score_data:
+        del score['_id']
+    return jsonify(score_data)

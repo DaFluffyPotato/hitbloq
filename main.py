@@ -78,5 +78,15 @@ def map_pools_detailed_api():
 def leaderboard_info_api(leaderboard_id):
     return api.get_leaderboard_info(leaderboard_id)
 
+@app.route('/api/leaderboard/<leaderboard_id>/scores')
+def leaderboard_score_first_api(leaderboard_id):
+    return api.get_leaderboard_scores(leaderboard_id, offset=0, count=30)
+
+@app.route('/api/leaderboard/<leaderboard_id>/scores/<page>')
+def leaderboard_scores_api(leaderboard_id, page):
+    page = int(page)
+    count = 30
+    return api.get_leaderboard_scores(leaderboard_id, offset=page * count, count=count)
+
 if __name__ == "__main__":
     app.run()
