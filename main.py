@@ -74,5 +74,9 @@ def announcement_api():
 def map_pools_detailed_api():
     return api.get_map_pools_detailed()
 
+@app.route('/api/leaderboard/<leaderboard_id>/info')
+def leaderboard_info_api(leaderboard_id):
+    return api.get_leaderboard_info(leaderboard_id)
+
 if __name__ == "__main__":
     app.run()

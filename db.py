@@ -65,7 +65,6 @@ class HitbloqMongo():
     def update_user_profile(self, user):
         scoresaber_api = scoresaber.ScoresaberInterface(self.db)
 
-
     def update_user_ranking(self, user, map_pool_id):
         if map_pool_id in user.cr_totals:
             resp = self.db['ladders'].update_one({'_id': map_pool_id, 'ladder.user': user.id}, {'$set': {'ladder.$.cr': user.cr_totals[map_pool_id]}})
