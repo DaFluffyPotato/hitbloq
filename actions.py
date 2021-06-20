@@ -35,17 +35,47 @@ def process_action(action):
         database.update_rank_histories(action['map_pool'], action['_id'])
 
     if action['type'] == 'regenerate_playlists':
-        map_lists = {ranked_list['_id'] : [hash.split('|') for hash in ranked_list['leaderboard_id_list']] for ranked_list in database.get_ranked_lists()}
+        map_lists = {ranked_list['_id'] : [(hash, hash.split('|')) for hash in ranked_list['leaderboard_id_list']] for ranked_list in database.get_ranked_lists()}
+
         for pool in map_lists:
+            leaderboard_data = {leaderboard['_id']: leaderboard for leaderboard in database.get_leaderboards([hash[0] for hash in map_lists[pool]])}
             # there are a few unstable string hacks for the char/diff settings...
             hash_list_json = {
                 'playlistTitle': pool,
                 'playlistAuthor': 'Hitbloq',
                 'playlistDescription': 'Hitbloq',
                 'image': BASE_64_LOGO,
-                'songs': [{'hash': hash[0], 'difficulties': [{'characteristic': hash[1].split('_')[2].replace('Solo', ''), 'name': hash[1].split('_')[1][0].lower() + hash[1].split('_')[1][1:]}]} for hash in map_lists[pool]],
+                'songs': [],
                 'syncURL': 'https://hitbloq.com/static/hashlists/' + pool + '.bplist',
             }
+            song_dict = {}
+            for hash in map_lists[pool]:
+                characteristic = hash[1][1].split('_')[2].replace('Solo', '')
+                difficulty = hash[1][1].split('_')[1][0].lower() + hash[1][1].split('_')[1][1:]
+                #print(pool, leaderboard_data[hash[0]])
+                song_data = {
+                    'hash': hash[1][0],
+                    'difficulties': [{'characteristic': characteristic, 'name': difficulty}],
+                    'hitbloq': {
+                        'difficulties': {
+                            characteristic: {
+                                difficulty: leaderboard_data[hash[0]]['star_rating'][pool] if pool in leaderboard_data[hash[0]]['star_rating'] else 0,
+                            },
+                        },
+                    },
+                }
+                if hash[1][0] not in song_dict:
+                    song_dict[hash[1][0]] = song_data
+                else:
+                    # update existing song entry instead of creating a dupe
+                    if characteristic not in song_dict[hash[1][0]]['hitbloq']['difficulties']:
+                        song_dict[hash[1][0]]['hitbloq']['difficulties'][characteristic] = {}
+                    song_dict[hash[1][0]]['hitbloq']['difficulties'][characteristic][difficulty] = leaderboard_data[hash[0]]['star_rating'][pool]
+                    song_dict[hash[1][0]]['difficulties'].append(song_data['difficulties'][0])
+
+            for song_id in song_dict:
+                hash_list_json['songs'].append(song_dict[song_id])
+
             f = open('static/hashlists/' + pool + '.bplist', 'w')
             json.dump(hash_list_json, f)
             f.close()
