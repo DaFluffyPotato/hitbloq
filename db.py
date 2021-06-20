@@ -263,9 +263,6 @@ class HitbloqMongo():
             new_scores = old_leaderboard_data['score_ids']
             print(len(new_scores), 'scores being transferred...')
 
-        # remove old instances
-        self.db['leaderboards'].delete_many({'_id': leaderboard_id})
-
         leaderboard_difficulty = leaderboard_id.split('|')[-1]
 
         beatsaver_api = beatsaver.BeatSaverInterface()
@@ -317,6 +314,11 @@ class HitbloqMongo():
                 'forced_star_rating': {},
             }
 
+            # remove old instances
+            print('removed old scores')
+            self.db['leaderboards'].delete_many({'_id': leaderboard_id})
+            # add new data
+            print('added new data')
             self.db['leaderboards'].insert_one(leaderboard_data)
 
             return leaderboard_data
