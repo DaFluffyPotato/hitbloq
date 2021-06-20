@@ -88,6 +88,21 @@ async def on_message(message):
                 create_action.update_user(rewind_id)
                 await message.channel.send(message.author.mention + ' user ' + str(rewind_id) + ' will be rewinded and updated.')
         if message.channel.name == POOL_ADMIN_COMMANDS_CHANNEL:
+            if message_args[0] == '!set_img':
+                valid_host = 'https://i.imgur.com/'
+                pool_id = message_args[1]
+                image_url = message_args[2]
+                if pool_id in database.get_pool_ids(True):
+                    if pool_id in [role.name for role in message.author.roles]:
+                        if (image_url[:len(valid_host)] != valid_host) or (image_url.split('.')[-1] != 'png'):
+                            await message.channel.send(message.author.mention + ' the image URL must come from ' + valid_host + ' and be a PNG')
+                        else:
+                            database.db['ranked_lists'].update_one({'_id': pool_id}, {'$set': {'cover': image_url}})
+                            await message.channel.send(message.author.mention + ' the pool image has been updated')
+                    else:
+                        await message.channel.send(message.author.mention + ' you don\'t have permissions to modify this pool')
+                else:
+                    await message.channel.send(message.author.mention + ' that pool ID appears to be invalid')
             if message_args[0] == '!recalculate_cr':
                 pool_id = message_args[1]
                 if pool_id in database.get_pool_ids(True):
