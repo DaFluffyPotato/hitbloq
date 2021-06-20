@@ -138,11 +138,14 @@ def generate_player_leaderboard_entries(map_pool, page):
     return player_leaderboard_entries_html
 
 
-def ranked_lists_page():
+def ranked_lists_page(page=0):
+    page = max(0, page)
+    page_size = 15
+
     ranked_list_entry_html = ''
     map_pool = get_map_pool()
 
-    for ranked_list in database.get_ranked_lists():
+    for ranked_list in database.get_ranked_lists()[page * page_size:(page + 1) * page_size]:
         if not ranked_list['third_party']:
             select_status = 'select'
             if map_pool == ranked_list['_id']:
@@ -155,10 +158,18 @@ def ranked_lists_page():
                 'map_pool_id': ranked_list['_id'],
             }
             ranked_list_entry_html += templates.inject('ranked_list_entry_layout', values)
-    ranked_lists_html = normal_page(templates.inject('ranked_lists_layout', {'ranked_lists': ranked_list_entry_html}), 'Map Pools', 'map pools')
+    base_injects = {
+        'ranked_lists': ranked_list_entry_html,
+        'next_page': '/map_pools/' + str(page + 1),
+        'last_page': '/map_pools/' + str(max(page - 1, 0)),
+    }
+    ranked_lists_html = normal_page(templates.inject('ranked_lists_layout', base_injects), 'Map Pools', 'map pools')
     return ranked_lists_html
 
-def ranked_list_page(group_id):
+def ranked_list_page(group_id, page=0):
+    page = max(0, page)
+    page_size = 30
+
     ranked_list_data = database.get_ranked_list(group_id)
     leaderboard_list = database.get_leaderboards(ranked_list_data['leaderboard_id_list'])
 
@@ -169,7 +180,7 @@ def ranked_list_page(group_id):
 
     leaderboard_list.sort(key=lambda x: x['star_rating'][group_id], reverse=True)
     ranked_songs_html = ''
-    for leaderboard in leaderboard_list:
+    for leaderboard in leaderboard_list[page * page_size:(page + 1) * page_size]:
         star_rating = 0
         if group_id in leaderboard['star_rating']:
             star_rating = leaderboard['star_rating'][group_id]
@@ -181,7 +192,12 @@ def ranked_list_page(group_id):
             'song_game_difficulty': leaderboard['difficulty'][0].upper() + leaderboard['difficulty'][1:],
         }
         ranked_songs_html += templates.inject('ranked_song_entry', values)
-    ranked_list_html = normal_page(templates.inject('ranked_list_layout', {'table_entries': ranked_songs_html}), group_id + ' Ranked List', 'all ranked songs for the ' + group_id + ' map pool')
+    base_injects = {
+        'table_entries': ranked_songs_html,
+        'next_page': '/ranked_list/' + group_id + '/' + str(page + 1),
+        'last_page': '/ranked_list/' + group_id + '/' + str(max(page - 1, 0)),
+    }
+    ranked_list_html = normal_page(templates.inject('ranked_list_layout', base_injects), group_id + ' Ranked List', 'all ranked songs for the ' + group_id + ' map pool')
     return ranked_list_html
 
 def about_page():

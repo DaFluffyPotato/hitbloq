@@ -23,8 +23,10 @@ def add_user(request_json, ip_address):
     else:
         return jsonify({'status': 'ratelimit'})
 
-def ranked_list(pool_id):
-    return jsonify(database.get_ranked_list(mongo_clean(pool_id)))
+def ranked_list(pool_id, offset=0, count=30):
+    ranked_list_data = database.get_ranked_list(mongo_clean(pool_id))
+    ranked_list_data['leaderboard_id_list'] = ranked_list_data['leaderboard_id_list'][offset:offset + count]
+    return jsonify(ranked_list_data)
 
 def ranked_lists():
     return jsonify(database.get_pool_ids(False))

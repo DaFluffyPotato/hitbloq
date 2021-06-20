@@ -18,9 +18,19 @@ def home():
 def ranked_lists():
     return pages.ranked_lists_page()
 
+@app.route('/map_pools/<page>')
+def ranked_lists_page(page):
+    page = int(page)
+    return pages.ranked_lists_page(page=page)
+
 @app.route('/ranked_list/<group_id>')
 def ranked_list(group_id):
     return pages.ranked_list_page(group_id)
+
+@app.route('/ranked_list/<group_id>/<page>')
+def ranked_list_page(group_id, page):
+    page = int(page)
+    return pages.ranked_list_page(group_id, page=page)
 
 @app.route('/ladder/<leaderboard_id>')
 def player_leaderboards(leaderboard_id):
@@ -61,6 +71,12 @@ def add_user():
 @app.route('/api/ranked_list/<pool_id>')
 def ranked_list_api(pool_id):
     return api.ranked_list(pool_id)
+
+@app.route('/api/ranked_list/<pool_id>/<page>')
+def ranked_list_page_api(pool_id, page):
+    count = 30
+    page = int(page)
+    return api.ranked_list(pool_id, offset=page * count)
 
 @app.route('/api/map_pools')
 def map_pools_api():
