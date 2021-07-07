@@ -20,6 +20,8 @@ var highestRank
 var mouseCanvasX
 var mouseCanvasY
 
+var lastUserUpdate
+
 window.onmousemove = () => {
     mouseCanvasX = event.clientX - canvasWrapper.getBoundingClientRect().x
     mouseCanvasY = event.clientY - canvasWrapper.getBoundingClientRect().y
@@ -38,10 +40,11 @@ window.addEventListener("load", () => {
     heightUnit = canvas.height / lowestRank
     widthUnit = canvas.width / (rankHistory.length - 1)
     renderGraph(rankHistory)
+    lastUserUpdate = document.getElementById("last-manual-refresh").innerHTML;
+    setInterval(refreshUpdateButton, 500);
 })
 
 window.onresize = () => {
-    console.log('osiejfoseijf')
     canvas.height = canvasWrapper.clientHeight
     canvas.width = canvasWrapper.clientWidth
     heightUnit = canvas.height / lowestRank
@@ -50,12 +53,20 @@ window.onresize = () => {
     renderGraph(rankHistory)
 }
 
+function refreshUpdateButton() {
+  epoch = new Date() / 1000;
+  if (epoch - lastUserUpdate < 60 * 3) {
+    document.getElementById("user-update-button").innerHTML = "update cooldown - " + Math.ceil(60 * 3 - (epoch - lastUserUpdate)) + "s";
+  } else {
+    document.getElementById("user-update-button").innerHTML = "request update";
+  }
+}
+
 function showRankInfo() {
     var closestPoint = Math.floor((mouseCanvasX / widthUnit))
 
     if(closestPoint >= rankHistory.length) { return }
 
-    console.log(closestPoint)
     var xPos = closestPoint * widthUnit + widthUnit / 2
     var yPos = rankHistory[closestPoint] * heightUnit
 
@@ -73,8 +84,6 @@ function showRankInfo() {
     rankLine.style.display = "block";
     rankCircle.style.display = "block";
     rankInfo.style.display = "block";
-
-    console.log(widthUnit)
 }
 
 function updateRankGraphData(rankHistory) {
@@ -103,4 +112,12 @@ function renderGraph(rankHistory) {
     }
 
     ctx.stroke()
+}
+
+function manualRefresh() {
+    getJSON("/api/update_user/" + location.pathname.split("/")[location.pathname.split("/").length - 1], setLastRefresh);
+}
+
+function setLastRefresh(_, data) {
+  lastUserUpdate = data["time"];
 }

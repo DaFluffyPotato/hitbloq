@@ -1,9 +1,13 @@
+import json
+import time
+
 from flask import Flask, request, make_response
 
 from db import database
 import pages
 import api
 from user import User
+import create_action
 
 #me = database.get_users([0])[0]
 #database.update_user_cr_total(me)
@@ -103,6 +107,17 @@ def leaderboard_scores_api(leaderboard_id, page):
     page = int(page)
     count = 30
     return api.get_leaderboard_scores(leaderboard_id, offset=page * count, count=count)
+
+@app.route('/api/update_user/<int:user_id>')
+def update_user(user_id):
+    print('received user update request for', user_id)
+    last_refresh = database.db['users'].find_one({'_id': user_id})['last_manual_refresh']
+    if time.time() - last_refresh > 60 * 3:
+        create_action.update_user(user_id, priority_shift=60 * 60 * 24)
+        database.db['users'].update_one({'_id': user_id}, {'$set': {'last_manual_refresh': time.time()}})
+        return json.dumps({'time': time.time()})
+    else:
+        return json.dumps({'time': last_refresh})
 
 if __name__ == "__main__":
     app.run()

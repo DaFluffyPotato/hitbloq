@@ -6,6 +6,11 @@
 				<span class="user-name"><b>\@player_name</b></span>
 				<img class="user-rank-img" src="/static/ranks/default/\@player_tier_img.png">
 			</div>
+			<div class="user-update-button">
+				<button id="user-update-button" class="general-button user-update-button" onclick="manualRefresh();">
+					<span id="last-manual-refresh" style="display: none;">\@last_manual_refresh</span>request update
+				</button>
+			</div>
 			<div class="rank-info">
 				<span class="rank-info-rank"><b>Global Rank:</b> #\@player_rank</span>
 				<span class="rank-info-peak-rank"><b>Peak Rank:</b> #\@peak_rank</span>

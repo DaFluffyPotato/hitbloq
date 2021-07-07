@@ -9,7 +9,7 @@ DAY = 24 * HOUR
 
 timer = 0
 while True:
-    if timer % (MINUTE * 15) == 0:
+    if timer % (HOUR * 3) == 0:
         if len(list(database.get_actions())) < 20:
             user_ids = [i for i in range(database.get_counter('user_id')['count'])]
             create_action.update_users(user_ids)

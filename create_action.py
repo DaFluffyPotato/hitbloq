@@ -3,8 +3,8 @@ from db import database
 def create_user(scoresaber_id):
     database.add_action({'type': 'add_user', 'user_id': scoresaber_id})
 
-def update_user(user_id):
-    database.add_action({'type': 'update_user', 'user_id': user_id})
+def update_user(user_id, priority_shift=0):
+    database.add_action({'type': 'update_user', 'user_id': user_id}, priority_shift=priority_shift)
 
 def update_users(user_ids):
     actions = [{'type': 'update_user', 'user_id': user_id} for user_id in user_ids]

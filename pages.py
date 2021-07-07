@@ -345,6 +345,7 @@ def profile_page(user_id, profile_page):
         'sort_oldest_style': oldest_sort_css,
         'sort_cr_style': cr_sort_css,
         'sort_newest_style': newest_sort_css,
+        'last_manual_refresh': str(profile_obj.user.last_manual_refresh),
     })
     profile_html = normal_page(templates.inject('profile_layout', profile_insert), profile_obj.user.username + '\'s Profile', profile_obj.user.username + '\'s Hitbloq profile', profile_obj.user.profile_pic)
     return profile_html

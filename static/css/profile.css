@@ -28,6 +28,12 @@
     grid-template-columns: 120px 1fr;
 }
 
+.user-update-button {
+  grid-row: 1;
+  grid-column: 2;
+  float: right;
+}
+
 .user-rank-img {
   margin-top: 10px;
   width: 120px;

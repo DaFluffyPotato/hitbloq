@@ -410,9 +410,9 @@ class HitbloqMongo():
         else:
             return [v['_id'] for v in self.db['ranked_lists'].aggregate([{'$match': {'deletedAt': None, 'third_party': False}}, {'$group': {'_id': '$_id'}}])]
 
-    def add_action(self, action):
+    def add_action(self, action, priority_shift=0):
         action['progress'] = 0
-        action['time'] = time.time()
+        action['time'] = time.time() - priority_shift
         self.db['actions'].insert_one(action)
 
     def add_actions(self, actions):

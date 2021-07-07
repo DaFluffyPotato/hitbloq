@@ -15,6 +15,7 @@ class User():
         self.date_created = 0
         self.max_rank = {}
         self.rank_history = {}
+        self.last_manual_refresh = 0
 
         # temp values
         self.scores = []
@@ -57,6 +58,7 @@ class User():
         self.date_created = time.time()
         self.rank_history = {pool_id : [] for pool_id in pool_ids}
         self.score_banner = None
+        self.last_manual_refresh = 0
 
         self.cr_totals = {pool_id : 0 for pool_id in pool_ids}
 
@@ -75,6 +77,7 @@ class User():
         self.max_rank = json_data['max_rank']
         self.rank_history = json_data['rank_history']
         self.score_banner = json_data['score_banner']
+        self.last_manual_refresh = json_data['last_manual_refresh']
         return self
 
     def jsonify(self):
@@ -90,6 +93,7 @@ class User():
             'max_rank': self.max_rank,
             'rank_history': self.rank_history,
             'score_banner': self.score_banner,
+            'last_manual_refresh': self.last_manual_refresh,
         }
         return json_data
 
