@@ -150,7 +150,7 @@ class HitbloqMongo():
         for pool in cr_totals:
             user.cr_totals[pool] = cr_totals[pool]
         self.db['users'].update_one({'_id': user.id}, {'$set': {'total_cr': user.cr_totals}})
-        user.unload_scores([])
+        user.unload_scores()
 
     def add_score(self, user, scoresaber_json):
         leaderboard_id = scoresaber_json['songHash'] + '|' + scoresaber_json['difficultyRaw']
