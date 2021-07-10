@@ -100,6 +100,9 @@ class User():
     def load_scores(self, database):
         self.scores = list(database.fetch_scores(self.score_ids))
 
+    def unload_scores(self):
+        self.scores = []
+
     def load_pool_scores(self, database, map_pool_id):
         self.load_scores(database)
         map_pool = database.get_ranked_list(map_pool_id)
