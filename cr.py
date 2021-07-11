@@ -30,6 +30,10 @@ def calculate_song_rankings(user, leaderboards):
             if acc > 0.15:
                 scores_for_sort.append([acc, leaderboard_id, score['_id']])
     scores_for_sort.sort(reverse=True)
+
+    # gimme back dat sweet RAM plz. the server has 800MB after Mongo and the OS. it's literally dying
+    user.unload_scores()
+
     return scores_for_sort
 
 def load_map_pools(map_pools):
