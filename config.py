@@ -7,11 +7,11 @@ CHARACTERISTIC_CONVERSION = {
 }
 
 DIFFICULTY_CONVERSION = {
-    'ExpertPlus': 'expertPlus',
-    'Expert': 'expert',
-    'Hard': 'hard',
-    'Normal': 'normal',
-    'Easy': 'easy',
+    'ExpertPlus': 'ExpertPlus',
+    'Expert': 'Expert',
+    'Hard': 'Hard',
+    'Normal': 'Normal',
+    'Easy': 'Easy',
 }
 
 LEADERBOARD_VOTE_RANKING_CURVE_CONSTANT = 0.8
