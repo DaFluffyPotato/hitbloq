@@ -25,7 +25,7 @@ class User():
 
     def refresh(self, database):
         ss_profile = scoresaber.ScoresaberInterface(database).ss_req('player/' + self.scoresaber_id + '/basic')
-        self.username = ss_profile['playerInfo']['playerName']
+        self.username = ss_profile['playerInfo']['playerName'].replace('<', '&lt;').replace('>', '&gt;')
         self.profile_pic = 'https://new.scoresaber.com' + ss_profile['playerInfo']['avatar']
         database.db['users'].update_one({'_id': self.id}, {'$set': {'profile_pic': self.profile_pic, 'username': self.username}})
 
