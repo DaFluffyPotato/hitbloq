@@ -7,7 +7,7 @@ WAIT_TIME = 1
 
 class BeatSaverInterface():
     def __init__(self):
-        self.headers = {'User-Agent': 'HB_Bot/1.1b'}
+        self.headers = {'User-Agent': 'HB_Bot/1.2b'}
         self.beatsaver_url = 'https://beatsaver.com/api/'
 
     def beatsaver_request(self, url):
@@ -25,11 +25,22 @@ class BeatSaverInterface():
                 time.sleep(10)
 
     def lookup_song_hash(self, hash):
-        map_data = self.beatsaver_request('maps/by-hash/' + hash)
-        if map_data == 'Not Found':
+        hash = hash.upper()
+        map_data = self.beatsaver_request('maps/hash/' + hash)
+        if 'error' in map_data:
             return None
         else:
+            for i, ver in sorted(enumerate(map_data['versions']), reverse=True):
+                if ver['hash'].upper() != hash:
+                    map_data['versions'].pop(i)
             return map_data
+
+    def get_diff_data(self, map_data, difficulty, characteristic):
+        if len(map_data['versions']):
+            for diff in map_data['versions'][0]['diffs']:
+                if diff['characteristic'] == characteristic:
+                    if diff['difficulty'] == difficulty:
+                        return diff
 
     def verify_song_id(self, song_id):
         if len(song_id.split('|')) != 2:
@@ -45,7 +56,7 @@ class BeatSaverInterface():
         if junk != '':
             return False
 
-        hash = song_id.split('|')[0]
+        hash = song_id.split('|')[0].upper()
 
         if characteristic not in char_shorten:
             return False
@@ -56,17 +67,15 @@ class BeatSaverInterface():
         if characteristic[:4] == 'Solo':
             characteristic = characteristic[4:]
 
-        difficulty = difficulty[0].lower() + difficulty[1:]
-
         song_data = self.lookup_song_hash(hash)
 
         if not song_data:
             return False
 
-        for c in song_data['metadata']['characteristics']:
-            if c['name'] == characteristic:
-                if difficulty in c['difficulties']:
-                    if c['difficulties'][difficulty] != None:
+        if len(song_data['versions']):
+            for diff in song_data['versions'][0]['diffs']:
+                if diff['characteristic'] == characteristic:
+                    if diff['difficulty'] == difficulty:
                         return song_data
 
         return False

@@ -221,6 +221,13 @@ class HitbloqMongo():
         return ranked_maps
 
     def create_leaderboard(self, leaderboard_id, leaderboard_hash, transfer=False):
+        leaderboard_hash = leaderboard_hash.upper()
+        try:
+            leaderboard_id = leaderboard_id.split('|')[0].upper() + '|' + leaderboard_id.split('|')[1]
+        except:
+            print('invalid leaderboard id:', leaderboard_id)
+            return
+
         print('Creating leaderboard:', leaderboard_id)
 
         ranked_maps = self.get_full_ranked_list()
@@ -281,19 +288,17 @@ class HitbloqMongo():
             difficulty = old_config.DIFFICULTY_CONVERSION[difficulty]
 
             # get the correct difficulty data based on characteristic and difficulty
-            try:
-                difficulty_data = [c['difficulties'] for c in beatsaver_data['metadata']['characteristics'] if c['name'] == characteristic][0][difficulty]
-                if difficulty_data == None:
-                    print('ERROR: the', difficulty, 'difficulty may have been deleted from Beat Saver...')
-                    return None
-            except IndexError:
-                print('ERROR: the', characteristic, 'characteristic may have been deleted from Beat Saver...')
+            difficulty_data = beatsaver_api.get_diff_data(beatsaver_data, difficulty, characteristic)
+            if not difficulty_data:
+                print('ERROR: the', difficulty, characteristic, 'version of song', leaderboard_has, 'may have been deleted.')
                 return None
+
+            version_data = beatsaver_data['versions'][0]
 
             leaderboard_data = {
                 '_id': leaderboard_id,
-                'key': beatsaver_data['key'],
-                'cover': beatsaver_data['coverURL'],
+                'key': version_data['key'],
+                'cover': version_data['coverURL'],
                 'name': beatsaver_data['metadata']['songName'],
                 'sub_name': beatsaver_data['metadata']['songSubName'],
                 'artist': beatsaver_data['metadata']['songAuthorName'],
@@ -303,7 +308,7 @@ class HitbloqMongo():
                 'difficulty': difficulty,
                 'characteristic': characteristic,
                 'duration': beatsaver_data['metadata']['duration'],
-                'difficulty_duration': difficulty_data['duration'],
+                'difficulty_duration': difficulty_data['seconds'],
                 'length': difficulty_data['length'],
                 'njs': difficulty_data['njs'],
                 'bombs': difficulty_data['bombs'],
