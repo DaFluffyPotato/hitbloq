@@ -290,7 +290,7 @@ class HitbloqMongo():
             # get the correct difficulty data based on characteristic and difficulty
             difficulty_data = beatsaver_api.get_diff_data(beatsaver_data, difficulty, characteristic)
             if not difficulty_data:
-                print('ERROR: the', difficulty, characteristic, 'version of song', leaderboard_has, 'may have been deleted.')
+                print('ERROR: the', difficulty, characteristic, 'version of song', leaderboard_hash, 'may have been deleted.')
                 return None
 
             version_data = beatsaver_data['versions'][0]

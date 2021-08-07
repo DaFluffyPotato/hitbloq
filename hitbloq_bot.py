@@ -152,7 +152,7 @@ async def on_message(message):
                     if song_data:
                         if pool_id in [role.name for role in message.author.roles]:
                             create_action.rank_song(song_id, pool_id)
-                            await message.channel.send(message.author.mention + ' the action queue has been updated with the rank request for:\n' + song_data['metadata']['songName'] + ' - ' + song_id.split('|')[-1][1:] + '\n(<https://beatsaver.com/beatmap/' + song_data['key'] + '>)!\nhttps://hitbloq.com/actions')
+                            await message.channel.send(message.author.mention + ' the action queue has been updated with the rank request for:\n' + song_data['metadata']['songName'] + ' - ' + song_id.split('|')[-1][1:] + '\n(<https://beatsaver.com/beatmap/' + song_data['versions'][0]['key'] + '>)!\nhttps://hitbloq.com/actions')
                         else:
                             await message.channel.send(message.author.mention + ' you don\'t have permissions to modify this pool')
                     else:
