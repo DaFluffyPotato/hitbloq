@@ -297,7 +297,7 @@ class HitbloqMongo():
 
             leaderboard_data = {
                 '_id': leaderboard_id,
-                'key': version_data['key'],
+                'key': beatsaver_data['key'],
                 'cover': version_data['coverURL'],
                 'name': beatsaver_data['metadata']['songName'],
                 'sub_name': beatsaver_data['metadata']['songSubName'],
