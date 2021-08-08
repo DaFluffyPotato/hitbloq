@@ -185,7 +185,7 @@ def ranked_list_page(group_id, page=0):
         if group_id in leaderboard['star_rating']:
             star_rating = leaderboard['star_rating'][group_id]
         values = {
-            'song_img': 'https://beatsaver.com' + leaderboard['cover'],
+            'song_img': leaderboard['cover'],
             'song_name': '<a href="/leaderboard/' + leaderboard['key'] + '_' + shorten_settings(leaderboard['difficulty_settings']) + '">' + leaderboard['name'] + '</a>',
             'song_plays': str(len(leaderboard['score_ids'])),
             'song_difficulty': str(star_rating) + '★',
@@ -225,12 +225,12 @@ def leaderboard_page(leaderboard_id, page):
         'star_rating': str(star_rating) + '★',
         'notes_per_second': str(round(leaderboard_data['notes'] / leaderboard_data['length'], 2)),
         'pulse_rate': str(1 / leaderboard_data['bpm'] * 60 * 2) + 's',
-        'song_picture': 'https://beatsaver.com' + leaderboard_data['cover'],
+        'song_picture': leaderboard_data['cover'],
         'song_hash': leaderboard_data['hash'],
         'next_page': request.path.split('?')[0] + rebuild_args({'page': str(page + 1)}),
         'last_page': request.path.split('?')[0] + rebuild_args({'page': str(max(page - 1, 0))}),
     }
-    leaderboard_html = normal_page(templates.inject('leaderboard_layout', leaderboard_insert), leaderboard_data['name'] + ' Leaderboard', 'song leaderboard for ' + leaderboard_data['name'], 'https://beatsaver.com' + leaderboard_data['cover'])
+    leaderboard_html = normal_page(templates.inject('leaderboard_layout', leaderboard_insert), leaderboard_data['name'] + ' Leaderboard', 'song leaderboard for ' + leaderboard_data['name'], leaderboard_data['cover'])
     return leaderboard_html
 
 def generate_leaderboard_entries(leaderboard_data, page):
@@ -382,7 +382,7 @@ def generate_profile_entries(profile_obj, profile_page):
             'cr_received': str(round(score['cr'][map_pool], 2)),
             'weighted_cr': str(round(score['cr'][map_pool] * cr_accumulation_curve(player_score_index + profile_page * page_length), 2)),
             'accuracy': str(score['accuracy']),
-            'song_pic': 'https://beatsaver.com' + score['leaderboard']['cover'],
+            'song_pic': score['leaderboard']['cover'],
             'date_set': epoch_ago(score['time_set']) + ' ago',
             'difficulty': score['leaderboard']['difficulty'][0].upper() + score['leaderboard']['difficulty'][1:],
         }
