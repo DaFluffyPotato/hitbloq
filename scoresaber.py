@@ -52,6 +52,7 @@ class ScoresaberInterface():
                         looking = False
                     else:
                         score['epochTime'] = convert_epoch(score['timeSet'])
+                        score['songHash'] = score['songHash'].upper()
                         save_dat.append(score)
                 total_dat += save_dat
             c += 1

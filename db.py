@@ -209,8 +209,22 @@ class HitbloqMongo():
 
     def refresh_score_order(self, leaderboard_id):
         leaderboard_data = self.db['leaderboards'].find_one({'_id': leaderboard_id})
-        new_score_order = [score['_id'] for score in self.fetch_scores(leaderboard_data['score_ids']).sort('score', -1)]
+        try:
+            new_score_order = [score['_id'] for score in self.fetch_scores(leaderboard_data['score_ids']).sort('score', -1)]
+        except:
+            print('error on score refresh --- attempting leaderboard repair')
+            self.repair_leaderboard_pointers(leaderboard_id)
+            new_score_order = [score['_id'] for score in self.fetch_scores(leaderboard_data['score_ids']).sort('score', -1)]
         self.db['leaderboards'].update_one({'_id': leaderboard_id}, {'$set': {'score_ids': new_score_order}})
+
+    def repair_leaderboard_pointers(self, leaderboard_id):
+        leaderboard_scores = list(self.db['scores'].find({'song_id': leaderboard_id}))
+
+        leaderboard_scores.sort(key=lambda x: x['score'], reverse=True)
+        leaderboard_score_ids = [score['_id'] for score in leaderboard_scores]
+
+        if len(leaderboard_scores):
+            self.db['leaderboards'].update_one({'_id': leaderboard_id}, {'$set': {'score_ids': leaderboard_score_ids}})
 
     def get_full_ranked_list(self):
         map_pools = self.get_ranked_lists()
