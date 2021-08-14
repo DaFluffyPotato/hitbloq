@@ -366,6 +366,7 @@ class HitbloqMongo():
             'cr_curve': {'type': 'basic'},
             'player_count': 0,
             'priority': 0,
+            'owners': [],
         })
         self.db['ladders'].insert_one({
             '_id': name,
@@ -373,6 +374,20 @@ class HitbloqMongo():
         })
         if not third_party:
             self.db['users'].update_many({}, {'$set': {'total_cr.' + name : 0}})
+            self.db['users'].update_many({}, {'$set': {'rank_history.' + name : []}})
+
+    def set_pool_owners(self, map_pool, owners):
+        self.db['ranked_lists'].update_one({'_id': map_pool}, {'$set': {'owners': owners}})
+
+    def is_pool_owner(self, map_pool, discord_id):
+        owners = self.db['ranked_lists'].find_one({'_id': map_pool})
+        if owners:
+            if discord_id in owners['owners']:
+                return True
+            else:
+                return False
+        else:
+            return False
 
     def delete_map_pool(self, name):
         self.db['users'].update_many({}, {'$unset': {'rank_history.' + name: 1, 'max_rank.' + name: 1, 'total_cr.' + name: 1}})
@@ -457,19 +472,26 @@ class HitbloqMongo():
         if action_id:
             self.db['actions'].update_one({'_id': action_id}, {'$set': {'progress': progress}})
 
-    def get_rate_limits(self, ip_address):
-        ip_hash = hash_ip(ip_address)
+    def get_rate_limits(self, ip_address, hash=True):
+        if hash:
+            ip_hash = hash_ip(ip_address)
+        else:
+            ip_hash = ip_address
         ratelimits = self.db['ratelimits'].find_one({'_id': ip_hash})
         if not ratelimits:
             ratelimits = {
                 '_id': ip_hash,
                 'user_additions': 0,
+                'pools_created': 0,
             }
             self.db['ratelimits'].insert_one(ratelimits)
         return ratelimits
 
-    def ratelimit_add(self, ip_address, field):
-        ip_hash = hash_ip(ip_address)
+    def ratelimit_add(self, ip_address, field, hash=True):
+        if hash:
+            ip_hash = hash_ip(ip_address)
+        else:
+            ip_hash = ip_address
         self.db['ratelimits'].update_one({'_id': ip_hash}, {'$inc': {field: 1}})
 
     def set_pool_curve(self, pool_id, curve_data):

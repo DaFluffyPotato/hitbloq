@@ -1,8 +1,10 @@
 import asyncio
 import json
 import time
+import sys
 
 import discord
+from discord.utils import get
 
 import create_action
 from db import database
@@ -27,6 +29,22 @@ ADMIN_COMMANDS_CHANNEL = 'admin-commands'
 POOL_ADMIN_COMMANDS_CHANNEL = 'pool-admin-commands'
 PATRON_COMMANDS_CHANNEL = 'patron-commands'
 channels = []
+
+def safe_string(s):
+    valid_chars = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+    valid_chars += ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '_']
+    for char in s:
+        if char not in valid_chars:
+            return False
+    if s == '':
+        return False
+    return True
+
+def is_admin(user):
+    if 'admin' in [role.name for role in user.roles]:
+        return True
+    else:
+        return False
 
 @client.event
 async def on_ready():
@@ -54,6 +72,30 @@ async def on_message(message):
                         await message.channel.send(message.author.mention + ' a new score banner has been set!')
                 else:
                     await message.channel.send(message.author.mention + ' banner URLs must be https://i.imgur.com links and they must be png or jpeg/jpg. You can get these by right clicking the image and clicking "open image in new tab".')
+            if message_args[0] == '!create_pool':
+                try:
+                    new_pool_id = message_args[1]
+                    if 'CR Farmer' in [role.name for role in message.author.roles]:
+                        if new_pool_id not in database.get_pool_ids(True):
+                            if safe_string(new_pool_id):
+                                if database.get_rate_limits(message.author.id, hash=False)['pools_created'] < 1:
+                                    role = get(active_guild.roles, name='map pool people')
+                                    pool_channel = get(active_guild.channels, name='pool-admin-commands')
+                                    await message.author.add_roles(role)
+                                    database.ratelimit_add(message.author.id, 'pools_created', hash=False)
+                                    database.create_map_pool(new_pool_id)
+                                    database.set_pool_owners(new_pool_id, [message.author.id])
+                                    await message.channel.send(message.author.mention + ' created the map pool `' + new_pool_id + '`! Head over to ' + pool_channel.mention + ' to manage your new pool.')
+                                else:
+                                    await message.channel.send(message.author.mention + ' You\'ve already created too many pools.')
+                            else:
+                                await message.channel.send(message.author.mention + ' This pool ID contains forbidden characters. It may only include lowercase letters, numbers, and underscores.')
+                        else:
+                            await message.channel.send(message.author.mention + ' This pool ID has been taken.')
+                    else:
+                        await message.channel.send(message.author.mention + ' You must be a CR Farmer patron to use this command.')
+                except IndexError:
+                    await message.channel.send(message.author.mention + ' invalid arguments. Should be `!create_pool <new_pool_id>`.')
         if message.channel.name == GENERAL_COMMANDS_CHANNEL:
             if message_args[0] == '!add':
                 scoresaber_id = message_args[1]
@@ -62,6 +104,13 @@ async def on_message(message):
             if message_args[0] == '!views':
                 await message.channel.send(message.author.mention + ' Hitbloq has accumulated ' + str(int(database.get_counter('views')['count'])) + ' views!')
         if message.channel.name == ADMIN_COMMANDS_CHANNEL:
+            if message_args[0] == '!delete_pool':
+                pool_id = message_args[1]
+                database.delete_map_pool(pool_id)
+                await message.channel.send(message.author.mention + ' deleted the `' + pool_id + '` map pool.')
+            if message_args[0] == '!stop_bot':
+                await message.channel.send(message.author.mention + ' stopping... :(')
+                sys.exit()
             if message_args[0] == '!recalculate_cr':
                 map_pools = message_args[1].split(',')
                 create_action.recalculate_cr(map_pools)
@@ -88,12 +137,33 @@ async def on_message(message):
                 create_action.update_user(rewind_id)
                 await message.channel.send(message.author.mention + ' user ' + str(rewind_id) + ' will be rewinded and updated.')
         if message.channel.name == POOL_ADMIN_COMMANDS_CHANNEL:
+            if message_args[0] == '!set_owners':
+                try:
+                    pool_id = message_args[1]
+                    valid_permissions = False
+                    if is_admin(message.author):
+                        valid_permissions = True
+                    else:
+                        if database.is_pool_owner(pool_id, message.author.id):
+                            valid_permissions = True
+
+                    if valid_permissions:
+                        owner_list = [user.id for user in message.mentions]
+                        if message.author.id in owner_list:
+                            database.set_pool_owners(pool_id, owner_list)
+                        else:
+                            await message.channel.send(message.author.mention + ' You must list yourself as an owner. If you would like to delete the pool, please contact an admin.')
+                    else:
+                        await message.channel.send(message.author.mention + ' Sorry, but you don\'t have permissions to modify this pool.')
+                except IndexError:
+                    await message.channel.send(message.author.mention + ' invalid arguments. Should be `!set_owners <pool_id> @owner1 @owner2 etc.`')
+
             if message_args[0] == '!set_img':
                 valid_host = 'https://i.imgur.com/'
                 pool_id = message_args[1]
                 image_url = message_args[2]
                 if pool_id in database.get_pool_ids(True):
-                    if pool_id in [role.name for role in message.author.roles]:
+                    if database.is_pool_owner(pool_id, message.author.id):
                         if (image_url[:len(valid_host)] != valid_host) or (image_url.split('.')[-1] != 'png'):
                             await message.channel.send(message.author.mention + ' the image URL must come from ' + valid_host + ' and be a PNG')
                         else:
@@ -106,7 +176,7 @@ async def on_message(message):
             if message_args[0] == '!recalculate_cr':
                 pool_id = message_args[1]
                 if pool_id in database.get_pool_ids(True):
-                    if pool_id in [role.name for role in message.author.roles]:
+                    if database.is_pool_owner(pool_id, message.author.id):
                         create_action.recalculate_cr([pool_id])
                         await message.channel.send(message.author.mention + ' the action queue has been updated with the recalc request for ' + pool_id + '.\nhttps://hitbloq.com/actions')
                     else:
@@ -122,7 +192,7 @@ async def on_message(message):
                     if not len(matched_leaderboards):
                         await message.channel.send(message.author.mention + ' that song ID appears to be invalid')
                     else:
-                        if pool_id in [role.name for role in message.author.roles]:
+                        if database.is_pool_owner(pool_id, message.author.id):
                             database.db['leaderboards'].update_one({'_id': song_id}, {'$set': {'forced_star_rating.' + pool_id: forced_rating}})
                             await message.channel.send(message.author.mention + ' switched the leaderboard to manual star ratings (' + str(forced_rating) + ').')
                         else:
@@ -137,7 +207,7 @@ async def on_message(message):
                     if not len(matched_leaderboards):
                         await message.channel.send(message.author.mention + ' that song ID appears to be invalid')
                     else:
-                        if pool_id in [role.name for role in message.author.roles]:
+                        if database.is_pool_owner(pool_id, message.author.id):
                             database.db['leaderboards'].update_one({'_id': song_id}, {'$unset': {'forced_star_rating.' + pool_id: 1}})
                             await message.channel.send(message.author.mention + ' switched the leaderboard to automatic star ratings.')
                         else:
@@ -150,7 +220,7 @@ async def on_message(message):
                 if pool_id in database.get_pool_ids(True):
                     song_data = beatsaver_interface.verify_song_id(song_id)
                     if song_data:
-                        if pool_id in [role.name for role in message.author.roles]:
+                        if database.is_pool_owner(pool_id, message.author.id):
                             create_action.rank_song(song_id, pool_id)
                             await message.channel.send(message.author.mention + ' the action queue has been updated with the rank request for:\n' + song_data['metadata']['songName'] + ' - ' + song_id.split('|')[-1][1:] + '\n(<https://beatsaver.com/beatmap/' + song_data['id'] + '>)!\nhttps://hitbloq.com/actions')
                         else:
@@ -163,7 +233,7 @@ async def on_message(message):
                 song_id = message_args[1]
                 pool_id = message_args[2]
                 if pool_id in database.get_pool_ids(True):
-                    if pool_id in [role.name for role in message.author.roles]:
+                    if database.is_pool_owner(pool_id, message.author.id):
                         create_action.unrank_song(song_id, pool_id)
                         await message.channel.send(message.author.mention + ' the action queue has been updated with the unrank request for:\n' + song_id + '\nhttps://hitbloq.com/actions')
                     else:
@@ -173,7 +243,7 @@ async def on_message(message):
             if message_args[0] == '!set_curve':
                 pool_id = message_args[1]
                 if pool_id in database.get_pool_ids(True):
-                    if pool_id in [role.name for role in message.author.roles]:
+                    if database.is_pool_owner(pool_id, message.author.id):
                         try:
                             json_data = json.loads(' '.join(message_args[2:]))
                             if json_data['type'] in curves:
