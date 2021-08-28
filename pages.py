@@ -212,7 +212,10 @@ def leaderboard_page(leaderboard_id, page):
 
     map_pool = get_map_pool()
 
-    leaderboard_data = database.search_leaderboards({'key': leaderboard_id.split('_')[0], 'difficulty_settings': lengthen_settings('_'.join(leaderboard_id.split('_')[1:]))})[0]
+    try:
+        leaderboard_data = database.search_leaderboards({'key': leaderboard_id.split('_')[0], 'difficulty_settings': lengthen_settings('_'.join(leaderboard_id.split('_')[1:]))})[0]
+    except IndexError:
+        leaderboard_data = database.search_leaderboards({'hash': leaderboard_id.split('_')[0], 'difficulty_settings': lengthen_settings('_'.join(leaderboard_id.split('_')[1:]))})[0]
     star_rating = 0
     if map_pool in leaderboard_data['star_rating']:
         star_rating = leaderboard_data['star_rating'][map_pool]
