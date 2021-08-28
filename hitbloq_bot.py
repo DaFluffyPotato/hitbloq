@@ -267,13 +267,13 @@ async def on_message(message):
                             json_data = json.loads(' '.join(message_args[2:]))
                             if json_data['type'] in curves:
                                 if invalid_curve_data(json_data):
-                                    await message.channel.send(message.author.mention + ' Invalid curve config:', invalid_curve_data(json_data))
+                                    await message.channel.send(message.author.mention + ' Invalid curve config: ' + invalid_curve_data(json_data))
                                 else:
                                     database.set_pool_curve(pool_id, json_data)
                                     await message.channel.send(message.author.mention + ' the curve for ' + pool_id + ' has been updated. You may want to run `!recalculate_cr ' + pool_id + '`.')
                             else:
                                 await message.channel.send(message.author.mention + ' the specified curve does not exist.')
-                        except JSONDecodeError:
+                        except:
                             await message.channel.send(message.author.mention + ' the JSON formatting is invalid.')
                     else:
                         await message.channel.send(message.author.mention + ' you don\'t have permissions to modify this pool')
