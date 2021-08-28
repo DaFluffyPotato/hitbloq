@@ -328,6 +328,14 @@ def profile_page(user_id, profile_page):
     newest_sort_css = 'box-shadow: 0px 2px 0px 0px #E03535;' if sort_mode == 'newest' else ''
     oldest_sort_css = 'box-shadow: 0px 2px 0px 0px #E03535;' if sort_mode == 'oldest' else ''
 
+    profile_banner_css = ''
+    if profile_obj.user.profile_banner:
+        profile_banner_css = 'linear-gradient(to right, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.75) 100%), url("' + profile_obj.user.profile_banner + '"); background-size: cover;'
+
+    profile_background_css = ''
+    if profile_obj.user.profile_background:
+        profile_background_css = 'linear-gradient(to right, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.75) 100%), url("' + profile_obj.user.profile_background + '"); background-size: cover;'
+
     profile_insert = {}
     profile_insert.update(profile_obj.insert_info)
     profile_insert.update({
@@ -349,6 +357,8 @@ def profile_page(user_id, profile_page):
         'sort_cr_style': cr_sort_css,
         'sort_newest_style': newest_sort_css,
         'last_manual_refresh': str(profile_obj.user.last_manual_refresh),
+        'profile_banner_css': profile_banner_css,
+        'profile_background_css': profile_background_css,
     })
     profile_html = normal_page(templates.inject('profile_layout', profile_insert), profile_obj.user.username + '\'s Profile', profile_obj.user.username + '\'s Hitbloq profile', profile_obj.user.profile_pic)
     return profile_html
