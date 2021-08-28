@@ -39,7 +39,6 @@ def linear_curve(accuracy, curve_data):
         i = 1
 
     middle_dis = (accuracy - curve_data['points'][i - 1][0]) / (curve_data['points'][i][0] - curve_data['points'][i - 1][0])
-    print(middle_dis)
 
     return curve_data['points'][i - 1][1] + middle_dis * (curve_data['points'][i][1] - curve_data['points'][i - 1][1])
 
