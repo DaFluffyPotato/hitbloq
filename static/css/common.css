@@ -79,8 +79,8 @@ a:hover {
 }
 
 .main {
-    margin-top: 55px;
-	margin-bottom: 100px;
+  margin-top: 55px;
+	padding-bottom: 100px;
 }
 
 .card {
