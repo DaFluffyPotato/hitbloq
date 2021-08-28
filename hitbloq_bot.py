@@ -56,7 +56,7 @@ def invalid_curve_data(json_data):
             json_data['points'].sort()
             if len(json_data['points']) > 15:
                 return 'You may not have more than 15 points in your curve.'
-            if (json_data['points'][0] != [0, 0]) or (json_data['points'][1] != [1, 1]):
+            if (json_data['points'][0] != [0, 0]) or (json_data['points'][-1] != [1, 1]):
                 return 'The first and last points must be `[0, 0]` and `[1, 1]` respectively.'
             if len(set([p[0] for p in json_data['points']])) != len(json_data['points']):
                 return 'The x values for every point must be unique.'
