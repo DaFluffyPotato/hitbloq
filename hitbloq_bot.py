@@ -273,7 +273,7 @@ async def on_message(message):
                                     await message.channel.send(message.author.mention + ' the curve for ' + pool_id + ' has been updated. You may want to run `!recalculate_cr ' + pool_id + '`.')
                             else:
                                 await message.channel.send(message.author.mention + ' the specified curve does not exist.')
-                        except:
+                        except JSONDecodeError:
                             await message.channel.send(message.author.mention + ' the JSON formatting is invalid.')
                     else:
                         await message.channel.send(message.author.mention + ' you don\'t have permissions to modify this pool')
