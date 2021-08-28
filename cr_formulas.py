@@ -24,8 +24,28 @@ def base_curve(accuracy, curve_data):
     else:
         return accuracy / 100 * cutoff + (1 - cutoff) * ((accuracy - baseline)/(100 - baseline)) ** exponential
 
+def linear_curve(accuracy, curve_data):
+    defaults = {'points': [[0, 0], [0.8, 0.5], [1, 1]]}
+    defaults.update(curve_data)
+    curve_data = defaults
+
+    accuracy = accuracy / 100
+
+    for i in range(len(curve_data['points'])):
+        if accuracy < curve_data['points'][i][0]:
+            break
+
+    if i == 0:
+        i = 1
+
+    middle_dis = (accuracy - curve_data['points'][i - 1][0]) / (curve_data['points'][i][0] - curve_data['points'][i - 1][0])
+    print(middle_dis)
+
+    return curve_data['points'][i - 1][1] + middle_dis * (curve_data['points'][i][1] - curve_data['points'][i - 1][1])
+
 curves = {
     'basic': base_curve,
+    'linear': linear_curve,
 }
 
 def cr_score_curve(accuracy, curve_data):

@@ -46,6 +46,24 @@ def is_admin(user):
     else:
         return False
 
+def invalid_curve_data(json_data):
+    if json_data['type'] == 'basic':
+        if 'cutoff' in json_data:
+            if json_data['cutoff'] == 0:
+                return 'The cutoff may not be 0.'
+    if json_data['type'] == 'linear':
+        if 'points' in json_data:
+            json_data['points'].sort()
+            if len(json_data['points']) > 15:
+                return 'You may not have more than 15 points in your curve.'
+            if (json_data['points'][0] != [0, 0]) or (json_data['points'][1] != [1, 1]):
+                return 'The first and last points must be `[0, 0]` and `[1, 1]` respectively.'
+            if len(set([p[0] for p in json_data['points']])) != len(json_data['points']):
+                return 'The x values for every point must be unique.'
+
+    # valid
+    return None
+
 @client.event
 async def on_ready():
     for guild in client.guilds:
@@ -248,8 +266,11 @@ async def on_message(message):
                         try:
                             json_data = json.loads(' '.join(message_args[2:]))
                             if json_data['type'] in curves:
-                                database.set_pool_curve(pool_id, json_data)
-                                await message.channel.send(message.author.mention + ' the curve for ' + pool_id + ' has been updated. You may want to run `!recalculate_cr ' + pool_id + '`.')
+                                if invalid_curve_data(json_data):
+                                    await message.channel.send(message.author.mention + ' Invalid curve config:', invalid_curve_data(json_data))
+                                else:
+                                    database.set_pool_curve(pool_id, json_data)
+                                    await message.channel.send(message.author.mention + ' the curve for ' + pool_id + ' has been updated. You may want to run `!recalculate_cr ' + pool_id + '`.')
                             else:
                                 await message.channel.send(message.author.mention + ' the specified curve does not exist.')
                         except:
