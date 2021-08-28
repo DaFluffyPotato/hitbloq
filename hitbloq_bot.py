@@ -80,7 +80,9 @@ async def on_message(message):
     for line in message.content.split('\n'):
         message_args = line.split(' ')
         if message.channel.name == PATRON_COMMANDS_CHANNEL:
-            if message_args[0] == '!set_banner':
+            if message_args[0] in ['!set_banner', '!set_profile_banner', '!set_profile_background']:
+                field = {'!set_banner': 'score_banner', '!set_profile_banner': 'profile_banner', '!set_profile_background': 'profile_background'}[message_args[0]]
+                print(field)
                 banner_url = message_args[1]
                 if (banner_url[:20] == 'https://i.imgur.com/') and (banner_url.split('.')[-1] in ['png', 'jpeg', 'jpg']):
                     user_id = int(message_args[2])
