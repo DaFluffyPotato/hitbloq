@@ -330,11 +330,11 @@ def profile_page(user_id, profile_page):
 
     profile_banner_css = ''
     if profile_obj.user.profile_banner:
-        profile_banner_css = 'background: linear-gradient(to right, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.75) 100%), url(\'' + profile_obj.user.profile_banner + '\'); background-size: cover;'
+        profile_banner_css = 'background: linear-gradient(to right, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.25) 100%), url(\'' + profile_obj.user.profile_banner + '\'); background-size: cover;'
 
     profile_background_css = ''
     if profile_obj.user.profile_background:
-        profile_background_css = 'background: linear-gradient(to right, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.75) 100%), url(\'' + profile_obj.user.profile_background + '\'); background-size: cover;'
+        profile_background_css = 'background: linear-gradient(to right, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.25) 100%), url(\'' + profile_obj.user.profile_background + '\'); background-size: cover;'
 
     profile_insert = {}
     profile_insert.update(profile_obj.insert_info)
