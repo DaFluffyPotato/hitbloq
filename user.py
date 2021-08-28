@@ -9,6 +9,8 @@ class User():
         self.id = -1
         self.scoresaber_id = 'null'
         self.score_banner = None
+        self.profile_banner = None
+        self.profile_background = None
         self.score_ids = []
         self.last_update = 0
         self.cr_totals = {}
@@ -58,6 +60,8 @@ class User():
         self.date_created = time.time()
         self.rank_history = {pool_id : [] for pool_id in pool_ids}
         self.score_banner = None
+        self.profile_banner = None
+        self.profile_background = None
         self.last_manual_refresh = 0
 
         self.cr_totals = {pool_id : 0 for pool_id in pool_ids}
@@ -77,6 +81,8 @@ class User():
         self.max_rank = json_data['max_rank']
         self.rank_history = json_data['rank_history']
         self.score_banner = json_data['score_banner']
+        self.profile_banner = json_data['profile_banner']
+        self.profile_background = json_data['profile_background']
         self.last_manual_refresh = json_data['last_manual_refresh']
         return self
 
@@ -93,6 +99,8 @@ class User():
             'max_rank': self.max_rank,
             'rank_history': self.rank_history,
             'score_banner': self.score_banner,
+            'profile_banner': self.profile_banner,
+            'profile_background': self.profile_background,
             'last_manual_refresh': self.last_manual_refresh,
         }
         return json_data
