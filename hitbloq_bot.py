@@ -82,13 +82,12 @@ async def on_message(message):
         if message.channel.name == PATRON_COMMANDS_CHANNEL:
             if message_args[0] in ['!set_banner', '!set_profile_banner', '!set_profile_background']:
                 field = {'!set_banner': 'score_banner', '!set_profile_banner': 'profile_banner', '!set_profile_background': 'profile_background'}[message_args[0]]
-                print(field)
                 banner_url = message_args[1]
                 if (banner_url[:20] == 'https://i.imgur.com/') and (banner_url.split('.')[-1] in ['png', 'jpeg', 'jpg']):
                     user_id = int(message_args[2])
                     users = database.get_users([user_id])
                     if len(users):
-                        database.update_user(users[0], {'$set': {'score_banner': banner_url}})
+                        database.update_user(users[0], {'$set': {field: banner_url}})
                         await message.channel.send(message.author.mention + ' a new score banner has been set!')
                 else:
                     await message.channel.send(message.author.mention + ' banner URLs must be https://i.imgur.com links and they must be png or jpeg/jpg. You can get these by right clicking the image and clicking "open image in new tab".')
