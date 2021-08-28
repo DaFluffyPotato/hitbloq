@@ -186,7 +186,7 @@ def ranked_list_page(group_id, page=0):
             star_rating = leaderboard['star_rating'][group_id]
         values = {
             'song_img': leaderboard['cover'],
-            'song_name': '<a href="/leaderboard/' + leaderboard['key'] + '_' + shorten_settings(leaderboard['difficulty_settings']) + '">' + leaderboard['name'] + '</a>',
+            'song_name': '<a href="/leaderboard/' + leaderboard['hash'] + '_' + shorten_settings(leaderboard['difficulty_settings']) + '">' + leaderboard['name'] + '</a>',
             'song_plays': str(len(leaderboard['score_ids'])),
             'song_difficulty': str(star_rating) + '★',
             'song_game_difficulty': leaderboard['difficulty'][0].upper() + leaderboard['difficulty'][1:],
@@ -381,7 +381,7 @@ def generate_profile_entries(profile_obj, profile_page):
         player_score_index = scores_by_cr.index(score)
         inject_values = {
             'song_rank': str(score['rank']),
-            'song_name': '<a href="/leaderboard/' + score['leaderboard']['key'] + '_' + shorten_settings(score['song_id'].split('|')[1]) + '">' + score['leaderboard']['name'] + '</a>',
+            'song_name': '<a href="/leaderboard/' + score['leaderboard']['hash'] + '_' + shorten_settings(score['song_id'].split('|')[1]) + '">' + score['leaderboard']['name'] + '</a>',
             'cr_received': str(round(score['cr'][map_pool], 2)),
             'weighted_cr': str(round(score['cr'][map_pool] * cr_accumulation_curve(player_score_index + profile_page * page_length), 2)),
             'accuracy': str(score['accuracy']),
