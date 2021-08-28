@@ -229,7 +229,7 @@ def leaderboard_page(leaderboard_id, page):
         'notes_per_second': str(round(leaderboard_data['notes'] / leaderboard_data['length'], 2)),
         'pulse_rate': str(1 / leaderboard_data['bpm'] * 60 * 2) + 's',
         'song_picture': leaderboard_data['cover'],
-        'song_hash': leaderboard_data['hash'],
+        'song_hash': leaderboard_data['key'], # swapped to key since the hash is normally in the URL now
         'next_page': request.path.split('?')[0] + rebuild_args({'page': str(page + 1)}),
         'last_page': request.path.split('?')[0] + rebuild_args({'page': str(max(page - 1, 0))}),
     }
