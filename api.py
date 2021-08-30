@@ -72,10 +72,11 @@ def get_leaderboard_scores_extended(leaderboard_id, offset=0, count=10):
     score_data = list(database.fetch_scores(score_ids).sort('score', -1))[offset:offset + count]
     user_list = [score['user'] for score in score_data]
     user_data = {user.id : user for user in database.get_users(user_list)}
-    for score in score_data:
+    for i, score in enumerate(score_data):
         del score['_id']
         score['username'] = user_data[score['user']].username
         score['accuracy'] = round(score['score'] / max_score(leaderboard_data['notes']) * 100, 2)
+        score['rank'] = offset + i + 1
 
     return jsonify(score_data)
 
@@ -93,12 +94,13 @@ def get_leaderboard_scores_nearby(leaderboard_id, user):
     base_index = max(0, matched_index - 4)
 
     score_data = score_data[base_index : base_index + 10]
-    
+
     user_list = [score['user'] for score in score_data]
     user_data = {user.id : user for user in database.get_users(user_list)}
-    for score in score_data:
+    for i, score in enumerate(score_data):
         del score['_id']
         score['username'] = user_data[score['user']].username
         score['accuracy'] = round(score['score'] / max_score(leaderboard_data['notes']) * 100, 2)
+        score['rank'] = base_index + i + 1
 
     return jsonify(score_data)
