@@ -104,3 +104,10 @@ def get_leaderboard_scores_nearby(leaderboard_id, user):
         score['rank'] = base_index + i + 1
 
     return jsonify(score_data)
+
+def ss_to_hitbloq_id(ss_id):
+    matching_user = database.db['users'].find_one({'scoresaber_id': ss_id})
+    if matching_user:
+        return jsonify({'id': matching_user['_id']})
+    else:
+        return jsonify({'id': -1})
