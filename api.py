@@ -122,7 +122,7 @@ def player_rank_api(pool_id, user):
     player_tier = 'none'
     if len(users):
         user = users[0]
-        player_name = user.name
+        player_name = user.username
         if pool_id in user.cr_totals:
             player_rank = database.get_user_ranking(user, pool_id)
             player_cr = user.cr_totals[pool_id]
