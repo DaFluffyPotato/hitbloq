@@ -121,7 +121,6 @@ def eladerboard_scores_nearby_api(leaderboard_id, user):
 
 @app.route('/api/tools/ss_to_hitbloq/<ss_id>')
 def ss_to_hitbloq_id(ss_id):
-    ss_id = int(ss_id)
     return api.ss_to_hitbloq_id(ss_id)
 
 @app.route('/api/update_user/<int:user_id>')
