@@ -111,3 +111,45 @@ def ss_to_hitbloq_id(ss_id):
         return jsonify({'id': matching_user['_id']})
     else:
         return jsonify({'id': -1})
+
+def player_rank_api(pool_id, user):
+    user = database.get_users([user])[0]
+    pool_data = database.get_ranked_list(pool_id)
+
+    player_rank = 0
+    player_name = None
+    player_cr = 0
+    player_tier = 'none'
+    if len(user):
+        player_name = user.name
+        if pool_id in user.cr_totals:
+            player_rank = database.get_user_ranking(user, pool_id)
+            player_cr = user.cr_totals[pool_id]
+
+    if pool_data:
+        player_rank_ratio = (player_rank - 1) / pool_data['player_count']
+        if not len(score_ids):
+            player_tier = 'none'
+        elif player_rank_ratio < 0.001:
+            player_tier = 'myth'
+        elif player_rank_ratio < 0.01:
+            player_tier = 'master'
+        elif player_rank_ratio < 0.05:
+            player_tier = 'diamond'
+        elif player_rank_ratio < 0.1:
+            player_tier = 'platinum'
+        elif player_rank_ratio < 0.2:
+            player_tier = 'gold'
+        elif player_rank_ratio < 0.5:
+            player_tier = 'silver'
+        else:
+            player_tier = 'bronze'
+
+    response = {
+        'username': player_name,
+        'rank': player_rank,
+        'cr': player_cr,
+        'tier': 'default/' + player_tier,
+    }
+
+    return jsonify(response)

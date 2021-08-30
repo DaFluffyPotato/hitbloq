@@ -123,6 +123,11 @@ def eladerboard_scores_nearby_api(leaderboard_id, user):
 def ss_to_hitbloq_id(ss_id):
     return api.ss_to_hitbloq_id(ss_id)
 
+@app.route('/api/player_rank/<pool_id>/<user>')
+def player_rank_api(pool_id, user):
+    user = int(user)
+    return api.player_rank_api(pool_id, user)
+
 @app.route('/api/update_user/<int:user_id>')
 def update_user(user_id):
     print('received user update request for', user_id)
