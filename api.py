@@ -3,7 +3,7 @@ import json
 from flask import jsonify
 
 from db import database
-from general import mongo_clean
+from general import mongo_clean, max_score
 import create_action
 
 RANKED_LIST_DESCRIPTION = 'A collection of maps from the <map_pool_name> Hitbloq map pool used for the associated ranked ladder. Check out https://hitbloq.com for more info.'
