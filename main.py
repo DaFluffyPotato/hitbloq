@@ -109,7 +109,7 @@ def leaderboard_scores_api(leaderboard_id, page):
     return api.get_leaderboard_scores(leaderboard_id, offset=page * count, count=count)
 
 @app.route('/api/leaderboard/<leaderboard_id>/scores_extended/<page>')
-def leaderboard_scores_api(leaderboard_id, page):
+def leaderboard_scores_extended_api(leaderboard_id, page):
     page = int(page)
     count = 10
     return api.get_leaderboard_scores_extended(leaderboard_id, offset=page * count, count=count)
