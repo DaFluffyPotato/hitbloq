@@ -108,6 +108,12 @@ def leaderboard_scores_api(leaderboard_id, page):
     count = 30
     return api.get_leaderboard_scores(leaderboard_id, offset=page * count, count=count)
 
+@app.route('/api/leaderboard/<leaderboard_id>/scores_extended/<page>')
+def leaderboard_scores_api(leaderboard_id, page):
+    page = int(page)
+    count = 10
+    return api.get_leaderboard_scores_extended(leaderboard_id, offset=page * count, count=count)
+
 @app.route('/api/update_user/<int:user_id>')
 def update_user(user_id):
     print('received user update request for', user_id)

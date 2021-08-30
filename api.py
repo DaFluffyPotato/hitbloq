@@ -65,3 +65,16 @@ def get_leaderboard_scores(leaderboard_id, offset=0, count=30):
     for score in score_data:
         del score['_id']
     return jsonify(score_data)
+
+def get_leaderboard_scores(leaderboard_id, offset=0, count=10):
+    leaderboard_data = list(database.get_leaderboards([leaderboard_id]))[0]
+    score_ids = leaderboard_data['score_ids']
+    score_data = list(database.fetch_scores(score_ids).sort('score', -1))[offset:offset + count]
+    user_list = [score['user'] for score in score_data]
+    user_data = {user['_id'] : user for user in database.get_users(user_list)}
+    for score in score_data:
+        del score['_id']
+        score['username'] = user_data[score['user']]['username']
+        score['accuracy'] = round(score['score'] / max_score(leaderboard_data['notes']) * 100, 2)
+
+    return jsonify(score_data)
