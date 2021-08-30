@@ -113,14 +113,15 @@ def ss_to_hitbloq_id(ss_id):
         return jsonify({'id': -1})
 
 def player_rank_api(pool_id, user):
-    user = database.get_users([user])[0]
+    users = database.get_users([user])
     pool_data = database.get_ranked_list(pool_id)
 
     player_rank = 0
     player_name = None
     player_cr = 0
     player_tier = 'none'
-    if len(user):
+    if len(users):
+        user = users[0]
         player_name = user.name
         if pool_id in user.cr_totals:
             player_rank = database.get_user_ranking(user, pool_id)
