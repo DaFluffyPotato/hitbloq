@@ -449,7 +449,7 @@ class HitbloqMongo():
         action['progress'] = 0
         action['time'] = time.time() - priority_shift
         mongo_response = self.db['actions'].insert_one(action)
-        inserted_id = mongo_response.inserted_id
+        inserted_id = str(mongo_response.inserted_id)
         return inserted_id
 
     def action_exists(self, action_id):
