@@ -4,7 +4,7 @@ CHARACTERISTIC_CONVERSION = {
     'Solo360Degree': '360Degree',
     'SoloOneSaber': 'OneSaber',
     'SoloStandardHD': 'Standard',
-    'SolowLawless': 'Lawless',
+    'SoloLawless': 'Lawless',
 }
 
 DIFFICULTY_CONVERSION = {
