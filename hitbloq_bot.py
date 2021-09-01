@@ -159,18 +159,22 @@ async def on_message(message):
         if message.channel.name == POOL_ADMIN_COMMANDS_CHANNEL:
             if message_args[0] == '!set_banner_title_hide':
                 try:
-                    boolean = message_args[1].lower()
-                    if boolean in ['true', 'false']:
-                        if boolean == 'true':
-                            hide = True
+                    pool_id = message_args[1]
+                    boolean = message_args[2].lower()
+                    if database.is_pool_owner(pool_id, message.author.id) or is_admin(message.author):
+                        if boolean in ['true', 'false']:
+                            if boolean == 'true':
+                                hide = True
+                            else:
+                                hide = False
+                            database.db['ranked_lists'].update_one({'_id': pool_id}, {'$set': {'banner_title_hide': hide}})
+                            await message.channel.send(message.author.mention + ' set banner title visibility to `' + str(hide) + '`.')
                         else:
-                            hide = False
-                        database.db['ranked_lists'].update_one({'_id': pool_id}, {'$set': {'banner_title_hide': hide}})
-                        await message.channel.send(message.author.mention + ' set banner title visibility to `' + str(hide) + '`.')
+                            await message.channel.send(message.author.mention + ' invalid arguments. Should be `!set_banner_title_hide <pool_id> true/false`')
                     else:
-                        await message.channel.send(message.author.mention + ' invalid arguments. Should be `!set_banner_title_hide true/false`')
+                        await message.channel.send(message.author.mention + ' You do not have permissions to modify this pool.')
                 except IndexError:
-                    await message.channel.send(message.author.mention + ' invalid arguments. Should be `!set_banner_title_hide true/false`')
+                    await message.channel.send(message.author.mention + ' invalid arguments. Should be `!set_banner_title_hide <pool_id> true/false`')
             if message_args[0] == '!set_shown_name':
                 try:
                     pool_id = message_args[1]
