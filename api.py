@@ -154,3 +154,7 @@ def player_rank_api(pool_id, user):
     }
 
     return jsonify(response)
+
+def action_id_status(action_id):
+    exists = database.action_exists(action_id)
+    return jsonify({'exists': exists})

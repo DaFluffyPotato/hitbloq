@@ -132,12 +132,16 @@ def player_rank_api(pool_id, user):
 def update_user(user_id):
     print('received user update request for', user_id)
     last_refresh = database.db['users'].find_one({'_id': user_id})['last_manual_refresh']
-    if time.time() - last_refresh > 60 * 3:
-        create_action.update_user(user_id, priority_shift=60 * 60 * 24)
+    if time.time() - last_refresh > 60:
+        action_id = create_action.update_user(user_id, priority_shift=60 * 60 * 24)
         database.db['users'].update_one({'_id': user_id}, {'$set': {'last_manual_refresh': time.time()}})
-        return json.dumps({'time': time.time()})
+        return json.dumps({'time': time.time(), 'id': action_id, 'error': None})
     else:
-        return json.dumps({'time': last_refresh})
+        return json.dumps({'time': last_refresh, 'id': None, 'error': 'refreshed too quickly'})
+
+@app.route('/api/action_status/<action_id>')
+def action_id_status(action_id):
+    return api.action_id_status(action_id)
 
 if __name__ == "__main__":
     app.run()
