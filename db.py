@@ -56,13 +56,14 @@ class HitbloqMongo():
             if i % 10 == 0:
                 self.set_action_progress(action_id, i / len(new_scores))
 
-        self.update_user(user, {'$set': {'last_update': time.time()}})
         if len(new_scores):
             fresh_user = self.get_users([user.id])[0]
             self.update_user_cr_total(fresh_user)
             for map_pool_id in fresh_user.cr_totals:
                 self.update_user_ranking(fresh_user, map_pool_id)
             self.delete_user_null_pointers(fresh_user)
+            
+        self.update_user(user, {'$set': {'last_update': time.time()}})
 
     def update_user_profile(self, user):
         scoresaber_api = scoresaber.ScoresaberInterface(self.db)

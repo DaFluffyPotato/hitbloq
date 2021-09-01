@@ -158,3 +158,12 @@ def player_rank_api(pool_id, user):
 def action_id_status(action_id):
     exists = database.action_exists(action_id)
     return jsonify({'exists': exists})
+
+def ss_registered(ss_id):
+    matching_user = database.db['users'].find_one({'scoresaber_id': ss_id})
+    if matching_user:
+        if matching_user['last_update'] != 0:
+            return jsonify({'registered': True, 'user': matching_user['_id']})
+        else:
+            return jsonify({'registered': False, 'user': matching_user['_id']})
+    return jsonify({'registered': False, 'user': None})
