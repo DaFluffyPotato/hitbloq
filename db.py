@@ -3,6 +3,7 @@ from getpass import getpass
 from hashlib import sha256
 
 import pymongo
+from bson.objectid import ObjectId
 
 import scoresaber, beatsaver
 import user
@@ -453,7 +454,7 @@ class HitbloqMongo():
         return inserted_id
 
     def action_exists(self, action_id):
-        return bool(self.db['actions'].find_one({'_id': action_id}))
+        return bool(self.db['actions'].find_one({'_id': ObjectId(action_id)})
 
     def add_actions(self, actions):
         for action in actions:
