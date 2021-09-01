@@ -44,6 +44,7 @@ class BeatSaverInterface():
 
     def verify_song_id(self, song_id):
         if len(song_id.split('|')) != 2:
+            print('invalid hash: bad hash format')
             return False
 
         difficulty_settings = song_id.split('|')[-1]
