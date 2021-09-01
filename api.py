@@ -161,9 +161,9 @@ def player_rank_api(pool_id, user):
 
 def user_basic_api(user_id):
     try:
-        users = database.get_users([user_id])[0]
-        return jsonify(users[0].jsonify())
-    except:
+        user = database.get_users([user_id])[0]
+        return jsonify(user.jsonify())
+    except IndexError:
         return jsonify({})
 
 def action_id_status(action_id):
