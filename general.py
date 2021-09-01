@@ -45,6 +45,12 @@ def mongo_clean(string):
         string = string.replace(char, '')
     return string
 
+def full_clean(string):
+    for char in ['<', '>']:
+        string = string.replace(char, '')
+    string = mongo_clean(string)
+    return string
+
 def epoch_to_date(epoch):
     ts = datetime.datetime.fromtimestamp(epoch)
     months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']

@@ -62,7 +62,7 @@ class HitbloqMongo():
             for map_pool_id in fresh_user.cr_totals:
                 self.update_user_ranking(fresh_user, map_pool_id)
             self.delete_user_null_pointers(fresh_user)
-            
+
         self.update_user(user, {'$set': {'last_update': time.time()}})
 
     def update_user_profile(self, user):

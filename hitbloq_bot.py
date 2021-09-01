@@ -10,6 +10,7 @@ import create_action
 from db import database
 import beatsaver
 from cr_formulas import curves
+from general import full_clean
 
 beatsaver_interface = beatsaver.BeatSaverInterface()
 
@@ -156,6 +157,19 @@ async def on_message(message):
                 create_action.update_user(rewind_id)
                 await message.channel.send(message.author.mention + ' user ' + str(rewind_id) + ' will be rewinded and updated.')
         if message.channel.name == POOL_ADMIN_COMMANDS_CHANNEL:
+            if message_args[0] == '!set_shown_name':
+                try:
+                    pool_id = message_args[1]
+                    shown_name = ' '.join(message_args[2:])
+                    if shown_name == '':
+                        await message.channel.send(message.author.mention + ' shown name must not be an empty string.')
+                    elif database.is_pool_owner(pool_id, message.author.id) or is_admin(message.author):
+                        database.db['ranked_lists'].update_one({'_id': pool_id}, {'$set': {'shown_name': full_clean(shown_name)}})
+                        await message.channel.send(message.author.mention + ' The shown name for the ' + pool_id + ' pool has been set to `' + shown_name + '`.')
+                    else:
+                        await message.channel.send(message.author.mention + ' You do not have permissions to modify this pool.')
+                except IndexError:
+                    await message.channel.send(message.author.mention + ' invalid arguments. Should be `!set_shown_name <pool_id> <shown_name>`')
             if message_args[0] == '!set_owners':
                 try:
                     pool_id = message_args[1]
@@ -193,6 +207,7 @@ async def on_message(message):
                         await message.channel.send(message.author.mention + ' you don\'t have permissions to modify this pool')
                 else:
                     await message.channel.send(message.author.mention + ' that pool ID appears to be invalid')
+
             if message_args[0] == '!recalculate_cr':
                 pool_id = message_args[1]
                 if pool_id in database.get_pool_ids(True):
@@ -203,6 +218,7 @@ async def on_message(message):
                         await message.channel.send(message.author.mention + ' you don\'t have permissions to modify this pool')
                 else:
                     await message.channel.send(message.author.mention + ' that pool ID appears to be invalid')
+
             if message_args[0] == '!set_manual':
                 song_id = message_args[1]
                 pool_id = message_args[2]
@@ -219,6 +235,7 @@ async def on_message(message):
                             await message.channel.send(message.author.mention + ' you don\'t have permissions to modify this pool')
                 else:
                     await message.channel.send(message.author.mention + ' that pool ID appears to be invalid')
+
             if message_args[0] == '!set_automatic':
                 song_id = message_args[1]
                 pool_id = message_args[2]
@@ -234,6 +251,7 @@ async def on_message(message):
                             await message.channel.send(message.author.mention + ' you don\'t have permissions to modify this pool')
                 else:
                     await message.channel.send(message.author.mention + ' that pool ID appears to be invalid')
+
             if message_args[0] == '!rank':
                 song_id = message_args[1]
                 pool_id = message_args[2]
@@ -249,6 +267,7 @@ async def on_message(message):
                         await message.channel.send(message.author.mention + ' that song ID appears to be invalid')
                 else:
                     await message.channel.send(message.author.mention + ' that pool ID appears to be invalid')
+
             if message_args[0] == '!unrank':
                 song_id = message_args[1]
                 pool_id = message_args[2]
@@ -260,6 +279,7 @@ async def on_message(message):
                         await message.channel.send(message.author.mention + ' you don\'t have permissions to modify this pool')
                 else:
                     await message.channel.send(message.author.mention + ' that pool ID appears to be invalid')
+
             if message_args[0] == '!set_curve':
                 pool_id = message_args[1]
                 if pool_id in database.get_pool_ids(True):
