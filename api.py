@@ -120,8 +120,11 @@ def player_rank_api(pool_id, user):
     player_name = None
     player_cr = 0
     player_tier = 'none'
+    player_scores = 0
     if len(users):
         user = users[0]
+        user.load_pool_scores(pool_id)
+        player_scores = len(user.scores)
         player_name = user.username
         if pool_id in user.cr_totals:
             player_rank = database.get_user_ranking(user, pool_id)
@@ -151,6 +154,7 @@ def player_rank_api(pool_id, user):
         'rank': player_rank,
         'cr': player_cr,
         'tier': 'default/' + player_tier,
+        'ranked_score_count': player_scores,
     }
 
     return jsonify(response)
