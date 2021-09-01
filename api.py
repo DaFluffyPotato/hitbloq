@@ -123,7 +123,7 @@ def player_rank_api(pool_id, user):
     player_scores = 0
     if len(users):
         user = users[0]
-        user.load_pool_scores(pool_id)
+        user.load_pool_scores(database, pool_id)
         player_scores = len(user.scores)
         player_name = user.username
         if pool_id in user.cr_totals:
