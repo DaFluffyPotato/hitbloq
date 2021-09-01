@@ -11,7 +11,7 @@ RANKED_LIST_DESCRIPTION = 'A collection of maps from the <map_pool_name> Hitbloq
 def action_list():
     resp = list(database.get_actions())
     for action in resp:
-        del action['_id']
+        action['_id'] = str(action['_id'])
     return jsonify(resp)
 
 def add_user(request_json, ip_address):
