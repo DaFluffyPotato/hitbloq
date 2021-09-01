@@ -108,6 +108,26 @@ def leaderboard_scores_api(leaderboard_id, page):
     count = 30
     return api.get_leaderboard_scores(leaderboard_id, offset=page * count, count=count)
 
+@app.route('/api/leaderboard/<leaderboard_id>/scores_extended/<page>')
+def leaderboard_scores_extended_api(leaderboard_id, page):
+    page = int(page)
+    count = 10
+    return api.get_leaderboard_scores_extended(leaderboard_id, offset=page * count, count=count)
+
+@app.route('/api/leaderboard/<leaderboard_id>/nearby_scores/<user>')
+def eladerboard_scores_nearby_api(leaderboard_id, user):
+    user = int(user)
+    return api.get_leaderboard_scores_nearby(leaderboard_id, user)
+
+@app.route('/api/tools/ss_to_hitbloq/<ss_id>')
+def ss_to_hitbloq_id(ss_id):
+    return api.ss_to_hitbloq_id(ss_id)
+
+@app.route('/api/player_rank/<pool_id>/<user>')
+def player_rank_api(pool_id, user):
+    user = int(user)
+    return api.player_rank_api(pool_id, user)
+
 @app.route('/api/update_user/<int:user_id>')
 def update_user(user_id):
     print('received user update request for', user_id)
