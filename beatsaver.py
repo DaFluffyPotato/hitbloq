@@ -49,19 +49,23 @@ class BeatSaverInterface():
         difficulty_settings = song_id.split('|')[-1]
 
         if len(difficulty_settings.split('_')) != 3:
+            print('invalid hash: bad difficulty args')
             return False
 
         junk, difficulty, characteristic = difficulty_settings.split('_')
 
         if junk != '':
+            print('invalid hash: bad difficulty args')
             return False
 
         hash = song_id.split('|')[0].upper()
 
         if characteristic not in char_shorten:
+            print('invalid hash: char not enabled')
             return False
 
         if difficulty not in diff_shorten:
+            print('invalid hash: diff not enabled')
             return False
 
         if characteristic[:4] == 'Solo':
@@ -70,6 +74,7 @@ class BeatSaverInterface():
         song_data = self.lookup_song_hash(hash)
 
         if not song_data:
+            print('invalid hash: beatsaver hash not found')
             return False
 
         if len(song_data['versions']):
@@ -78,4 +83,5 @@ class BeatSaverInterface():
                     if diff['difficulty'] == difficulty:
                         return song_data
 
+        print('invalid hash: no matching beatsaver diff/char:', characteristic, difficulty)
         return False
