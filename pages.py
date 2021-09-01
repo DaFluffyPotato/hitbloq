@@ -153,7 +153,7 @@ def ranked_lists_page(page=0):
             values = {
                 'entry_link': '/ranked_list/' + ranked_list['_id'],
                 'entry_img': ranked_list['cover'],
-                'entry_title': ranked_list['shown_name'],
+                'entry_title': ranked_list['shown_name'] if ranked_list['banner_title_hide'] else '',
                 'select_status': select_status,
                 'map_pool_id': ranked_list['_id'],
             }

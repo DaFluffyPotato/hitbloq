@@ -157,6 +157,20 @@ async def on_message(message):
                 create_action.update_user(rewind_id)
                 await message.channel.send(message.author.mention + ' user ' + str(rewind_id) + ' will be rewinded and updated.')
         if message.channel.name == POOL_ADMIN_COMMANDS_CHANNEL:
+            if message_args[0] == '!set_banner_title_hide':
+                try:
+                    boolean = message_args[1].lower()
+                    if boolean in ['true', 'false']:
+                        if boolean == 'true':
+                            hide = True
+                        else:
+                            hide = False
+                        database.db['ranked_lists'].update_one({'_id': pool_id}, {'$set': {'banner_title_hide': hide}})
+                        await message.channel.send(message.author.mention + ' set banner title visibility to `' + str(hide) + '`.')
+                    else:
+                        await message.channel.send(message.author.mention + ' invalid arguments. Should be `!set_banner_title_hide true/false`')
+                except IndexError:
+                    await message.channel.send(message.author.mention + ' invalid arguments. Should be `!set_banner_title_hide true/false`')
             if message_args[0] == '!set_shown_name':
                 try:
                     pool_id = message_args[1]

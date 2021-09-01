@@ -363,6 +363,7 @@ class HitbloqMongo():
             '_id': name,
             'leaderboard_id_list': [],
             'shown_name': name,
+            'banner_title_hide': False,
             'third_party': third_party,
             'cover': cover,
             'cr_curve': {'type': 'basic'},
