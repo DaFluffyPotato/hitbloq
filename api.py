@@ -162,7 +162,9 @@ def player_rank_api(pool_id, user):
 def user_basic_api(user_id):
     try:
         user = database.get_users([user_id])[0]
-        return jsonify(user.jsonify())
+        user_data = user.jsonify()
+        del user_data['score_ids']
+        return jsonify(user_data)
     except IndexError:
         return jsonify({})
 
