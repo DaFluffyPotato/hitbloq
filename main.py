@@ -127,6 +127,11 @@ def ss_to_hitbloq_id(ss_id):
 def ss_registered(ss_id):
     return api.ss_registered(ss_id)
 
+@app.route('/api/users/<user_id>')
+def user_basic_api(user_id):
+    user_id = int(user_id)
+    return api.user_basic_api(user_id)
+
 @app.route('/api/player_rank/<pool_id>/<user>')
 def player_rank_api(pool_id, user):
     user = int(user)
