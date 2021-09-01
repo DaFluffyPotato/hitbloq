@@ -61,6 +61,7 @@ class HitbloqMongo():
             self.update_user_cr_total(fresh_user)
             for map_pool_id in fresh_user.cr_totals:
                 self.update_user_ranking(fresh_user, map_pool_id)
+            self.delete_user_null_pointers(fresh_user)
 
     def update_user_profile(self, user):
         scoresaber_api = scoresaber.ScoresaberInterface(self.db)
@@ -178,7 +179,6 @@ class HitbloqMongo():
             inserted_id = mongo_response.inserted_id
             self.update_user(user, {'$push': {'score_ids': inserted_id}})
             self.db['leaderboards'].update_one({'_id': leaderboard_id}, {'$push': {'score_ids': inserted_id}})
-            self.delete_user_null_pointers(user)
             self.refresh_score_order(leaderboard_id)
             return True
 
