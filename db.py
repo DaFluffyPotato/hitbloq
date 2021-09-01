@@ -454,7 +454,7 @@ class HitbloqMongo():
         return inserted_id
 
     def action_exists(self, action_id):
-        return bool(self.db['actions'].find_one({'_id': ObjectId(action_id)})
+        return bool(self.db['actions'].find_one({'_id': ObjectId(action_id)}))
 
     def add_actions(self, actions):
         for action in actions:
