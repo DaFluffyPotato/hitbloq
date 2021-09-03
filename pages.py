@@ -232,7 +232,7 @@ def leaderboard_page(leaderboard_id, page):
     if star_rating == 0:
         star_rating = 'Unranked'
     else:
-        star_rating = f"Ranked - {star_rating}★"
+        star_rating = f"Ranked - <b>{star_rating}★</b>"
     leaderboard_insert = {
         'leaderboard_scores': generate_leaderboard_entries(leaderboard_data, page),
         'song_name': leaderboard_data['name'],
