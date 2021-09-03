@@ -13,6 +13,16 @@
     padding: 1.5rem;
 	position: relative;
 	background-color: rgba(45, 53, 65, 0.5);
+	/* Added to prevent scroll bar on card */
+	overflow-y: hidden;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+}
+/* Scroll bar hack but for webkit */
+.song-card::-webkit-scrollbar {
+	width: 0px;
+	background: transparent;
+	height: 0px;
 }
 
 .song-card img {

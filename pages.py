@@ -43,9 +43,11 @@ def rebuild_args(updates):
             arg_str += arg + '=' + new_args[arg]
     return arg_str
 
-def normal_page(contents, title='Hitbloq', desc='a competitive beat saber service', image='https://hitbloq.com/static/hitbloq.png'):
+def normal_page(contents, title='Hitbloq', desc='A competitive beat saber service', image='https://hitbloq.com/static/hitbloq.png'):
     if title != 'Hitbloq':
         title = 'Hitbloq - ' + title
+    if desc != 'A competitive beat saber service':
+        desc = "Hitbloq - " + desc
 
     map_pool = get_map_pool()
     database.inc_counter('views')
@@ -219,13 +221,27 @@ def leaderboard_page(leaderboard_id, page):
     star_rating = 0
     if map_pool in leaderboard_data['star_rating']:
         star_rating = leaderboard_data['star_rating'][map_pool]
+    difficulty_mappings = {
+        'easy': 'Easy',
+        'normal': 'Normal',
+        'hard': 'Hard',
+        'expert': 'Expert',
+        'expertplus': 'Expert+',
+    } # I don't really know if there's more? I don't think so...
+    
+    if star_rating == 0:
+        star_rating = 'Unranked'
+    else:
+        star_rating = f"Ranked - {star_rating}★"
     leaderboard_insert = {
         'leaderboard_scores': generate_leaderboard_entries(leaderboard_data, page),
         'song_name': leaderboard_data['name'],
         'artist_name': leaderboard_data['artist'],
         'mapper_name': leaderboard_data['mapper'],
-        'song_difficulty': leaderboard_data['difficulty'],
-        'star_rating': str(star_rating) + '★',
+        'song_difficulty': difficulty_mappings[leaderboard_data['difficulty'].lower()],
+        'star_rating': star_rating,
+        'length': str(leaderboard_data["length"]), # What is this in? Seconds?
+        'bpm': str(leaderboard_data["bpm"]) + 'BPM',
         'notes_per_second': str(round(leaderboard_data['notes'] / leaderboard_data['length'], 2)),
         'pulse_rate': str(1 / leaderboard_data['bpm'] * 60 * 2) + 's',
         'song_picture': leaderboard_data['cover'],
@@ -233,7 +249,7 @@ def leaderboard_page(leaderboard_id, page):
         'next_page': request.path.split('?')[0] + rebuild_args({'page': str(page + 1)}),
         'last_page': request.path.split('?')[0] + rebuild_args({'page': str(max(page - 1, 0))}),
     }
-    leaderboard_html = normal_page(templates.inject('leaderboard_layout', leaderboard_insert), leaderboard_data['name'] + ' Leaderboard', 'song leaderboard for ' + leaderboard_data['name'], leaderboard_data['cover'])
+    leaderboard_html = normal_page(templates.inject('leaderboard_layout', leaderboard_insert), leaderboard_data['name'] + ' Leaderboard', 'Song leaderboard for ' + leaderboard_data['name'], leaderboard_data['cover'])
     return leaderboard_html
 
 def generate_leaderboard_entries(leaderboard_data, page):

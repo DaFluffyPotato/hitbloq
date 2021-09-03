@@ -4,3 +4,5 @@ data/token.txt
 data/token_2.txt
 data/config.json
 backups/
+flaskTestRender*.py
+.gitignore

@@ -1,7 +1,7 @@
 <div class="main">
 <div class="song-leaderboard leaderboard">
 		<div class="card song-card">
-			<div class="song-card-background" style="background-image: url('\@song_picture'); -webkit-filter: blur(2px);">
+			<div class="song-card-background" style="background-image: url('\@song_picture'); filter: blur(2px); -webkit-filter: blur(2px); ">
 			</div>
 			<img src="\@song_picture" style="animation-duration: \@pulse_rate;">
 
@@ -11,11 +11,15 @@
 				<span class="song-info song-mapper">\@mapper_name</span>
 				<span class="song-info song-difficulty">\@song_difficulty</span>
 				<span class="song-info song-star">\@star_rating</span>
-				<span class="song-info song-nps">\@notes_per_second nps</span>
+				<span class="song-info song-nps">
+				<!-- Note: I was originally gonna use this icon [sourced from the scoresaber country leaderboards userscript], but it didn't look good. 
+					<i class="fas fa-fire fa-fw"></i>	-->
+				NPS: <b>\@notes_per_second</b></span>
+				<span class="song-info song-bpm">BPM: <b>\@bpm</b></span>
 			</div>
 
 			<div class="right-info">
-				<div class="song-hash gradient-text">\@song_hash</div>
+				<div class="song-hash gradient-text"><a href="https://beatsaver.com/maps/\@song_hash" title="Open in BeatSaver" aria-label="Open the current map in BeatSaver">\@song_hash</a></div>
 			</div>
 		</div>
 
