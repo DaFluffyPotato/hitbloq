@@ -9,6 +9,7 @@ body {
   background-color: rgb(24, 20, 37);
   color: rgba(255, 255, 255);
   overflow: hidden;
+  height: 100%;
 }
 
 h1 {
