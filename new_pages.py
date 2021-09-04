@@ -42,7 +42,7 @@ def about():
     return html
 
 @page
-def new_map_pools():
+def map_pools():
     header = generate_header(additional_css=['new_map_pools.css'], additional_js=['new_map_pools.js'])
     setup_data = page_setup()
     html = templates.inject('new_base', {'header': header, 'content': templates.inject('new_map_pools', {})})
