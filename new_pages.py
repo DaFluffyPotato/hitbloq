@@ -13,7 +13,7 @@ def generate_header(title='Hitbloq', desc='a competitive beat saber service', im
     header += '<meta property="og:image" content="' + image + '">\n'
     header += '<meta property="og:image:secure_url" content="' + image + '">\n'
     header += '<meta property="og:title" content="' + title + '">\n'
-    header += '<meta property="og:description" content="' + description + '">\n'
+    header += '<meta property="og:description" content="' + desc + '">\n'
     header += '<meta property="og:type" content="website">\n'
     header += '<meta property="og:url" content="' + request.path + '">\n'
     header += '<meta property="og:site_name" content="Hitbloq">\n'
