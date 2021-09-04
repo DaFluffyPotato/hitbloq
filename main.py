@@ -159,12 +159,12 @@ def new_home():
     return html
 
 @app.route('/new/about')
-def new_home():
+def new_about():
     html = new_pages['about']()
     return html
 
 @app.route('/new/map_pools')
-def new_home():
+def new_map_pools():
     html = new_pages['map_pools']()
     return html
 
