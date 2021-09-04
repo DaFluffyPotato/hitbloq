@@ -5,6 +5,7 @@ from flask import Flask, request, make_response
 
 from db import database
 import pages
+from new_pages import new_pages
 import api
 from user import User
 import create_action
@@ -152,9 +153,20 @@ def update_user(user_id):
 def action_id_status(action_id):
     return api.action_id_status(action_id)
 
-@app.route('/', subdomain='new')
+@app.route('/new')
 def new_home():
-    return 'hi'
+    html = new_pages['home']()
+    return html
+
+@app.route('/new/about')
+def new_home():
+    html = new_pages['about']()
+    return html
+
+@app.route('/new/map_pools')
+def new_home():
+    html = new_pages['map_pools']()
+    return html
 
 if __name__ == "__main__":
     app.run()

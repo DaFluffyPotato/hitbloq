@@ -1,0 +1,57 @@
+.purpose-statement {
+  margin: 30vh auto 0 auto;
+  max-width: 80%;
+  text-align: center;
+  font-size: 3vw;
+  animation: fade-in-text ease-out 500ms;
+}
+
+@keyframes fade-in-text {
+  0% {
+    opacity: 0;
+    font-size: 0.5vw;
+  }
+  100% {
+    opacity: 1;
+    font-size: 3vw;
+  }
+}
+
+.map-pools-info {
+  background-color: rgb(38, 43, 68);
+  margin: 20vh 0 3.5cm 0;
+  display: flex;
+}
+
+.using-map-pools {
+  background-color: rgb(38, 43, 68);
+  margin: 20vh 0 3.5cm 0;
+  display: flex;
+}
+
+.using-map-pools-contents {
+  margin: 0 auto 0 auto;
+  padding: 0 5%;
+  width: 60%;
+  text-align: center;
+  font-size: 1.7vw;
+}
+
+.map-pools-info-contents {
+  margin: 0 auto 0 auto;
+  padding: 0 5%;
+  width: 60%;
+  text-align: center;
+  font-size: 1.7vw;
+}
+
+.map-pools-img {
+  width: 40%;
+}
+
+.home-add-user {
+  font-size: 1.7vw;
+  width: 60%;
+  text-align: center;
+  margin: 0 auto 3cm auto;
+}

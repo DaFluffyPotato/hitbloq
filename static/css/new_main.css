@@ -1,0 +1,155 @@
+@font-face {
+  font-family: 'aller';
+  src: url('/static/Aller/Aller_Rg.ttf');
+}
+
+body {
+  margin: 0px;
+  font-family: aller;
+  background-color: rgb(24, 20, 37);
+  color: rgba(255, 255, 255);
+  overflow: hidden;
+}
+
+h1 {
+  font-size: 1.6vw + 1cm;
+}
+
+h2 {
+  font-size: 1.2vw + 0.7cm;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  display:inline-block;
+}
+
+p {
+  margin: 0.2cm auto 0.2cm auto;
+}
+
+.link:hover {
+  color: rgb(255, 0, 68);
+  transition: color 250ms ease-in-out;
+}
+
+.link:after {
+  display:block;
+  content: '';
+  border-bottom: solid 2px rgb(255, 0, 68);
+  transform: scaleX(0);
+  transition: transform 250ms ease-in-out;
+  transform-origin: 0% 50%;
+}
+
+.link:hover:after {
+  transform: scaleX(1);
+}
+
+.highlight {
+  color: rgb(255, 0, 68);
+}
+
+.navbar-link {
+  margin-left: 0.1cm;
+  margin-right: 0.1cm;
+}
+
+.hitbloq-logo {
+  width: 1.2cm;
+}
+
+.title {
+  position: relative;
+  top: -0.2cm;
+}
+
+.navbar {
+  background-color: rgb(38, 43, 68);
+  font-size: 1cm;
+  position: fixed;
+  width: 100%;
+  height: 1.4cm;
+  z-index: 2;
+}
+
+.navbar-contents {
+  position: relative;
+  width: 20cm;
+  max-width: 100%;
+  margin: auto;
+  display: flex;
+}
+
+.navbar-title {
+
+}
+
+.navbar-options {
+  font-size: 0.5cm;
+  margin: 0.5cm 0px auto auto;
+}
+
+.content {
+  background-color: rgb(24, 20, 37);
+  padding-top: 1.4cm;
+  height: calc(100% - 1.4cm);
+  overflow-y: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.content::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+.home-element {
+  position: relative;
+  animation: fade-in ease-out 2s;
+}
+
+.popup-element {
+  position:  relative;
+  animation: fade-in-raw ease-out 250ms;
+}
+
+.middle-column {
+  margin: 0 auto 0 auto;
+  width: 25cm;
+  font-size: calc(0.25cm + 0.75vw);
+  min-font-size: 1.4cm;
+  max-width: 90%;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    top: 2vh;
+  }
+  50% {
+    opacity: 0;
+    top: 2vh;
+  }
+  100% {
+    opacity: 1;
+    top: 0vh;
+  }
+}
+
+@keyframes fade-in-raw {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.footer {
+  text-align: center;
+  font-size: calc(0.7vw + 0.2cm);
+  margin: 0.5cm auto 1cm auto;
+}
