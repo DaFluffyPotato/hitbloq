@@ -416,6 +416,7 @@ class HitbloqMongo():
             self.replace_scores(scores)
 
     def rank_song(self, leaderboard_id, map_pool):
+        leaderboard_id = leaderboard_id.split('|')[0].upper() + '|' + leaderboard_id.split('|')[1]
         # ensure that it wasn't previously added
         self.db['ranked_lists'].update_one({'_id': map_pool}, {'$pull': {'leaderboard_id_list': leaderboard_id}})
 
