@@ -152,5 +152,9 @@ def update_user(user_id):
 def action_id_status(action_id):
     return api.action_id_status(action_id)
 
+@app.route('/', subdomain='new')
+def new_home():
+    return 'hi'
+
 if __name__ == "__main__":
     app.run()
