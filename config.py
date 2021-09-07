@@ -3,6 +3,7 @@ CHARACTERISTIC_CONVERSION = {
     'Solo90Degree': '90Degree',
     'Solo360Degree': '360Degree',
     'SoloOneSaber': 'OneSaber',
+    'SoloNoArrows': 'NoArrows',
     'SoloStandardHD': 'Standard',
     'SoloLawless': 'Lawless',
 }

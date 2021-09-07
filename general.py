@@ -24,6 +24,7 @@ char_shorten = {
     'Solo90Degree': 's90',
     'Solo360Degree': 's360',
     'SoloOneSaber': 's1s',
+    'SoloNoArrows': 'sna',
     'SoloStandardHD': 'shd',
     'SoloLawless': 'sll',
 }
