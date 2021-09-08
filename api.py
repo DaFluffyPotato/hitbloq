@@ -69,7 +69,7 @@ def get_leaderboard_scores(leaderboard_id, offset=0, count=30):
 def get_leaderboard_scores_extended(leaderboard_id, offset=0, count=10):
     leaderboard_data = list(database.get_leaderboards([leaderboard_id]))[0]
     score_ids = leaderboard_data['score_ids']
-    score_data = list(database.fetch_scores(score_ids).sort('score', -1))[offset:offset + count]
+    score_data = list(database.db['scores'].find({'song_id': leaderboard_data['_id']}).sort('score', -1))[offset:offset + count]
     user_list = [score['user'] for score in score_data]
     user_data = {user.id : user for user in database.get_users(user_list)}
     for i, score in enumerate(score_data):
@@ -83,7 +83,7 @@ def get_leaderboard_scores_extended(leaderboard_id, offset=0, count=10):
 def get_leaderboard_scores_nearby(leaderboard_id, user):
     leaderboard_data = list(database.get_leaderboards([leaderboard_id]))[0]
     score_ids = leaderboard_data['score_ids']
-    score_data = list(database.fetch_scores(score_ids).sort('score', -1))
+    score_data = list(database.db['scores'].find({'song_id': leaderboard_data['_id']}).sort('score', -1))
 
     matched_index = -1
     for i, score in enumerate(score_data):

@@ -110,6 +110,7 @@ class HitbloqMongo():
         self.db['scores'].delete_many({'_id': {'$in': score_id_list}})
         self.db['leaderboards'].update_one({'_id': leaderboard_id}, {'$pull': {'score_ids': {'$in': score_id_list}}})
 
+    # WILL BE REMOVED
     def delete_user_null_pointers(self, user):
         matching_scores = set([score['_id'] for score in self.fetch_scores(user.score_ids)])
         null_pointers = set(user.score_ids) - matching_scores
@@ -209,6 +210,7 @@ class HitbloqMongo():
         self.db['users'].delete_one({'_id': user_id})
         print('deleted user', user_id)
 
+    # WILL BE REMOVED
     def refresh_score_order(self, leaderboard_id):
         leaderboard_data = self.db['leaderboards'].find_one({'_id': leaderboard_id})
         try:
@@ -408,7 +410,7 @@ class HitbloqMongo():
             print('found leaderboard')
             self.db['leaderboards'].update_one({'_id': leaderboard_id}, {'$unset': {'star_rating.' + map_pool: 1}})
 
-            scores = list(self.fetch_scores(current_leaderboard['score_ids']))
+            scores = list(database.db['scores'].find({'song_id': leaderboard_id}))
             for score in scores:
                 if map_pool in score['cr']:
                     del score['cr'][map_pool]

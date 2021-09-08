@@ -5,7 +5,7 @@ from cr_formulas import *
 
 def update_leaderboard_cr(leaderboard_id, map_pools, curve_data):
     leaderboard = database.get_leaderboards([leaderboard_id])[0]
-    scores = list(database.fetch_scores(leaderboard['score_ids']))
+    scores = list(database.db['scores'].find({'song_id': leaderboard['_id']}))
     if len(scores) != 0:
         for score in scores:
             for map_pool in map_pools:
