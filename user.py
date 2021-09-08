@@ -106,7 +106,7 @@ class User():
         return json_data
 
     def load_scores(self, database):
-        self.scores = list(database.fetch_scores(self.score_ids))
+        self.scores = list(database.db['scores'].find({'user': self.id, 'cr': {'$ne': {}}}))
 
     def unload_scores(self):
         self.scores = []
