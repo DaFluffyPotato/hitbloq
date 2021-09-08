@@ -79,12 +79,11 @@ def full_cr_update(map_pools, action_id=None):
         difficulty_vote_total = 0
 
         i = 0
-        for score_id in [score['_id'] for score in database.db['scores'].find({'song_id': leaderboard['_id']})]:
-            if score_id in leaderboard['votes']:
-                vote_weight = calculate_weight(LEADERBOARD_VOTE_RANKING_CURVE_CONSTANT, i)
-                difficulty_vote_weight_total += vote_weight
-                difficulty_vote_total += leaderboard['votes'][score_id] * vote_weight
-                i += 1
+        for score_id in sorted(leaderboard['votes'], key=lambda x : x[0]):
+            vote_weight = calculate_weight(LEADERBOARD_VOTE_RANKING_CURVE_CONSTANT, i)
+            difficulty_vote_weight_total += vote_weight
+            difficulty_vote_total += leaderboard['votes'][score_id] * vote_weight
+            i += 1
 
         if difficulty_vote_weight_total == 0:
             continue
