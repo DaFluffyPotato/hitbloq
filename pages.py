@@ -240,7 +240,7 @@ def generate_leaderboard_entries(leaderboard_data, page):
     page_length = 25
     html = ''
 
-    visible_scores = list(database.fetch_scores(leaderboard_data['score_ids']).sort('score', -1))[page_length * page : page_length * (page + 1)]
+    visible_scores = list(database.db['scores'].find({'song_id': leaderboard_data['_id']}).sort('score', -1))[page_length * page : page_length * (page + 1)]
     user_ids = [score['user'] for score in visible_scores]
     score_users = database.get_users(user_ids)
 

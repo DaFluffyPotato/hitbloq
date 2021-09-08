@@ -132,7 +132,7 @@ def player_rank_api(pool_id, user):
 
         if pool_data:
             player_rank_ratio = (player_rank - 1) / pool_data['player_count']
-            if not len(user.score_ids):
+            if not len(user.scores):
                 player_tier = 'none'
             elif player_rank_ratio < 0.001:
                 player_tier = 'myth'
