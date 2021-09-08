@@ -107,7 +107,6 @@ class HitbloqMongo():
 
     def delete_scores(self, leaderboard_id, score_id_list):
         self.db['scores'].delete_many({'_id': {'$in': score_id_list}})
-        self.db['leaderboards'].update_one({'_id': leaderboard_id}, {'$pull': {'score_ids': {'$in': score_id_list}}})
 
     def fetch_scores(self, score_id_list):
         return self.db['scores'].find({'_id': {'$in': score_id_list}}).sort('time_set', -1)
@@ -119,14 +118,6 @@ class HitbloqMongo():
             self.db['scores'].insert_many(scores)
         else:
             print('warning: no scores to replace')
-
-    # no longer used since scores must be dynamically sorted on a per-pool basis
-    def update_user_score_order(self, user):
-        user.load_scores(self)
-        user.scores.sort(key=lambda x: x['cr'], reverse=True)
-        print(user.scores)
-        score_id_list = [score['_id'] for score in user.scores]
-        self.db['users'].update_one({'_id': user.id}, {'$set': {'score_ids': score_id_list}})
 
     def update_user_cr_total(self, user):
         user.load_scores(self)
@@ -170,16 +161,11 @@ class HitbloqMongo():
             score_json = self.format_score(user, scoresaber_json, leaderboard)
             mongo_response = self.db['scores'].insert_one(score_json)
             inserted_id = mongo_response.inserted_id
-            self.db['leaderboards'].update_one({'_id': leaderboard_id}, {'$push': {'score_ids': inserted_id}})
-            self.refresh_score_order(leaderboard_id)
             return True
 
     def delete_user_scores(self, user_id):
         score_list = list(self.db['scores'].find({'user': user_id}))
         score_ids = [score['_id'] for score in score_list]
-
-        for score in score_list:
-            self.db['leaderboards'].update_one({'_id': score['song_id']}, {'$pull': {'score_ids': score['_id']}})
 
         self.db['scores'].delete_many({'_id': {'$in': score_ids}})
 
@@ -198,26 +184,6 @@ class HitbloqMongo():
             self.db['ladders'].update_one({'_id': ladder['_id']}, {'$set': {'ladder': ladder['ladder']}})
         self.db['users'].delete_one({'_id': user_id})
         print('deleted user', user_id)
-
-    # WILL BE REMOVED
-    def refresh_score_order(self, leaderboard_id):
-        leaderboard_data = self.db['leaderboards'].find_one({'_id': leaderboard_id})
-        try:
-            new_score_order = [score['_id'] for score in self.fetch_scores(leaderboard_data['score_ids']).sort('score', -1)]
-        except:
-            print('error on score refresh --- attempting leaderboard repair')
-            self.repair_leaderboard_pointers(leaderboard_id)
-            new_score_order = [score['_id'] for score in self.fetch_scores(leaderboard_data['score_ids']).sort('score', -1)]
-        self.db['leaderboards'].update_one({'_id': leaderboard_id}, {'$set': {'score_ids': new_score_order}})
-
-    def repair_leaderboard_pointers(self, leaderboard_id):
-        leaderboard_scores = list(self.db['scores'].find({'song_id': leaderboard_id}))
-
-        leaderboard_scores.sort(key=lambda x: x['score'], reverse=True)
-        leaderboard_score_ids = [score['_id'] for score in leaderboard_scores]
-
-        if len(leaderboard_scores):
-            self.db['leaderboards'].update_one({'_id': leaderboard_id}, {'$set': {'score_ids': leaderboard_score_ids}})
 
     def get_full_ranked_list(self):
         map_pools = self.get_ranked_lists()
@@ -263,7 +229,6 @@ class HitbloqMongo():
                 'notes': 99999,
                 'obstacles': -1,
                 'hash': leaderboard_hash,
-                'score_ids': [],
                 'star_rating': {},
                 'forced_star_rating': {},
             }
@@ -275,8 +240,6 @@ class HitbloqMongo():
         elif transfer:
             print('transferring scores on leaderboard', leaderboard_id)
             old_leaderboard_data = self.db['leaderboards'].find_one({'_id': leaderboard_id})
-            new_scores = old_leaderboard_data['score_ids']
-            print(len(new_scores), 'scores being transferred...')
 
         leaderboard_difficulty = leaderboard_id.split('|')[-1]
 
@@ -322,7 +285,6 @@ class HitbloqMongo():
                 'notes': difficulty_data['notes'],
                 'obstacles': difficulty_data['obstacles'],
                 'hash': leaderboard_hash,
-                'score_ids': new_scores,
                 'star_rating': {},
                 'forced_star_rating': {},
             }
@@ -420,7 +382,7 @@ class HitbloqMongo():
             self.create_leaderboard(leaderboard_id, leaderboard_id.split('|')[0], True)
             current_leaderboard = self.db['leaderboards'].find_one({'_id': leaderboard_id})
         self.db['leaderboards'].update_one({'_id': leaderboard_id}, {'$set': {'star_rating.' + map_pool: 0}})
-        scores = list(self.fetch_scores(current_leaderboard['score_ids']))
+        scores = list(self.db['scores'].find({'song_id': leaderboard_id}))
         for score in scores:
             score['cr'][map_pool] = 0
         self.replace_scores(scores)

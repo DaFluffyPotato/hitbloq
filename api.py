@@ -54,7 +54,6 @@ def get_map_pools_detailed():
 def get_leaderboard_info(leaderboard_id):
     leaderboard_data = list(database.get_leaderboards([leaderboard_id]))[0]
     leaderboard_data['_id'] = str(leaderboard_data['_id'])
-    del leaderboard_data['score_ids']
     print(leaderboard_data)
     return jsonify(leaderboard_data)
 
@@ -160,7 +159,6 @@ def user_basic_api(user_id):
     try:
         user = database.get_users([user_id])[0]
         user_data = user.jsonify()
-        del user_data['score_ids']
         return jsonify(user_data)
     except IndexError:
         return jsonify({})

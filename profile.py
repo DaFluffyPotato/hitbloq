@@ -21,5 +21,5 @@ class Profile:
             for leaderboard in leaderboard_data:
                 if score['song_id'] == leaderboard['_id']:
                     score['leaderboard'] = leaderboard
-                    score['rank'] = score['leaderboard']['score_ids'].index(score['_id']) + 1
+                    score['rank'] = [leaderboard_score['_id'] for leaderboard_score in database.db['scores'].find({'song_id': score['song_id']}).sort('score', pymongo.DESCENDING)].index(score['_id']) + 1
                     score['accuracy'] = round(score['score'] / max_score(score['leaderboard']['notes']) * 100, 2)
