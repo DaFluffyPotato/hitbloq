@@ -61,7 +61,6 @@ class HitbloqMongo():
             self.update_user_cr_total(fresh_user)
             for map_pool_id in fresh_user.cr_totals:
                 self.update_user_ranking(fresh_user, map_pool_id)
-            self.delete_user_null_pointers(fresh_user)
 
         self.update_user(user, {'$set': {'last_update': time.time()}})
 
@@ -109,15 +108,6 @@ class HitbloqMongo():
     def delete_scores(self, leaderboard_id, score_id_list):
         self.db['scores'].delete_many({'_id': {'$in': score_id_list}})
         self.db['leaderboards'].update_one({'_id': leaderboard_id}, {'$pull': {'score_ids': {'$in': score_id_list}}})
-
-    # WILL BE REMOVED
-    def delete_user_null_pointers(self, user):
-        matching_scores = set([score['_id'] for score in self.fetch_scores(user.score_ids)])
-        null_pointers = set(user.score_ids) - matching_scores
-        if len(null_pointers):
-            print('deleting null pointers', null_pointers)
-            print('(user: ' + str(user.id) + ')')
-        self.db['users'].update_one({'_id': user.id}, {'$pull': {'score_ids': {'$in': list(null_pointers)}}})
 
     def fetch_scores(self, score_id_list):
         return self.db['scores'].find({'_id': {'$in': score_id_list}}).sort('time_set', -1)
@@ -180,7 +170,6 @@ class HitbloqMongo():
             score_json = self.format_score(user, scoresaber_json, leaderboard)
             mongo_response = self.db['scores'].insert_one(score_json)
             inserted_id = mongo_response.inserted_id
-            self.update_user(user, {'$push': {'score_ids': inserted_id}})
             self.db['leaderboards'].update_one({'_id': leaderboard_id}, {'$push': {'score_ids': inserted_id}})
             self.refresh_score_order(leaderboard_id)
             return True

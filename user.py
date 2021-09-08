@@ -11,7 +11,6 @@ class User():
         self.score_banner = None
         self.profile_banner = None
         self.profile_background = None
-        self.score_ids = []
         self.last_update = 0
         self.cr_totals = {}
         self.date_created = 0
@@ -55,7 +54,6 @@ class User():
         self.profile_pic = 'https://new.scoresaber.com' + ss_profile['playerInfo']['avatar']
         self.id = database.gen_new_user_id()
         self.scoresaber_id = scoresaber_id
-        self.score_ids = []
         self.last_update = 0
         self.date_created = time.time()
         self.rank_history = {pool_id : [] for pool_id in pool_ids}
@@ -73,7 +71,6 @@ class User():
         self.username = json_data['username']
         self.id = json_data['_id']
         self.scoresaber_id = json_data['scoresaber_id']
-        self.score_ids = json_data['score_ids']
         self.last_update = json_data['last_update']
         self.cr_totals = json_data['total_cr']
         self.profile_pic = json_data['profile_pic']
@@ -91,7 +88,6 @@ class User():
             '_id': self.id,
             'username': self.username,
             'scoresaber_id': self.scoresaber_id,
-            'score_ids': self.score_ids,
             'last_update': self.last_update,
             'total_cr': self.cr_totals,
             'profile_pic': self.profile_pic,
