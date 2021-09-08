@@ -1,3 +1,5 @@
+import pymongo
+
 from general import max_score
 from db import database
 
