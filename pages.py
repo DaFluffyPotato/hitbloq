@@ -187,7 +187,7 @@ def ranked_list_page(group_id, page=0):
         values = {
             'song_img': leaderboard['cover'],
             'song_name': '<a href="/leaderboard/' + leaderboard['hash'] + '_' + shorten_settings(leaderboard['difficulty_settings']) + '">' + leaderboard['name'] + '</a>',
-            'song_plays': len(list(database.db['scores'].find({'song_id': leaderboard['_id']}))),
+            'song_plays': str(len(list(database.db['scores'].find({'song_id': leaderboard['_id']})))),
             'song_difficulty': str(star_rating) + '★',
             'song_game_difficulty': leaderboard['difficulty'][0].upper() + leaderboard['difficulty'][1:],
         }
