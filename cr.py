@@ -59,6 +59,7 @@ def full_cr_update(map_pools, action_id=None):
 
     for leaderboard in leaderboards:
         leaderboards[leaderboard]['votes'] = {}
+        leaderboards[leaderboard]['score_ids'] = []
 
     players_with_scores = 0
 
@@ -68,6 +69,7 @@ def full_cr_update(map_pools, action_id=None):
             players_with_scores += 1
         for i, vote in enumerate(votes):
             leaderboards[vote[1]]['votes'][vote[2]] = (i + 1) / len(votes)
+            leaderboards[vote[1]]['score_ids'].append(vote[2])
 
         if j % 10 == 0:
             database.set_action_progress(action_id, 0.1 + j / len(user_list) * 0.6)
@@ -79,7 +81,7 @@ def full_cr_update(map_pools, action_id=None):
         difficulty_vote_total = 0
 
         i = 0
-        for score_id in sorted(leaderboard['votes'], key=lambda x : leaderboard['votes'][x][0]):
+        for score_id in leaderboard['score_ids']:
             vote_weight = calculate_weight(LEADERBOARD_VOTE_RANKING_CURVE_CONSTANT, i)
             difficulty_vote_weight_total += vote_weight
             difficulty_vote_total += leaderboard['votes'][score_id] * vote_weight
