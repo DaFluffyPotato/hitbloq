@@ -1,5 +1,6 @@
 import time
 import json
+import threading
 
 from db import database
 from user import User
@@ -86,12 +87,17 @@ def process_action(action):
 
     database.clear_action(action['_id'])
 
-if __name__ == "__main__":
+def process_queue(queue_id=0):
     while True:
-        next_action = database.get_next_action()
+        next_action = database.get_next_action(queue_id)
 
         if next_action:
             print('processing action', next_action['type'])
             process_action(next_action)
         else:
-            time.sleep(3)
+            time.sleep(1.5)
+
+if __name__ == "__main__":
+    process_queue(queue_id=0)
+
+    threading.Thread(target=process_queue, args=(1,)).start()

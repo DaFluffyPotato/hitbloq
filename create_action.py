@@ -4,8 +4,8 @@ def create_user(scoresaber_id):
     action_id = database.add_action({'type': 'add_user', 'user_id': scoresaber_id})
     return action_id
 
-def update_user(user_id, priority_shift=0):
-    action_id = database.add_action({'type': 'update_user', 'user_id': user_id}, priority_shift=priority_shift)
+def update_user(user_id, queue_id=0):
+    action_id = database.add_action({'type': 'update_user', 'user_id': user_id}, queue_id=queue_id)
     return action_id
 
 def update_users(user_ids):

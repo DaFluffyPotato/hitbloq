@@ -402,9 +402,10 @@ class HitbloqMongo():
         else:
             return [v['_id'] for v in self.db['ranked_lists'].aggregate([{'$match': {'deletedAt': None, 'third_party': False}}, {'$group': {'_id': '$_id'}}])]
 
-    def add_action(self, action, priority_shift=0):
+    def add_action(self, action, queue_id=0):
         action['progress'] = 0
-        action['time'] = time.time() - priority_shift
+        action['time'] = time.time()
+        action['queue_id'] = queue_id
         mongo_response = self.db['actions'].insert_one(action)
         inserted_id = str(mongo_response.inserted_id)
         return inserted_id
@@ -412,18 +413,19 @@ class HitbloqMongo():
     def action_exists(self, action_id):
         return bool(self.db['actions'].find_one({'_id': ObjectId(action_id)}))
 
-    def add_actions(self, actions):
+    def add_actions(self, actions, queue_id=0):
         for action in actions:
             action['progress'] = 0
             action['time'] = time.time()
+            action['queue_id'] = queue_id
         self.db['actions'].insert_many(actions)
 
-    def get_actions(self):
-        return self.db['actions'].find({}).sort([('time', pymongo.ASCENDING)])
+    def get_actions(self, queue_id=0):
+        return self.db['actions'].find({'queue_id': queue_id}).sort([('time', pymongo.ASCENDING)])
 
-    def get_next_action(self):
+    def get_next_action(self, queue_id=0):
         try:
-            return self.get_actions().limit(1).next()
+            return self.get_actions(queue_id).limit(1).next()
         except StopIteration:
             return None
 
