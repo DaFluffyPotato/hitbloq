@@ -47,8 +47,8 @@ class HitbloqMongo():
         else:
             self.db['users'].replace_one({'_id': user.id}, user.jsonify())
 
-    def update_user_scores(self, user, action_id=None):
-        scoresaber_api = scoresaber.ScoresaberInterface(self.db)
+    def update_user_scores(self, user, action_id=None, queue_id=0):
+        scoresaber_api = scoresaber.ScoresaberInterface(self.db, queue_id=queue_id)
         new_scores = scoresaber_api.fetch_until(user.scoresaber_id, user.last_update)
         for i, score in enumerate(new_scores):
             print('adding score', i, '/', len(new_scores))

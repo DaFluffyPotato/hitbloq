@@ -21,8 +21,8 @@ class User():
         # temp values
         self.scores = []
 
-    def refresh_scores(self, database, action_id=None):
-        database.update_user_scores(self, action_id)
+    def refresh_scores(self, database, action_id=None, queue_id=0):
+        database.update_user_scores(self, action_id, queue_id)
 
     def refresh(self, database):
         ss_profile = scoresaber.ScoresaberInterface(database).ss_req('player/' + self.scoresaber_id + '/basic')

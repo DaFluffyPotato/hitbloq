@@ -19,7 +19,7 @@ def process_action(action):
     if action['type'] == 'update_user':
         try:
             u = database.get_users([action['user_id']])[0]
-            u.refresh_scores(database, action['_id'])
+            u.refresh_scores(database, action['_id'], action['queue_id'])
         except IndexError:
             print('Invalid user for update:', action['user_id'])
 

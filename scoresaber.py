@@ -7,17 +7,16 @@ def convert_epoch(t):
     return epoch
 
 class ScoresaberInterface():
-    def __init__(self, database):
+    def __init__(self, database, queue_id=0):
         self.headers = {'User-Agent': 'Hitbloq/1.1b'}
         self.database = database
+        self.queue_id = queue_id
         self.scoresaber_url = 'https://new.scoresaber.com/api/'
 
     def ss_req(self, url):
         for i in range(5):
             try:
-                print('request start!')
                 req = requests.get(self.scoresaber_url + url, headers=self.headers)
-                print('req received!')
                 req_content = req.text
                 print(req.headers['X-RateLimit-Limit'], req.headers['X-RateLimit-Remaining'], req.headers['X-RateLimit-Reset'])
                 return json.loads(req_content)
