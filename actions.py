@@ -65,7 +65,7 @@ def process_action(action):
             if playlist_img:
                 try:
                     playlist_img_b64 = get_web_img_b64(playlist_img)
-                    print('used', url, 'for', pool, 'playlist')
+                    print('used', playlist_img, 'for', pool, 'playlist')
                 except:
                     pass
 
