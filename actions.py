@@ -50,7 +50,8 @@ def process_action(action):
         database.update_rank_histories(action['map_pool'], action['_id'])
 
     if action['type'] == 'regenerate_playlists':
-        map_lists = {ranked_list['_id'] : [(hash, hash.split('|')) for hash in ranked_list['leaderboard_id_list'], ranked_list] for ranked_list in database.get_ranked_lists()}
+        map_pools = {ranked_list['_id'] : ranked_list for ranked_list in database.get_ranked_lists()}
+        map_lists = {ranked_list['_id'] : [(hash, hash.split('|')) for hash in ranked_list['leaderboard_id_list']] for ranked_list in database.get_ranked_lists()}
 
         for pool in map_lists:
             leaderboard_data = {leaderboard['_id']: leaderboard for leaderboard in database.get_leaderboards([hash[0] for hash in map_lists[pool]])}
@@ -59,7 +60,7 @@ def process_action(action):
             pool_data = map_lists[pool][-1]
 
             playlist_img_b64 = BASE_64_LOGO
-            playlist_img = pool['playlist_cover']
+            playlist_img = map_pools[pool]['playlist_cover']
             if playlist_img:
                 try:
                     playlist_img_b64 = get_web_img_b64(url)
@@ -68,7 +69,7 @@ def process_action(action):
                     pass
 
             hash_list_json = {
-                'playlistTitle': pool['shown_name'],
+                'playlistTitle': map_pools[pool],
                 'playlistAuthor': 'Hitbloq',
                 'playlistDescription': 'Hitbloq',
                 'image': playlist_img_b64,
