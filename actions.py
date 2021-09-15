@@ -70,7 +70,7 @@ def process_action(action):
                     pass
 
             hash_list_json = {
-                'playlistTitle': map_pools[pool],
+                'playlistTitle': map_pools[pool]['shown_name'],
                 'playlistAuthor': 'Hitbloq',
                 'playlistDescription': 'Hitbloq',
                 'image': playlist_img_b64,
