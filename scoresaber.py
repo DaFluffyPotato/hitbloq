@@ -22,7 +22,10 @@ class ScoresaberInterface():
             try:
                 req = requests.get(self.scoresaber_url + url, headers=self.headers)
                 req_content = req.text
-                print(req.headers['X-RateLimit-Limit'], req.headers['X-RateLimit-Remaining'], req.headers['X-RateLimit-Reset'])
+                try:
+                    print(req.headers['X-RateLimit-Limit'], req.headers['X-RateLimit-Remaining'], req.headers['X-RateLimit-Reset'])
+                except:
+                    print('no headers found. received SS response.')
                 return json.loads(req_content)
             except Exception as e:
                 print(e)
