@@ -1,6 +1,8 @@
 import json, requests, time
 from datetime import datetime
 
+from config_loader import config
+
 def convert_epoch(t):
     utc_time = datetime.strptime(t, '%Y-%m-%dT%H:%M:%S.%fZ')
     epoch = (utc_time - datetime(1970, 1, 1)).total_seconds()
@@ -11,7 +13,9 @@ class ScoresaberInterface():
         self.headers = {'User-Agent': 'Hitbloq/1.1b'}
         self.database = database
         self.queue_id = queue_id
-        self.scoresaber_url = 'https://new.scoresaber.com/api/'
+        self.all_endpoints = config['scoresaber_endpoints'][str(queue_id)]
+        self.scoresaber_url = self.all_endpoints[0]
+        print('created ScoreSaber interface with endpoint set:', self.all_endpoints)
 
     def ss_req(self, url):
         for i in range(5):
