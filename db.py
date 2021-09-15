@@ -319,6 +319,7 @@ class HitbloqMongo():
             'banner_title_hide': False,
             'third_party': third_party,
             'cover': cover,
+            'playlist_cover': None,
             'cr_curve': {'type': 'basic'},
             'player_count': 0,
             'priority': 0,

@@ -157,6 +157,23 @@ async def on_message(message):
             if message_args[0] == '!regenerate_playlists':
                 create_action.regenerate_playlists()
                 await message.channel.send(message.author.mention + ' hashlist generation has been added to the action queue.\nhttps://hitbloq.com/actions')
+
+            if message_args[0] == '!set_playlist_cover':
+                valid_host = 'https://i.imgur.com/'
+                pool_id = message_args[1]
+                image_url = message_args[2]
+                if pool_id in database.get_pool_ids(True):
+                    if database.is_pool_owner(pool_id, message.author.id):
+                        if (image_url[:len(valid_host)] != valid_host) or (image_url.split('.')[-1] != 'png'):
+                            await message.channel.send(message.author.mention + ' the image URL must come from ' + valid_host + ' and be a PNG')
+                        else:
+                            database.db['ranked_lists'].update_one({'_id': pool_id}, {'$set': {'playlist_cover': image_url}})
+                            await message.channel.send(message.author.mention + ' the pool image has been updated')
+                    else:
+                        await message.channel.send(message.author.mention + ' you don\'t have permissions to modify this pool')
+                else:
+                    await message.channel.send(message.author.mention + ' that pool ID appears to be invalid')
+
             if message_args[0] == '!set_banner_title_hide':
                 try:
                     pool_id = message_args[1]
