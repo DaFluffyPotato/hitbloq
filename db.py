@@ -421,7 +421,10 @@ class HitbloqMongo():
         self.db['actions'].insert_many(actions)
 
     def get_actions(self, queue_id=0):
-        return self.db['actions'].find({'queue_id': queue_id}).sort([('time', pymongo.ASCENDING)])
+        if queue_id == -1:
+            return self.db['actions'].find({'queue_id': queue_id}).sort([('time', pymongo.ASCENDING)])
+        else:
+            return self.db['actions'].find({}).sort([('time', pymongo.ASCENDING)])
 
     def get_next_action(self, queue_id=0):
         try:

@@ -9,7 +9,7 @@ import create_action
 RANKED_LIST_DESCRIPTION = 'A collection of maps from the <map_pool_name> Hitbloq map pool used for the associated ranked ladder. Check out https://hitbloq.com for more info.'
 
 def action_list():
-    resp = list(database.get_actions())
+    resp = list(database.get_actions(queue_id=-1))
     for action in resp:
         action['_id'] = str(action['_id'])
     return jsonify(resp)
