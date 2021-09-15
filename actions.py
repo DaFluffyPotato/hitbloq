@@ -4,6 +4,7 @@ import threading
 import base64
 import shutil
 import requests
+import os
 
 from db import database
 from user import User
@@ -63,7 +64,7 @@ def process_action(action):
             playlist_img = map_pools[pool]['playlist_cover']
             if playlist_img:
                 try:
-                    playlist_img_b64 = get_web_img_b64(url)
+                    playlist_img_b64 = get_web_img_b64(playlist_img)
                     print('used', url, 'for', pool, 'playlist')
                 except:
                     pass
