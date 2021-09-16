@@ -19,7 +19,7 @@ def generate_header(title='Hitbloq', desc='a competitive beat saber service', im
     header += '<meta property="og:site_name" content="Hitbloq">\n'
     for css_file in additional_css:
         header += '<link rel="stylesheet" href="/static/css/' + css_file + '">\n'
-    for js_file in additional_css:
+    for js_file in additional_js:
         header += '<script src="/static/js/' + js_file + '"></script>\n'
     return header
 

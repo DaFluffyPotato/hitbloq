@@ -3,3 +3,5 @@ function genMapPools(status, data) {
 }
 
 getJSON('https://hitbloq.com/api/map_pools_detailed', genMapPools);
+
+console.log("HI");

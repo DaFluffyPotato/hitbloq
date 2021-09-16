@@ -67,6 +67,10 @@ p {
   top: -0.2cm;
 }
 
+.card {
+  background-color: rgb(38, 43, 68);
+}
+
 .navbar {
   background-color: rgb(38, 43, 68);
   font-size: 1cm;
