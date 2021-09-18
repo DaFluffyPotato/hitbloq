@@ -55,10 +55,9 @@ def process_action(action):
         map_lists = {ranked_list['_id'] : [(hash, hash.split('|')) for hash in ranked_list['leaderboard_id_list']] for ranked_list in database.get_ranked_lists()}
 
         for pool in map_lists:
+            print('generating playlist for', pool)
             leaderboard_data = {leaderboard['_id']: leaderboard for leaderboard in database.get_leaderboards([hash[0] for hash in map_lists[pool]])}
             # there are a few unstable string hacks for the char/diff settings...
-
-            pool_data = map_lists[pool][-1]
 
             playlist_img_b64 = BASE_64_LOGO
             playlist_img = map_pools[pool]['playlist_cover']
