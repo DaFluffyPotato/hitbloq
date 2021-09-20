@@ -6,6 +6,13 @@ function submitSearch(form) {
   return false;
 }
 
+templates = {}
+
+function loadTemplate(status, template_data) {
+  templates[template_data['id']] = template_data['template'];
+  console.log(templates);
+}
+
 function sendJSON(url, json_data, callback) {
   var xhr = new XMLHttpRequest();
   xhr.open('POST', url, true);

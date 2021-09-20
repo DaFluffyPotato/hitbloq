@@ -5,8 +5,12 @@ from flask import jsonify
 from db import database
 from general import mongo_clean, max_score
 import create_action
+from templates import templates
 
 RANKED_LIST_DESCRIPTION = 'A collection of maps from the <map_pool_name> Hitbloq map pool used for the associated ranked ladder. Check out https://hitbloq.com for more info.'
+
+def get_template(template_id):
+    return jsonify({'id': template_id, 'template': templates.templates[template_id]})
 
 def action_list():
     resp = list(database.get_actions(queue_id=-1))

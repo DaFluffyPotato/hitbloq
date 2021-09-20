@@ -153,6 +153,10 @@ def update_user(user_id):
 def action_id_status(action_id):
     return api.action_id_status(action_id)
 
+@app.route('/api/get_template/<template_id>')
+def get_template(template_id):
+    return api.get_template(template_id)
+
 @app.route('/new')
 def new_home():
     html = new_pages['home']()
