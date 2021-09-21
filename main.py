@@ -116,9 +116,13 @@ def leaderboard_scores_extended_api(leaderboard_id, page):
     return api.get_leaderboard_scores_extended(leaderboard_id, offset=page * count, count=count)
 
 @app.route('/api/leaderboard/<leaderboard_id>/nearby_scores/<user>')
-def eladerboard_scores_nearby_api(leaderboard_id, user):
+def laderboard_scores_nearby_api(leaderboard_id, user):
     user = int(user)
     return api.get_leaderboard_scores_nearby(leaderboard_id, user)
+
+@app.route('/api/leaderboard/<leaderboard_id>/friends', methods=['POST'])
+def leaderboard_scores_friends_api(leaderboard_id):
+    return api.leaderboard_scores_friends(leaderboard_id, request.json['friends'])
 
 @app.route('/api/tools/ss_to_hitbloq/<ss_id>')
 def ss_to_hitbloq_id(ss_id):
@@ -137,6 +141,18 @@ def user_basic_api(user_id):
 def player_rank_api(pool_id, user):
     user = int(user)
     return api.player_rank_api(pool_id, user)
+
+@app.route('/api/ladder/<pool_id>/players/<int:page>')
+def ranked_ladder_api(pool_id, page):
+    return api.ranked_ladder(pool_id, page)
+
+@app.route('/api/ladder/<pool_id>/nearby_players/<int:user_id>')
+def ranked_ladder_nearby_api(pool_id, user_id):
+    return api.ranked_ladder_nearby(pool_id, user_id)
+
+@app.route('/api/ladder/<pool_id>/friends', methods=['POST'])
+def ranked_ladder_friends_api(pool_id):
+    return api.ranked_ladder_friends(pool_id, request.json['friends'])
 
 @app.route('/api/update_user/<int:user_id>')
 def update_user(user_id):

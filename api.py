@@ -105,6 +105,79 @@ def get_leaderboard_scores_nearby(leaderboard_id, user):
 
     return jsonify(score_data)
 
+def leaderboard_scores_friends(leaderboard_id, friends_list):
+    # induce error if the request contents are invalid
+    l = [int(v) for v in friends_list]
+
+    leaderboard_data = list(database.get_leaderboards([leaderboard_id]))[0]
+    score_data = list(database.db['scores'].find({'song_id': leaderboard_data['_id'], 'user': {'$in': friends_list}}).sort('score', -1))
+
+    user_list = [score['user'] for score in score_data]
+    user_data = {user.id : user for user in database.get_users(user_list)}
+    for i, score in enumerate(score_data):
+        del score['_id']
+        score['username'] = user_data[score['user']].username
+        score['accuracy'] = round(score['score'] / max_score(leaderboard_data['notes']) * 100, 2)
+        score['rank'] = base_index + i + 1
+
+    return jsonify(score_data)
+
+def ranked_ladder(pool_id, page):
+    players_per_page = 10
+
+    ladder_data = database.get_ranking_slice(pool_id, page * players_per_page, (page + 1) * players_per_page)
+    user_list = [user['user'] for user in ladder_data['ladder']]
+    user_data = {user.id : user for user in database.get_users(user_list)}
+
+    for i, player in enumerate(ladder_data):
+        player['username'] = user_data[player['user']]
+        player['rank'] = page * players_per_page + i + 1
+
+    return jsonify(ladder_data)
+
+def ranked_ladder_nearby(pool_id, user_id):
+    players_per_page = 10
+
+    users = database.get_users([user_id])
+    base_index = 0
+    if len(users):
+        user = users[0]
+        player_rank = database.get_user_ranking(user, pool_id)
+
+        base_index = max(0, player_rank - 4)
+
+    ladder_data = database.get_ranking_slice(pool_id, base_index, base_index + players_per_page)
+
+    user_list = [user['user'] for user in ladder_data['ladder']]
+    user_data = {user.id : user for user in database.get_users(user_list)}
+
+    for i, player in enumerate(ladder_data):
+        player['username'] = user_data[player['user']].username
+        player['rank'] = basae_index + i + 1
+
+    return jsonify(ladder_data)
+
+def ranked_ladder_friends(pool_id, friends_list):
+    ladder_data = database.db['ladders'].find_one({'_id': pool_id})['ladder']
+    matched_friends = []
+    for i, user in enumerate(ladder_data['ladder']):
+        if user['user'] in friends_list:
+            matched_friends.append({
+                'rank': i,
+                'user': user['user'],
+                'cr': user['cr'],
+            })
+
+    ladder_data['ladder'] = matched_friends
+
+    user_list = [user['user'] for user in ladder_data['ladder']]
+    user_data = {user.id : user for user in database.get_users(user_list)}
+
+    for player in ladder_data:
+        player['username'] = user_data[player['user']].username
+
+    return jsonify(ladder_data)
+
 def ss_to_hitbloq_id(ss_id):
     matching_user = database.db['users'].find_one({'scoresaber_id': ss_id})
     if matching_user:
