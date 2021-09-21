@@ -118,7 +118,7 @@ def leaderboard_scores_friends(leaderboard_id, friends_list):
         del score['_id']
         score['username'] = user_data[score['user']].username
         score['accuracy'] = round(score['score'] / max_score(leaderboard_data['notes']) * 100, 2)
-        score['rank'] = base_index + i + 1
+        score['rank'] = i + 1
 
     return jsonify(score_data)
 
@@ -129,8 +129,8 @@ def ranked_ladder(pool_id, page):
     user_list = [user['user'] for user in ladder_data['ladder']]
     user_data = {user.id : user for user in database.get_users(user_list)}
 
-    for i, player in enumerate(ladder_data):
-        player['username'] = user_data[player['user']]
+    for i, player in enumerate(ladder_data['ladder']):
+        player['username'] = user_data[player['user']].username
         player['rank'] = page * players_per_page + i + 1
 
     return jsonify(ladder_data)
@@ -144,26 +144,26 @@ def ranked_ladder_nearby(pool_id, user_id):
         user = users[0]
         player_rank = database.get_user_ranking(user, pool_id)
 
-        base_index = max(0, player_rank - 4)
+        base_index = max(0, player_rank - 5)
 
     ladder_data = database.get_ranking_slice(pool_id, base_index, base_index + players_per_page)
 
     user_list = [user['user'] for user in ladder_data['ladder']]
     user_data = {user.id : user for user in database.get_users(user_list)}
 
-    for i, player in enumerate(ladder_data):
+    for i, player in enumerate(ladder_data['ladder']):
         player['username'] = user_data[player['user']].username
-        player['rank'] = basae_index + i + 1
+        player['rank'] = base_index + i + 1
 
     return jsonify(ladder_data)
 
 def ranked_ladder_friends(pool_id, friends_list):
-    ladder_data = database.db['ladders'].find_one({'_id': pool_id})['ladder']
+    ladder_data = database.db['ladders'].find_one({'_id': pool_id})
     matched_friends = []
     for i, user in enumerate(ladder_data['ladder']):
         if user['user'] in friends_list:
             matched_friends.append({
-                'rank': i,
+                'rank': len(matched_friends) + 1,
                 'user': user['user'],
                 'cr': user['cr'],
             })
@@ -173,7 +173,7 @@ def ranked_ladder_friends(pool_id, friends_list):
     user_list = [user['user'] for user in ladder_data['ladder']]
     user_data = {user.id : user for user in database.get_users(user_list)}
 
-    for player in ladder_data:
+    for player in ladder_data['ladder']:
         player['username'] = user_data[player['user']].username
 
     return jsonify(ladder_data)
