@@ -20,10 +20,13 @@ def generate_header(image, title, description):
     return header
 
 def get_map_pool():
+    user_ip = request.remote_addr
     map_pool = request.cookies.get('map_pool')
     # a temp hack to get around people with global_main as their cached pool
     if (not map_pool) or (map_pool == 'global_main'):
         map_pool = 'bbbear'
+    else:
+        database.log_interest(user_ip, map_pool)
     if request.args.get('pool'):
         map_pool = request.args.get('pool')
     return map_pool
