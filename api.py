@@ -185,6 +185,16 @@ def ss_to_hitbloq_id(ss_id):
     else:
         return jsonify({'id': -1})
 
+def mass_ss_to_hitbloq_id(id_list):
+    # crash out if invalid IDs
+    v = [int(ss_id) for ss_id in id_list]
+
+    matching_users = database.db['users'].find({'scoresaber_id': {'$in': id_list}})
+
+    result = [{'id': user['_id'], 'scoresaber_id': user['scoresaber_id']} for user in matching_users]
+
+    return jsonify(result)
+
 def player_rank_api(pool_id, user):
     users = database.get_users([user])
     pool_data = database.get_ranked_list(pool_id)

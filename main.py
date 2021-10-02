@@ -124,6 +124,10 @@ def laderboard_scores_nearby_api(leaderboard_id, user):
 def leaderboard_scores_friends_api(leaderboard_id):
     return api.leaderboard_scores_friends(leaderboard_id, request.json['friends'])
 
+@app.route('/api/tools/mass_ss_to_hitbloq', methods=['POST'])
+def mass_ss_to_hitbloq_id():
+    return api.mass_ss_to_hitbloq_id(request.json['ids'])
+
 @app.route('/api/tools/ss_to_hitbloq/<ss_id>')
 def ss_to_hitbloq_id(ss_id):
     return api.ss_to_hitbloq_id(ss_id)
