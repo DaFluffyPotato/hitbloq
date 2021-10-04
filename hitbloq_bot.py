@@ -100,8 +100,6 @@ async def on_message(message):
                     for valid_role in valid_creation_roles:
                         if valid_role in [role.name for role in message.author.roles]:
                             highest_role = valid_role
-                        else:
-                            await message.channel.send(message.author.mention + ' You must be a CR Farmer or CR Grinder patron to use this command.')
 
                     if highest_role:
                         threshold = 1
@@ -123,6 +121,9 @@ async def on_message(message):
                                 await message.channel.send(message.author.mention + ' This pool ID contains forbidden characters. It may only include lowercase letters, numbers, and underscores.')
                         else:
                             await message.channel.send(message.author.mention + ' This pool ID has been taken.')
+                    else:
+                        await message.channel.send(message.author.mention + ' You must be a CR Farmer or CR Grinder patron to use this command.')
+                        
                 except IndexError:
                     await message.channel.send(message.author.mention + ' invalid arguments. Should be `!create_pool <new_pool_id>`.')
         if message.channel.name == GENERAL_COMMANDS_CHANNEL:
