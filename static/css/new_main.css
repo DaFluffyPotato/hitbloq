@@ -118,7 +118,7 @@ p {
 
 .popup-element {
   position:  relative;
-  animation: fade-in-raw ease-out 250ms;
+  animation: fade-in-raw-delayed ease-out 350ms;
 }
 
 .middle-column {
@@ -146,6 +146,18 @@ p {
 
 @keyframes fade-in-raw {
   0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in-raw-delayed {
+  0% {
+    opacity: 0;
+  }
+  50% {
     opacity: 0;
   }
   100% {

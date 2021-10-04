@@ -1,32 +1,71 @@
+var templates = {};
+var remaining_template_requests = 0;
+
 function submitSearch(form) {
-  var value = form.input.value.replace(/[^ a-zA-Z0-9_-]/, "")
-	if (value != '') {
-		window.location.href = "/search/" + value;
-	}
-  return false;
+    var value = form.input.value.replace(/[^ a-zA-Z0-9_-]/, "")
+	  if (value != '') {
+		    window.location.href = "/search/" + value;
+	  }
+    return false;
 }
 
-templates = {}
-
 function loadTemplate(status, template_data) {
-  templates[template_data['id']] = template_data['template'];
-  console.log(templates);
+    templates[template_data['id']] = template_data['template'];
+    console.log(templates);
+}
+
+function useTemplate(template_id, substitutions) {
+    output_html = templates[template_id];
+    for (const key of Object.keys(substitutions)) {
+        output_html = output_html.replace('\\@' + key, substitutions[key]);
+    }
+    return createElementFromHTML(output_html);
 }
 
 function sendJSON(url, json_data, callback) {
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', url, true);
-  xhr.setRequestHeader("Content-Type", "application/json");
-  xhr.responseType = 'json';
-  xhr.send(JSON.stringify(json_data));
-  xhr.onload = function() {
-    var status = xhr.status;
-    if (status === 200) {
-      callback(null, xhr.response);
-    } else {
-      callback(status, xhr.response);
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.responseType = 'json';
+    xhr.send(JSON.stringify(json_data));
+    xhr.onload = function() {
+        var status = xhr.status;
+        if (status === 200) {
+            callback(null, xhr.response);
+        } else {
+            callback(status, xhr.response);
+        }
     }
-  }
+}
+
+function getJSON(url, callback, callback_args=[]) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.responseType = 'json';
+    xhr.onload = function() {
+      var status = xhr.status;
+      if (status === 200) {
+        callback(null, xhr.response, ...callback_args);
+      } else {
+        callback(status, xhr.response, ...callback_args);
+      }
+    }
+    xhr.send();
+}
+
+function processTemplate(status, json_response, callback) {
+    templates[json_response['id']] = json_response['template'];
+    remaining_template_requests -= 1;
+    if (remaining_template_requests <= 0) {
+        callback();
+    }
+}
+
+function loadTemplates(requested_templates, callback) {
+    remaining_template_requests = requested_templates.length;
+    for (const template of requested_templates) {
+        getJSON(window.location.origin + '/api/get_template/' + template, processTemplate, [callback]);
+    }
 }
 
 function createCookie(name,value,days) {
@@ -54,21 +93,6 @@ function eraseCookie(name) {
     createCookie(name,"",-1);
 }
 
-function getJSON(url, callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-    xhr.responseType = 'json';
-    xhr.onload = function() {
-      var status = xhr.status;
-      if (status === 200) {
-        callback(null, xhr.response);
-      } else {
-        callback(status, xhr.response);
-      }
-    }
-    xhr.send();
-}
-
 function postAddUser(status, json_response) {
   if (json_response['status'] == 'success') {
     document.getElementById('user-addition-card').innerHTML = '<p>Added to the <a href="/actions">Action Queue</a>! After the Score Saber data has been downloaded, you can search for your Score Saber username.</p>';
@@ -94,6 +118,13 @@ function set_announcement(status, json_response) {
     document.getElementById('announcement-card').innerHTML = json_response['html'];
     document.getElementById('announcement-card').style.display = 'block';
   }
+}
+
+function createElementFromHTML(htmlString) {
+  var div = document.createElement('div');
+  div.innerHTML = htmlString.trim();
+
+  return div.firstChild;
 }
 
 getJSON('/api/announcement', set_announcement);
