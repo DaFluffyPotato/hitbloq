@@ -12,7 +12,7 @@ function genMapPool() {
         {
             'title': pool['banner_title_hide'] ? '' : pool['title'],
             'description': pool['short_description'],
-            'cover': pool['image'],
+            'cover': pool['banner_image'],
             'player_count': numWithCommas(pool['player_count']),
             'pool_id': pool['id'],
             'download_url': pool['download_url'],
