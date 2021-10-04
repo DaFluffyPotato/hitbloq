@@ -465,6 +465,31 @@ class HitbloqMongo():
     def log_interest(self, ip_address, pool_id):
         self.db['pool_interest'].update_one({'_id': hash_ip(ip_address)}, {'$set': {'pools_viewed.' + pool_id: time.time()}}, upsert=True)
 
+    def calculate_pool_popularity(self):
+        POOL_INTEREST_CYCLE = 60 * 60 * 24 * 30 # 30 day cycle
+        interest_log = list(self.db['pool_interest'].find({}))
+
+        current_time = time.time()
+
+        pool_popularity = {}
+
+        for i, user in sorted(enumerate(interest_log), reverse=True):
+            for pool_id in list(user['pools_viewed']):
+                if user['pools_viewed'][pool_id] > current_time - POOL_INTEREST_CYCLE:
+                    if pool_id not in pool_popularity:
+                        pool_popularity[pool_id] = 0
+                    pool_popularity[pool_id] += 1
+                # TODO add mechanism to delete old data
+
+        for pool_id in self.get_pool_ids():
+            if pool_id not in pool_popularity:
+                priority = 0
+            else:
+                priority = pool_popularity[pool_id]
+            self.db['ranked_lists'].update_one({'_id': pool_id}, {'$set': {'priority': priority}})
+
+        return pool_popularity
+
     def set_pool_curve(self, pool_id, curve_data):
         self.db['ranked_lists'].update_one({'_id': pool_id}, {'$set': {'cr_curve': curve_data}})
 

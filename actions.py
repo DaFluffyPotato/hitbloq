@@ -112,6 +112,9 @@ def process_action(action):
         for user in database.get_all_users():
             user.refresh(database)
 
+    if action['type'] == 'refresh_pool_popularity':
+        database.calculate_pool_popularity()
+
     database.clear_action(action['_id'])
 
 def process_queue(queue_id=0):

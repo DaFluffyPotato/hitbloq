@@ -19,6 +19,10 @@ while True:
             if timer != 0: # skip player history updates if rebooting regular tasks
                 create_action.update_rank_histories(pool_id)
         create_action.regenerate_playlists()
+
+    if timer % (DAY * 7) == 0:
+        create_action.refresh_pool_popularity()
         create_action.refresh_profiles()
+        
     time.sleep(1)
     timer += 1

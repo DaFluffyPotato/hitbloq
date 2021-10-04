@@ -36,3 +36,7 @@ def regenerate_playlists():
 def refresh_profiles():
     action_id = database.add_action({'type': 'refresh_profiles'})
     return action_id
+
+def refresh_pool_popularity():
+    action_id = database.add_action({'type': 'refresh_pool_popularity'})
+    return action_id
