@@ -95,10 +95,21 @@ async def on_message(message):
             if message_args[0] == '!create_pool':
                 try:
                     new_pool_id = message_args[1]
-                    if 'CR Farmer' in [role.name for role in message.author.roles]:
+                    valid_creation_roles = ['CR Farmer', 'CR Grinder']
+                    highest_role = None
+                    for valid_role in valid_creation_roles:
+                        if valid_role in [role.name for role in message.author.roles]:
+                            highest_role = valid_role
+                        else:
+                            await message.channel.send(message.author.mention + ' You must be a CR Farmer or CR Grinder patron to use this command.')
+
+                    if highest_role:
+                        threshold = 1
+                        if highest_role == 'CR Grinder':
+                            threshold = 3
                         if new_pool_id not in database.get_pool_ids(True):
                             if safe_string(new_pool_id):
-                                if database.get_rate_limits(message.author.id, hash=False)['pools_created'] < 1:
+                                if database.get_rate_limits(message.author.id, hash=False)['pools_created'] < threshold:
                                     role = get(active_guild.roles, name='map pool people')
                                     pool_channel = get(active_guild.channels, name='pool-admin-commands')
                                     await message.author.add_roles(role)
@@ -112,8 +123,6 @@ async def on_message(message):
                                 await message.channel.send(message.author.mention + ' This pool ID contains forbidden characters. It may only include lowercase letters, numbers, and underscores.')
                         else:
                             await message.channel.send(message.author.mention + ' This pool ID has been taken.')
-                    else:
-                        await message.channel.send(message.author.mention + ' You must be a CR Farmer patron to use this command.')
                 except IndexError:
                     await message.channel.send(message.author.mention + ' invalid arguments. Should be `!create_pool <new_pool_id>`.')
         if message.channel.name == GENERAL_COMMANDS_CHANNEL:
