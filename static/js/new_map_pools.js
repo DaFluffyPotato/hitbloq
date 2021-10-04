@@ -16,6 +16,7 @@ function genMapPool() {
             'player_count': numWithCommas(pool['player_count']),
             'pool_id': pool['id'],
             'download_url': pool['download_url'],
+            'popularity': numWithCommas(pool['popularity']),
         }
     );
     document.getElementById('map-pools-container').appendChild(newHTML);
