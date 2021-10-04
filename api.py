@@ -45,11 +45,15 @@ def get_map_pools_detailed():
     for pool in map_pools:
         response.append({
             'title': pool['shown_name'],
+            'banner_title_hide': pool['banner_title_hide'],
             'author': 'Hitbloq',
-            #'image': pool['cover'],
-            'image': 'https://hitbloq.com/static/hitbloq.png',
+            'image': pool['cover'],
+            'playlist_image': pool['playlist_cover'],
             'id': pool['_id'],
             'description': RANKED_LIST_DESCRIPTION.replace('<map_pool_name>', pool['shown_name']),
+            'short_description': 'The ' + pool['shown_name'] + ' map pool.',
+            'player_count': pool['player_count'],
+            'popularity': pool['priority'],
             'download_url': 'https://hitbloq.com/static/hashlists/' + pool['_id'] + '.bplist'
         })
 

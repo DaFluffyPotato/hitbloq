@@ -11,7 +11,7 @@
 .map-pool-card {
   position: relative;
   width: 10cm;
-  height: 4cm;
+  height: 4.5cm;
   margin: 0.5cm;
   border-radius: 0.4cm 0.4cm 0cm 0cm;
   box-shadow: 0.15cm 0.15cm 0cm rgb(255, 0, 68);
@@ -23,6 +23,26 @@
   box-shadow: 0.25cm 0.25cm 0cm rgb(255, 0, 68);
   left: -0.1cm;
   top: -0.1cm;
+}
+
+.map-pool-links {
+  font-size: 1.6em;
+  padding: 0.3em;
+}
+
+.map-pool-link {
+  color: inherit;
+}
+
+.map-pool-link:hover {
+  color: rgb(255, 0, 68);
+  transition: all 250ms;
+}
+
+.map-pool-links-right {
+  float: right;
+  display: inline;
+  margin-right: 0.2em;
 }
 
 .map-pool-cover {

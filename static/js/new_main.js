@@ -17,7 +17,7 @@ function loadTemplate(status, template_data) {
 function useTemplate(template_id, substitutions) {
     output_html = templates[template_id];
     for (const key of Object.keys(substitutions)) {
-        output_html = output_html.replace('\\@' + key, substitutions[key]);
+        output_html = output_html.replace(new RegExp('\\\\@' + key, 'g'), substitutions[key]);
     }
     return createElementFromHTML(output_html);
 }
@@ -125,6 +125,10 @@ function createElementFromHTML(htmlString) {
   div.innerHTML = htmlString.trim();
 
   return div.firstChild;
+}
+
+function numWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 getJSON('/api/announcement', set_announcement);

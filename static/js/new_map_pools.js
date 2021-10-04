@@ -8,7 +8,16 @@ function genMapPools(status, data) {
 function genMapPool() {
   if (poolData.length > 0) {
     const pool = poolData[0];
-    var newHTML = useTemplate('new_map_pool_card', {'title': pool['title'], 'description': pool['description'], 'cover': pool['image']});
+    var newHTML = useTemplate('new_map_pool_card',
+        {
+            'title': pool['banner_title_hide'] ? '' : pool['title'],
+            'description': pool['short_description'],
+            'cover': pool['image'],
+            'player_count': numWithCommas(pool['player_count']),
+            'pool_id': pool['id'],
+            'download_url': pool['download_url'],
+        }
+    );
     document.getElementById('map-pools-container').appendChild(newHTML);
     poolData.splice(0, 1);
   }
