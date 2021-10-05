@@ -10,19 +10,20 @@
 
 .map-pool-card {
   position: relative;
-  width: 10cm;
-  height: 4.5cm;
-  margin: 0.5cm;
-  border-radius: 0.4cm 0.4cm 0cm 0cm;
-  box-shadow: 0.15cm 0.15cm 0cm rgb(0, 0, 0);
-  left: 0cm;
-  top: 0cm;
+  width: 22em;
+  height: 10.7em;
+  margin: 1em;
+  border-radius: 1em 1em 0cm 0cm;
+  box-shadow: 0.4em 0.4em 0 rgb(0, 0, 0);
+  left: 0;
+  top: 0;
+  font-size: 2em;
 }
 
 .map-pool-card:hover {
   box-shadow: 0.25cm 0.25cm 0cm rgb(255, 0, 68);
-  left: -0.1cm;
-  top: -0.1cm;
+  left: -0.1em;
+  top: -0.1em;
 }
 
 .map-pool-links {
@@ -47,21 +48,28 @@
 
 .map-pool-cover {
   width: inherit;
-  height: 2cm;
+  height: 4.4em;
   margin: 0;
-  margin-bottom: 0.5cm;
-  border-radius: 0.4cm 0.4cm 0cm 0cm;
+  margin-bottom: 1em;
+  border-radius: 1em 1em 0cm 0cm;
   box-shadow: 0cm 0.1cm 0.1cm rgba(0, 0, 0, 0.7);
 }
 
 .map-pool-title {
   position: absolute;
   left: 50%;
-  top: 1cm;
-  font-size: 0.7cm;
+  top: 1.2em;
+  font-size: 1.8em;
+  text-align: center;
   transform: translate(-50%, -50%);
 }
 
 .map-pool-description {
   margin: 0.15cm;
+}
+
+@media only screen and (min-width: 1020px) {
+  .map-pool-card {
+    font-size: 1em;
+  }
 }
