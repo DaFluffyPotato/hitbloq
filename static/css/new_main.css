@@ -54,8 +54,11 @@ p {
 }
 
 .navbar-link {
-  margin-left: 0.1cm;
-  margin-right: 0.1cm;
+  padding: 0.4em 0.5em;
+  margin: 0.1em 0;
+  font-size: 2em;
+  background-color: rgb(24, 20, 37);
+  width: 100%;
 }
 
 .hitbloq-logo {
@@ -170,7 +173,50 @@ p {
   margin: 0.5cm auto 1cm auto;
 }
 
+.empty-button {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+.dropnav {
+  background-color: rgb(38, 43, 68);
+  width: 100%;
+  position: fixed;
+  z-index: 10;
+  top: -60%;
+  left: 0;
+  transition: 0.3s;
+  box-shadow: 0 2em 10px 10px rgba(0, 0, 0, 0.5);
+}
+
+.menu-button {
+  position: fixed;
+  top: 0.3em;
+  right: 1em;
+}
+
+.menu-close-button {
+  font-size: 2.2em;
+  float: right;
+  margin: 0.3em 1em;
+}
+
 @media only screen and (min-width: 1020px) {
+  .navbar-link {
+    margin: 0 0.1cm;
+    padding: 0 0;
+    font-size: inherit;
+    background-color: inherit;
+    width: inherit;
+  }
+
+  .menu-button {
+    display: none;
+  }
+
   .navbar {
     background-color: rgb(38, 43, 68);
     font-size: 200%;

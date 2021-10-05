@@ -7,8 +7,21 @@
     <link rel="stylesheet" href="/static/css/new_main.css">
 	</head>
 	<body class="body">
+		<div class="dropnav" id="dropnav">
+			<button class="menu-close-button empty-button" onclick="document.getElementById('dropnav').style.top='-60%';">
+				<i class="fas fa-times"></i>
+			</button>
+			<a href="/" class="navbar-link link">Leaderboard</a><br>
+			<a href="/new/map_pools" class="navbar-link link">Map Pools</a><br>
+			<a href="/" class="navbar-link link">Add User</a><br>
+			<a href="https://discord.gg/pxWwtWJ" class="navbar-link link">Discord</a><br>
+			<a href="/new/about" class="navbar-link link">About</a>
+		</div>
 		<div class="navbar">
 			<div class="navbar-contents">
+				<button class="menu-button empty-button" onclick="document.getElementById('dropnav').style.top='0';">
+					<i class="fas fa-bars"></i>
+				</button>
 				<div class="navbar-title">
 					<img src="https://hitbloq.com/static/hitbloq.png" class="hitbloq-logo">
 					<a href="/new" class="title">Hitbloq</a>
