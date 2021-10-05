@@ -13,11 +13,11 @@ body {
 }
 
 h1 {
-  font-size: 1.6vw + 1cm;
+  font-size: 1.7em;
 }
 
 h2 {
-  font-size: 1.2vw + 0.7cm;
+  font-size: 1.6em;
   margin: 0;
 }
 
@@ -28,7 +28,7 @@ a {
 }
 
 p {
-  margin: 0.2cm auto 0.2cm auto;
+  margin: 0.2em auto 0.2em auto;
 }
 
 .link:hover {
@@ -73,7 +73,7 @@ p {
 
 .navbar {
   background-color: rgb(38, 43, 68);
-  font-size: 1cm;
+  font-size: 200%;
   position: fixed;
   width: 100%;
   height: 1.4cm;
@@ -89,12 +89,12 @@ p {
 }
 
 .navbar-title {
-
+  margin-left: 0.5em;
+  margin-top: 0.1em;
 }
 
 .navbar-options {
-  font-size: 0.5cm;
-  margin: 0.5cm 0px auto auto;
+  display: none;
 }
 
 .content {
@@ -124,8 +124,7 @@ p {
 .middle-column {
   margin: 0 auto 0 auto;
   width: 25cm;
-  font-size: calc(0.25cm + 0.75vw);
-  min-font-size: 1.4cm;
+  font-size: 1em;
   max-width: 90%;
 }
 
@@ -167,6 +166,35 @@ p {
 
 .footer {
   text-align: center;
-  font-size: calc(0.7vw + 0.2cm);
+  font-size: 1em;
   margin: 0.5cm auto 1cm auto;
+}
+
+@media only screen and (min-width: 768px) {
+  .navbar {
+    background-color: rgb(38, 43, 68);
+    font-size: 200%;
+    position: fixed;
+    width: 100%;
+    height: 1.4cm;
+    z-index: 2;
+  }
+
+  .navbar-contents {
+    position: relative;
+    width: 20cm;
+    max-width: 100%;
+    margin: auto;
+    display: flex;
+  }
+
+  .navbar-title {
+
+  }
+
+  .navbar-options {
+    font-size: 0.6em;
+    margin: 0.5cm 0px auto auto;
+    display: block;
+  }
 }

@@ -1,57 +1,113 @@
 .purpose-statement {
-  margin: 30vh auto 0 auto;
-  max-width: 80%;
   text-align: center;
-  font-size: 3vw;
   animation: fade-in-text ease-out 500ms;
+  font-size: 1.2em;
+  margin: 10% 2em;
 }
 
 @keyframes fade-in-text {
   0% {
     opacity: 0;
-    font-size: 0.5vw;
+    font-size: 0.5em;
   }
   100% {
     opacity: 1;
-    font-size: 3vw;
+    font-size: 1.2em;
   }
 }
 
 .map-pools-info {
   background-color: rgb(38, 43, 68);
-  margin: 20vh 0 3.5cm 0;
-  display: flex;
 }
 
 .using-map-pools {
   background-color: rgb(38, 43, 68);
-  margin: 20vh 0 3.5cm 0;
-  display: flex;
-}
-
-.using-map-pools-contents {
-  margin: 0 auto 0 auto;
-  padding: 0 5%;
-  width: 60%;
-  text-align: center;
-  font-size: 1.7vw;
-}
-
-.map-pools-info-contents {
-  margin: 0 auto 0 auto;
-  padding: 0 5%;
-  width: 60%;
-  text-align: center;
-  font-size: 1.7vw;
 }
 
 .map-pools-img {
-  width: 40%;
+  width: 100%;
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+.using-map-pools-contents {
+  margin: 0em auto 2em auto;
+  padding: 5% 5%;
+  text-align: center;
+  font-size: 1.2em;
+}
+
+.map-pools-info-contents {
+  margin: 0 auto 2em auto;
+  padding: 5% 5%;
+  text-align: center;
+  font-size: 1.2em;
 }
 
 .home-add-user {
-  font-size: 1.7vw;
-  width: 60%;
+  font-size: 1.2em;
   text-align: center;
-  margin: 0 auto 3cm auto;
+  margin: 0 auto 3em auto;
+}
+
+@media only screen and (min-width: 768px) {
+
+  @keyframes fade-in-text {
+    0% {
+      opacity: 0;
+      font-size: 0.5em;
+    }
+    100% {
+      opacity: 1;
+      font-size: 3em;
+    }
+  }
+
+  .purpose-statement {
+    margin: 30vh auto 0 auto;
+    max-width: 80%;
+    font-size: 3em;
+  }
+
+  .map-pools-info {
+    background-color: rgb(38, 43, 68);
+    margin: 20vh 0 3.5cm 0;
+    display: flex;
+  }
+
+  .using-map-pools {
+    background-color: rgb(38, 43, 68);
+    margin: 20vh 0 3.5cm 0;
+    display: flex;
+  }
+
+  .using-map-pools-contents {
+    margin: 0 auto 0.5em auto;
+    padding: 5% 5%;
+    width: 60%;
+    text-align: center;
+    font-size: 1.7em;
+  }
+
+  .map-pools-info-contents {
+    margin: 0 auto 0.5em auto;
+    padding: 5% 5%;
+    width: 60%;
+    text-align: center;
+    font-size: 1.7em;
+  }
+
+  .map-pools-img {
+    display: block;
+    width: 55%;
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+
+  .home-add-user {
+    font-size: 1.7em;
+    width: 60%;
+    text-align: center;
+    margin: 0 auto 3cm auto;
+  }
 }
