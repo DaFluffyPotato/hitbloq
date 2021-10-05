@@ -103,8 +103,8 @@ p {
 
 .content {
   background-color: rgb(24, 20, 37);
-  padding-top: 1.4cm;
-  height: calc(100% - 1.4cm);
+  padding-top: 5em;
+  height: calc(100% - 5em);
   overflow-y: scroll;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -206,6 +206,11 @@ p {
 }
 
 @media only screen and (min-width: 1020px) {
+  .content {
+    padding-top: 3em;
+    height: calc(100% - 3em);
+  }
+
   .navbar-link {
     margin: 0 0.1cm;
     padding: 0 0;
