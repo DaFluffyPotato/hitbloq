@@ -3,10 +3,10 @@ function genPlayerLeaderboard(status, json_data) {
     var change_str = player['rank_change'].toString();
     if (change_str[0] != '-') {
       if (change_str != '0') {
-        change_str = '<span style="color: #42B129">+' + change_str + '</span>'
+        change_str = '<span style="color: #42B129">+' + change_str + '</span>';
       }
     } else {
-      change_str = '<span style="color: rgb(255, 0, 68)">' + change_str + '</span>'
+      change_str = '<span style="color: rgb(255, 0, 68)">' + change_str + '</span>';
     }
 
     var newHTML = useTemplate('new_player_leaderboard_entry',
@@ -18,6 +18,12 @@ function genPlayerLeaderboard(status, json_data) {
             'change': change_str,
         }
     );
+
+    if (player['banner_image'] != null) {
+      newHTML.style.background = 'linear-gradient(to right, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.15) 40%, rgba(0, 0, 0, 0.35) 80%, rgba(0, 0, 0, 1) 100%), url("' + player['banner_image'] + '") no-repeat';
+      newHTML.style.backgroundSize = "1200px 100%";
+    }
+
     document.getElementById('player-leaderboard-entries-container').appendChild(newHTML);
   }
 }

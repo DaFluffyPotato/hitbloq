@@ -137,6 +137,7 @@ def ranked_ladder(pool_id, page, players_per_page=10):
         player['rank'] = page * players_per_page + i + 1
         player['profile_pic'] = user_data[player['user']].profile_pic
         player['rank_change'] = user_data[player['user']].rank_change(pool_id, player['rank'])
+        player['banner_image'] = user_data[player['user']].score_banner
 
     return jsonify(ladder_data)
 
