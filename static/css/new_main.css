@@ -205,6 +205,28 @@ p {
   margin: 0.3em 1em;
 }
 
+.icon-button {
+  font-size: 2em;
+  background: none;
+  border: none;
+  font-family: inherit;
+  color: inherit;
+  transition: all 250ms ease-in-out;
+}
+
+.icon-button:hover {
+  color: rgb(255, 0, 68);
+
+}
+
+.nav-button-r {
+  float: right;
+}
+
+.nav-button-l {
+  float: left;
+}
+
 @media only screen and (min-width: 1020px) {
   .content {
     padding-top: 3em;

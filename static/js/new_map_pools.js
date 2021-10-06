@@ -2,7 +2,7 @@ var poolData;
 
 function genMapPools(status, data) {
   poolData = data;
-  window.setInterval(genMapPool, 100);
+  window.setInterval(genMapPool, 50);
 }
 
 function genMapPool() {

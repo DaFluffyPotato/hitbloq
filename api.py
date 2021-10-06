@@ -126,8 +126,7 @@ def leaderboard_scores_friends(leaderboard_id, friends_list):
 
     return jsonify(score_data)
 
-def ranked_ladder(pool_id, page):
-    players_per_page = 10
+def ranked_ladder(pool_id, page, players_per_page=10):
 
     ladder_data = database.get_ranking_slice(pool_id, page * players_per_page, (page + 1) * players_per_page)
     user_list = [user['user'] for user in ladder_data['ladder']]
@@ -136,6 +135,8 @@ def ranked_ladder(pool_id, page):
     for i, player in enumerate(ladder_data['ladder']):
         player['username'] = user_data[player['user']].username
         player['rank'] = page * players_per_page + i + 1
+        player['profile_pic'] = user_data[player['user']].profile_pic
+        player['rank_change'] = user_data[player['user']].rank_change(pool_id, player['rank'])
 
     return jsonify(ladder_data)
 

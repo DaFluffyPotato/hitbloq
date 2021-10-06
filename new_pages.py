@@ -1,6 +1,7 @@
 from flask import request
 
 from templates import templates
+from db import database
 
 new_pages = {}
 
@@ -46,4 +47,19 @@ def map_pools():
     header = generate_header(additional_css=['new_map_pools.css'], additional_js=['new_map_pools.js'])
     setup_data = page_setup()
     html = templates.inject('new_base', {'header': header, 'content': templates.inject('new_map_pools', {})})
+    return html
+
+@page
+def ladder(ladder_id):
+    header = generate_header(additional_css=['new_player_leaderboard.css'], additional_js=['new_player_leaderboard.js'])
+    setup_data = page_setup()
+
+    shown_name = database.db['ranked_lists'].find_one({'_id': ladder_id})['shown_name']
+
+    next_page = int(request.args.get('page')) + 1 if request.args.get('page') else 1
+    last_page = max(int(request.args.get('page')) - 1, 0) if request.args.get('page') else 0
+    next_page = request.path + '?page=' + str(next_page)
+    last_page = request.path + '?page=' + str(last_page)
+
+    html = templates.inject('new_base', {'header': header, 'content': templates.inject('new_player_leaderboard', {'shown_name': shown_name, 'page_right': next_page, 'page_left': last_page})})
     return html

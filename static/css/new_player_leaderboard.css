@@ -1,0 +1,95 @@
+.player-leaderboard-container {
+  margin: 1em auto 1em auto;
+  box-shadow: 0.4em 0.4em 0 rgb(0, 0, 0);
+  padding: 2em;
+  font-size: 1.4em;
+  max-width: 50em;
+}
+
+.player-leaderboard-entry {
+  border-radius: 0.5em;
+  background-color: rgb(24, 20, 37);
+  margin: 0.25em;
+  overflow: hidden;
+  height: 2em;
+}
+
+.player-leaderboard-entry-content {
+  padding-top: 0.5em;
+}
+
+.player-leaderboard-entry:hover {
+  background-color: rgb(0, 0, 0);
+}
+
+.player-leaderboard-entry:hover .leaderboard-pfp {
+  box-shadow: 0.2em 0 0 rgb(255, 0, 68);
+}
+
+.leaderboard-rank {
+  margin: 0 0.5em 0 0.5em;
+  width: 4em;
+  display: inline-block;
+}
+
+.leaderboard-cr {
+  text-align: center;
+  display: inline-block;
+  width: 7em;
+}
+
+.leaderboard-change {
+  display: none;
+}
+
+.leaderboard-username {
+  display: inline-block;
+  position: absolute;
+}
+
+.leaderboard-pfp {
+  width: 2em;
+  float: left;
+  margin-right: 0.5em;
+  box-shadow: 0.2em 0 0 rgb(0, 0, 0);
+}
+
+.right-elements {
+  float: right;
+  margin-right: 1.5em;
+}
+
+.player-leaderboard-header {
+  text-align: center;
+  height: 2.5em;
+  margin: 0 1em;
+}
+
+.player-leaderboard-footer {
+  height: 2.5em;
+  margin: 1em 1em 0 1em;
+}
+
+.leaderboard-title {
+  display: inline-block;
+}
+
+@media only screen and (min-width: 1020px) {
+  .player-leaderboard-container {
+    font-size: 1.2em;
+  }
+
+  .leaderboard-change {
+    width: 3em;
+    text-align: center;
+    display: inline-block;
+  }
+
+  .leaderboard-cr {
+    width: 10em;
+  }
+
+  .leaderboard-rank {
+    width: 4em;
+  }
+}

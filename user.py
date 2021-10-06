@@ -21,6 +21,13 @@ class User():
         # temp values
         self.scores = []
 
+    def rank_change(self, pool_id, current_rank):
+        if not len(self.rank_history[pool_id]):
+            self.rank_history[pool_id].append(current_rank)
+        self.rank_history[pool_id].append(current_rank)
+        user_change = self.rank_history[pool_id][max(-7, -len(self.rank_history[pool_id]))] - self.rank_history[pool_id][-1]
+        return user_change
+
     def refresh_scores(self, database, action_id=None, queue_id=0):
         database.update_user_scores(self, action_id, queue_id)
 

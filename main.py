@@ -148,7 +148,10 @@ def player_rank_api(pool_id, user):
 
 @app.route('/api/ladder/<pool_id>/players/<int:page>')
 def ranked_ladder_api(pool_id, page):
-    return api.ranked_ladder(pool_id, page)
+    per_page = 10
+    if request.args.get('per_page'):
+        per_page = min(100, int(request.args.get('per_page')))
+    return api.ranked_ladder(pool_id, page, players_per_page=per_page)
 
 @app.route('/api/ladder/<pool_id>/nearby_players/<int:user_id>')
 def ranked_ladder_nearby_api(pool_id, user_id):
@@ -190,6 +193,11 @@ def new_about():
 @app.route('/new/map_pools')
 def new_map_pools():
     html = new_pages['map_pools']()
+    return html
+
+@app.route('/new/ladder/<ladder>')
+def new_ladder(ladder):
+    html = new_pages['ladder'](ladder)
     return html
 
 if __name__ == "__main__":
