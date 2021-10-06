@@ -200,5 +200,10 @@ def new_ladder(ladder):
     html = new_pages['ladder'](ladder)
     return html
 
+@app.route('/new/user/<int:user_id>')
+def new_user(user_id):
+    html = new_pages['user'](user_id)
+    return html
+
 if __name__ == "__main__":
     app.run()

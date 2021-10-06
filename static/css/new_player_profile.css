@@ -1,0 +1,85 @@
+.player-profile-card {
+  box-shadow: 0.4em 0.4em 0 rgb(0, 0, 0);
+  max-width: 60em;
+  margin: 2em auto;
+  padding: 2em;
+}
+
+.player-profile-image {
+  border-radius: 5em;
+  width: 5em;
+}
+
+.player-profile-top {
+  display: flex;
+  margin: 0 auto;
+  max-width: 64em;
+  justify-content: center;
+}
+
+.player-profile-general {
+  font-size: 1.2em;
+}
+
+.player-profile-username {
+  display: block;
+  margin-top: 0.8em;
+  font-size: 1.2em;
+}
+
+.player-profile-joined {
+  display: block;
+  margin-top: 0.5em;
+}
+
+.player-profile-total-scores {
+  display: block;
+  margin-top: 0.5em;
+}
+
+.player-profile-basic {
+  margin: 2em 2em 2em 0;
+  width: 60%;
+}
+
+.player-profile-pool-stats {
+  margin: 2em 0 2em 2em;
+  width: 40%;
+}
+
+.player-profile-badges {
+
+}
+
+.player-profile-rank {
+
+}
+
+.player-profile-scores {
+
+}
+
+.player-profile-pool {
+  display: block;
+  font-size: 1.4em;
+}
+
+.player-profile-rank-image {
+  display: block;
+}
+
+.player-profile-pool-rank {
+  display: block;
+}
+
+.player-profile-pool-max-rank {
+  display: block;
+}
+
+.player-profile-pool-cr {
+  display: block;
+}
+
+.player-profile-pool-scores-set {
+  display: block;
+}

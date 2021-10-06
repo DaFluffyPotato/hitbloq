@@ -21,6 +21,45 @@ class User():
         # temp values
         self.scores = []
 
+    def generate_rank_info(self, database, map_pool):
+        pool_data = self.load_pool_scores(database, map_pool)
+
+        player_cr_total = 0
+        if map_pool in self.cr_totals:
+            player_cr_total = self.cr_totals[map_pool]
+
+        player_max_rank = 0
+        if map_pool in self.max_rank:
+            player_max_rank = self.max_rank[map_pool]
+
+        player_rank = database.get_user_ranking(self, map_pool)
+
+        player_rank_ratio = (player_rank - 1) / pool_data['player_count']
+
+        if self.scores == []:
+            player_tier = 'none'
+        elif player_rank_ratio < 0.001:
+            player_tier = 'myth'
+        elif player_rank_ratio < 0.01:
+            player_tier = 'master'
+        elif player_rank_ratio < 0.05:
+            player_tier = 'diamond'
+        elif player_rank_ratio < 0.1:
+            player_tier = 'platinum'
+        elif player_rank_ratio < 0.2:
+            player_tier = 'gold'
+        elif player_rank_ratio < 0.5:
+            player_tier = 'silver'
+        else:
+            player_tier = 'bronze'
+
+        self.pool_tier = player_tier
+        self.pool_rank = player_rank
+        self.pool_max_rank = player_max_rank
+        self.pool_cr_total = player_cr_total
+
+        return pool_data
+
     def rank_change(self, pool_id, current_rank):
         if not len(self.rank_history[pool_id]):
             self.rank_history[pool_id].append(current_rank)
