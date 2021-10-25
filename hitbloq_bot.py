@@ -150,6 +150,7 @@ async def on_message(message):
                             'pool': str(event_data['pool']),
                         }
                         database.db['events'].replace_one({'_id': event_data['_id']}, event_data, upsert=True)
+                        database.db['events'].update_one({'_id': 'current_event'}, {'$set': {'event_id': event_data['_id']}})
                         await message.channel.send(message.author.mention + ' the current event has been updated to `' + str(event_data['_id']) + '`.')
                     except:
                         await message.channel.send(message.author.mention + ' there was an error in the formatting of the event data.')
