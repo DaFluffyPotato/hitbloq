@@ -250,6 +250,12 @@ async def on_message(message):
                         owner_list = [user.id for user in message.mentions]
                         if message.author.id in owner_list:
                             database.set_pool_owners(pool_id, owner_list)
+
+                            # add map pool people role to all owners
+                            role = get(active_guild.roles, name='map pool people')
+                            for user in message.mentions:
+                                await user.add_roles(role)
+
                             await message.channel.send(' '.join([user.mention for user in message.mentions]) + ' You have been set to the owner(s) of the `' + pool_id + '` pool.')
                         else:
                             await message.channel.send(message.author.mention + ' You must list yourself as an owner. If you would like to delete the pool, please contact an admin.')
