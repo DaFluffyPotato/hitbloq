@@ -3,7 +3,9 @@ import json
 from flask import jsonify
 
 from db import database
-from general import mongo_clean, max_score
+from profile import Profile
+from general import mongo_clean, max_score, shorten_settings, epoch_ago
+from cr import cr_accumulation_curve
 import create_action
 from templates import templates
 
@@ -183,6 +185,47 @@ def ranked_ladder_friends(pool_id, friends_list):
         player['username'] = user_data[player['user']].username
 
     return jsonify(ladder_data)
+
+def get_user_scores(user_id, pool_id, sort_mode='cr', page=0, count=10):
+    page_length = count
+    profile_obj = Profile(user_id)
+    pool_data = profile_obj.user.load_pool_scores(database, pool_id)
+
+    scores_by_cr = None
+    if sort_mode == 'newest':
+        profile_obj.user.scores.sort(key=lambda x : x['time_set'], reverse=True)
+    elif sort_mode == 'oldest':
+        profile_obj.user.scores.sort(key=lambda x : x['time_set'])
+    else:
+        profile_obj.user.scores.sort(key=lambda x : x['cr'][pool_id], reverse=True)
+        scores_by_cr = profile_obj.user.scores
+
+    # a copy of the scores ordered by CR is necessary to calculate the weighted cr for each score since it's based on index
+    if not scores_by_cr:
+        scores_by_cr = sorted(profile_obj.user.scores, key=lambda x : x['cr'][pool_id], reverse=True)
+
+    visible_scores = profile_obj.user.scores[page * page_length : (page + 1) * page_length]
+
+    score_data = []
+
+    profile_obj.fetch_score_leaderboards(visible_scores)
+    for i, score in enumerate(visible_scores):
+        player_score_index = scores_by_cr.index(score)
+        inject_values = {
+            'song_rank': str(score['rank']),
+            'song_name': score['leaderboard']['name'],
+            'song_id': score['leaderboard']['hash'] + '_' + shorten_settings(score['song_id'].split('|')[1]),
+            'cr_received': str(round(score['cr'][pool_id], 2)),
+            'weighted_cr': str(round(score['cr'][pool_id] * cr_accumulation_curve(player_score_index + page * page_length), 2)),
+            'accuracy': str(score['accuracy']),
+            'song_cover': score['leaderboard']['cover'],
+            'date_set': epoch_ago(score['time_set']) + ' ago',
+            'time': score['time_set'],
+            'difficulty': score['leaderboard']['difficulty'][0].upper() + score['leaderboard']['difficulty'][1:],
+        }
+        score_data.append(inject_values)
+
+    return jsonify(score_data)
 
 def ss_to_hitbloq_id(ss_id):
     matching_user = database.db['users'].find_one({'scoresaber_id': ss_id})

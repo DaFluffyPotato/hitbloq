@@ -161,6 +161,16 @@ def ranked_ladder_nearby_api(pool_id, user_id):
 def ranked_ladder_friends_api(pool_id):
     return api.ranked_ladder_friends(pool_id, request.json['friends'])
 
+@app.route('/api/user/<int:user_id>')
+def user_api(user_id):
+    sort_mode = 'cr'
+    page = 0
+    if request.args.get('sort'):
+        sort_mode = request.args.get('sort')
+    if request.args.get('page'):
+        page = int(request.args.get('page'))
+    return api.get_user_scores(user_id, pages.get_map_pool(), sort_mode=sort_mode, page=page)
+
 @app.route('/api/update_user/<int:user_id>')
 def update_user(user_id):
     print('received user update request for', user_id)
