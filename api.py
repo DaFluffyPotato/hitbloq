@@ -273,10 +273,10 @@ def get_current_event():
     current_event_id = database.db['events'].find_one({'_id': 'current_event'})['event_id']
     current_event = database.db['events'].find_one({'_id': current_event_id})
 
-    current_event['id'] = current_event['_id']
-    del current_event['_id']
-
     if current_event == None:
         current_event = {'id': -1}
-        
+    else:
+        current_event['id'] = current_event['_id']
+        del current_event['_id']
+
     return jsonify(current_event)
