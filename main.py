@@ -180,6 +180,10 @@ def action_id_status(action_id):
 def get_template(template_id):
     return api.get_template(template_id)
 
+@app.route('/api/event')
+def get_current_event():
+    return api.get_current_event()
+
 @app.route('/new')
 def new_home():
     html = new_pages['home']()

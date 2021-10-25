@@ -268,3 +268,8 @@ def ss_registered(ss_id):
         else:
             return jsonify({'registered': False, 'user': matching_user['_id']})
     return jsonify({'registered': False, 'user': None})
+
+def get_current_event():
+    current_event_id = database.db['events'].find_one({'_id': 'current_event'})['event_id']
+    current_event = database.db['events'].find_one({'_id': current_event_id})
+    return jsonify(current_event)

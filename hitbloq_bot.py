@@ -123,7 +123,7 @@ async def on_message(message):
                             await message.channel.send(message.author.mention + ' This pool ID has been taken.')
                     else:
                         await message.channel.send(message.author.mention + ' You must be a CR Farmer or CR Grinder patron to use this command.')
-                        
+
                 except IndexError:
                     await message.channel.send(message.author.mention + ' invalid arguments. Should be `!create_pool <new_pool_id>`.')
         if message.channel.name == GENERAL_COMMANDS_CHANNEL:
@@ -134,6 +134,26 @@ async def on_message(message):
             if message_args[0] == '!views':
                 await message.channel.send(message.author.mention + ' Hitbloq has accumulated ' + str(int(database.get_counter('views')['count'])) + ' views!')
         if message.channel.name == ADMIN_COMMANDS_CHANNEL:
+            if message_args[0] == '!set_event':
+                event_data = ' '.join(message_args[1:])
+                if event_data == '':
+                    database.db['events'].update_one({'_id': 'current_event'}, {'$set': {'event_id': -1}})
+                    await message.channel.send(message.author.mention + ' the current event has been updated to `none`.')
+                else:
+                    try:
+                        event_data = json.loads(event_data)
+                        event_data = {
+                            '_id': int(event_data['_id']),
+                            'title': str(event_data['title']),
+                            'image': str(event_data['image']),
+                            'description': str(event_data['description']),
+                            'pool': str(event_data['pool']),
+                        }
+                        database.db['events'].replace_one({'_id': event_data['_id']}, event_data, upsert=True)
+                        await message.channel.send(message.author.mention + ' the current event has been updated to `' + str(event_data['_id']) + '`.')
+                    except:
+                        await message.channel.send(message.author.mention + ' there was an error in the formatting of the event data.')
+
             if message_args[0] == '!delete_pool':
                 pool_id = message_args[1]
                 database.delete_map_pool(pool_id)
