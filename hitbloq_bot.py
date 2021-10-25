@@ -141,7 +141,7 @@ async def on_message(message):
                     await message.channel.send(message.author.mention + ' the current event has been updated to `none`.')
                 else:
                     try:
-                        event_data = json.loads(event_data)
+                        event_data = json.loads(event_data.replace('\'', '"'))
                         event_data = {
                             '_id': int(event_data['_id']),
                             'title': str(event_data['title']),
