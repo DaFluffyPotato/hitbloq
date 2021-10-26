@@ -161,7 +161,7 @@ def ranked_ladder_nearby_api(pool_id, user_id):
 def ranked_ladder_friends_api(pool_id):
     return api.ranked_ladder_friends(pool_id, request.json['friends'])
 
-@app.route('/api/user/<int:user_id>')
+@app.route('/api/user/<int:user_id>/scores')
 def user_api(user_id):
     sort_mode = 'cr'
     page = 0
