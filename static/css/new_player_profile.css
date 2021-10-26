@@ -91,7 +91,7 @@
 
 .player-score-entry {
   display: grid;
-  grid-template-columns: 4em 4% 32% 12% 0% auto;
+  grid-template-columns: 4em 7% 30% 12% 0% auto;
   gap: 1em;
   height: 4em;
   background-color: rgb(24, 20, 37);
@@ -147,6 +147,6 @@
   }
 
   .player-score-entry {
-    grid-template-columns: 4em 4% 32% 12% 15% auto;
+    grid-template-columns: 4em 7% 30% 12% 15% auto;
   }
 }
