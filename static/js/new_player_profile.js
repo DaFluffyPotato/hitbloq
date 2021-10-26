@@ -25,7 +25,10 @@ function finishedTemplateLoading() {
 }
 
 window.addEventListener('load', () => {
-    //console.log(document.getElementsByClassName('map-pool-card')[0].innerHTML);
+  let params = new URLSearchParams(location.search)
+  var sortMode = params.get('sort');
 
-    loadTemplates(['new_player_profile_score'], finishedTemplateLoading);
+  document.getElementById(sortMode + '-sort-link').style.boxShadow = '0px -2px 0px rgb(255, 0, 68) inset';
+
+  loadTemplates(['new_player_profile_score'], finishedTemplateLoading);
 })

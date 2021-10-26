@@ -39,6 +39,29 @@
   <div class="player-profile-card player-profile-rank card popup-element">
     rank_history
   </div>
-  <div class="player-profile-card player-profile-scores card popup-element" id="player-profile-scores">
+  <div class="player-profile-card player-profile-scores card popup-element">
+    <div class="player-scores-header">
+      <button class="icon-button nav-button-l" onclick="window.location.href='\@page_left';">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div class="profile-score-sorts">
+        <a href="\@sort_newest" class="sort-link" id="newest-sort-link">Newest</a>
+        <a href="\@sort_cr" class="sort-link" id="cr-sort-link">CR</a>
+        <a href="\@sort_oldest" class="sort-link" id="oldest-sort-link">Oldest</a>
+      </div>
+      <button class="icon-button nav-button-r" onclick="window.location.href='\@page_right';">
+        <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+    <div id="player-profile-scores">
+    </div>
+    <div class="player-scores-footer">
+      <button class="icon-button nav-button-l" onclick="window.location.href='\@page_left';">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <button class="icon-button nav-button-r" onclick="window.location.href='\@page_right';">
+        <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
   </div>
 </div>

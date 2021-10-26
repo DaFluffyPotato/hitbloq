@@ -141,6 +141,25 @@
   margin: auto 2em auto auto;
 }
 
+.player-scores-header {
+  height: 2.5em;
+  text-align: center;
+}
+
+.profile-score-sorts {
+  display: inline;
+  font-size: 1.6em;
+  box-shadow: 0px 1px 0px white;
+}
+
+.sort-link {
+  padding: 0 0.5em;
+}
+
+.player-scores-footer {
+  height: 2.5em;
+}
+
 @media only screen and (min-width: 1020px) {
   .score-date {
     display: block;

@@ -5,6 +5,7 @@ from db import database
 from profile import Profile
 from pages import get_map_pool
 from general import epoch_to_date
+import urllib.parse
 
 new_pages = {}
 
@@ -74,10 +75,21 @@ def user(user_id):
 
     next_page = int(request.args.get('page')) + 1 if request.args.get('page') else 1
     last_page = max(int(request.args.get('page')) - 1, 0) if request.args.get('page') else 0
-    next_page = request.path + '?page=' + str(next_page)
-    last_page = request.path + '?page=' + str(last_page)
 
     sort_mode = request.args.get('sort')
+
+    args = dict(request.args)
+
+    args['page'] = str(next_page)
+    next_page = request.path + '?' + urllib.parse.urlencode(args)
+    args['page'] = str(last_page)
+    last_page = request.path + '?' + urllib.parse.urlencode(args)
+
+    args = dict(request.args)
+    args['sort'] = 'sort_replace'
+    if 'page' in args:
+        del args['page']
+    sort_change_url = request.path + '?' + urllib.parse.urlencode(args)
 
     pool_id = get_map_pool()
 
@@ -95,6 +107,11 @@ def user(user_id):
         'pool_max_rank': '{:,}'.format(profile_obj.user.pool_max_rank),
         'pool_cr': '{:,}'.format(round(profile_obj.user.pool_cr_total, 2)),
         'selected_pool': pool_data['shown_name'],
+        'page_left': last_page,
+        'page_right': next_page,
+        'sort_newest': sort_change_url.replace('sort_replace', 'newest'),
+        'sort_cr': sort_change_url.replace('sort_replace', 'cr'),
+        'sort_oldest': sort_change_url.replace('sort_replace', 'oldest'),
     }
 
     html = templates.inject('new_base', {'header': header, 'content': templates.inject('new_player_profile', profile_insert)})
