@@ -256,6 +256,9 @@ def player_rank_api(pool_id, user):
     if len(users):
         user = users[0]
         user.load_pool_scores(database, pool_id)
+        
+        rank_history = user.rank_history[pool_id] if pool_id in user.rank_history else [0, 0]
+
         player_scores = len(user.scores)
         player_name = user.username
         if pool_id in user.cr_totals:
@@ -287,6 +290,7 @@ def player_rank_api(pool_id, user):
         'cr': player_cr,
         'tier': 'default/' + player_tier,
         'ranked_score_count': player_scores,
+        'history': rank_history,
     }
 
     return jsonify(response)

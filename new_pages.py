@@ -90,6 +90,16 @@ def user(user_id):
     profile_obj = Profile(user_id)
     pool_data = profile_obj.user.generate_rank_info(database, pool_id)
 
+    if profile_obj.user.profile_banner:
+        banner_style = 'background: linear-gradient(to right, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.25) 100%), url(' + profile_obj.user.profile_banner + '); background-size: cover;'
+    else:
+        banner_style = ''
+
+    if profile_obj.user.profile_background:
+        background_style = 'background: linear-gradient(to right, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.25) 100%), url(' + profile_obj.user.profile_background + '); background-size: cover;'
+    else:
+        background_style = ''
+
     profile_insert = {
         'username': profile_obj.user.username,
         'pfp': profile_obj.user.profile_pic,
@@ -106,7 +116,8 @@ def user(user_id):
         'sort_newest': sort_change_url.replace('sort_replace', 'newest'),
         'sort_cr': sort_change_url.replace('sort_replace', 'cr'),
         'sort_oldest': sort_change_url.replace('sort_replace', 'oldest'),
+        'player_banner_styling': banner_style,
     }
 
-    html = templates.inject('new_base', {'header': header, 'content': templates.inject('new_player_profile', profile_insert)})
+    html = templates.inject('new_base', {'header': header, 'cont_styling': background_style, 'content': templates.inject('new_player_profile', profile_insert)})
     return html

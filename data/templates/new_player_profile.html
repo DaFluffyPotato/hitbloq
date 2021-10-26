@@ -1,6 +1,6 @@
 <div class="player-profile-container">
   <div class="player-profile-top">
-    <div class="player-profile-card player-profile-basic card popup-element">
+    <div class="player-profile-card player-profile-basic card popup-element" style="\@player_banner_styling">
       <img class="player-profile-image" src="\@pfp">
       <div class="player-profile-general">
         <span class="player-profile-username">
@@ -37,7 +37,11 @@
     badges (coming soon)
   </div>
   <div class="player-profile-card player-profile-rank card popup-element">
-    rank_history
+    <div class="rank-history-container">
+      <canvas class="rank-history-canvas" id="rank-history"></canvas>
+      <div class="rank-circle" id="rank-circle"></div>
+      <div class="rank-data" id="rank-data"></div>
+    </div>
   </div>
   <div class="player-profile-card player-profile-scores card popup-element">
     <div class="player-scores-header">

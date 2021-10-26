@@ -1,21 +1,23 @@
-function genPlayerLeaderboard(status, json_data) {
-  for (const player of json_data['ladder']) {
-    var change_str = player['rank_change'].toString();
-    if (change_str[0] != '-') {
-      if (change_str != '0') {
-        change_str = '<span style="color: #42B129">+' + change_str + '</span>';
+var poolD;
+
+function genPlayerLeaderboard(status, jsonData) {
+  for (const player of jsonData['ladder']) {
+    var changeStr = player['rank_change'].toString();
+    if (changeStr[0] != '-') {
+      if (changeStr != '0') {
+        changeStr = '<span style="color: #42B129">+' + changeStr + '</span>';
       }
     } else {
-      change_str = '<span style="color: rgb(255, 0, 68)">' + change_str + '</span>';
+      changeStr = '<span style="color: rgb(255, 0, 68)">' + changeStr + '</span>';
     }
 
     var newHTML = useTemplate('new_player_leaderboard_entry',
         {
-            'username': '<a class="link" href="/user/' + player['user'] + '">' + player['username'] + '</a>',
+            'username': '<a class="link" href="/new/user/' + player['user'] + '?pool=' + poolID + '">' + player['username'] + '</a>',
             'pfp': player['profile_pic'],
             'rank': '#' + player['rank'],
             'cr': Math.round(player['cr'] * 100) / 100 + 'cr',
-            'change': change_str,
+            'change': changeStr,
         }
     );
 
@@ -30,16 +32,14 @@ function genPlayerLeaderboard(status, json_data) {
 
 function finishedTemplateLoading() {
   var path = window.location.pathname.split('/');
-  var pool_id = path[path.length - 1];
+  poolID = path[path.length - 1];
   var page = new URL(location.href).searchParams.get('page');
   if (page == null) {
     page = 0;
   }
-  getJSON(window.location.origin + '/api/ladder/' + pool_id + '/players/' + page + '?per_page=50', genPlayerLeaderboard);
+  getJSON(window.location.origin + '/api/ladder/' + poolID + '/players/' + page + '?per_page=50', genPlayerLeaderboard);
 }
 
 window.addEventListener('load', () => {
-    //console.log(document.getElementsByClassName('map-pool-card')[0].innerHTML);
-
     loadTemplates(['new_player_leaderboard_entry'], finishedTemplateLoading);
 })

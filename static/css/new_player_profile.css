@@ -160,6 +160,43 @@
   height: 2.5em;
 }
 
+.rank-history-canvas {
+  background-color: rgb(0, 0, 0);
+  border-radius: 1em;
+  width: 100%;
+  height: 14em;
+  position: relative;
+  z-index: 1;
+}
+
+.rank-history-container {
+  position: relative;
+}
+
+.rank-circle {
+  border: 2px solid rgb(255, 0, 68);
+  background-color: rgb(0, 0, 0);
+  width: 1em;
+  height: 1em;
+  border-radius: 1em;
+  position: absolute;
+  display: none;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.rank-data {
+  border: 1px solid rgb(255, 255, 255);
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 0.5em;
+  padding: 0.5em;
+  z-index: 3;
+  position: absolute;
+  display: none;
+  width: 7em;
+  font-size: 0.85em;
+}
+
 @media only screen and (min-width: 1020px) {
   .score-date {
     display: block;
