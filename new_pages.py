@@ -78,20 +78,14 @@ def user(user_id):
 
     sort_mode = request.args.get('sort')
 
-    args = dict(request.args)
-
-    args['page'] = str(next_page)
-    next_page = request.path + '?' + urllib.parse.urlencode(args)
-    args['page'] = str(last_page)
-    last_page = request.path + '?' + urllib.parse.urlencode(args)
-
-    args = dict(request.args)
-    args['sort'] = 'sort_replace'
-    if 'page' in args:
-        del args['page']
-    sort_change_url = request.path + '?' + urllib.parse.urlencode(args)
-
     pool_id = get_map_pool()
+
+    next_page = request.path + '?page=' + str(next_page) + '&pool=' + pool_id
+    last_page = request.path + '?page=' + str(last_page) + '&pool=' + pool_id
+    if sort_mode:
+        next_page += '&sort=' + sort_mode
+        last_page += '&sort=' + sort_mode
+    sort_change_url = request.path + '?pool=' + pool_id + '&sort=sort_replace'
 
     profile_obj = Profile(user_id)
     pool_data = profile_obj.user.generate_rank_info(database, pool_id)
