@@ -4,7 +4,7 @@ from flask import jsonify
 
 from db import database
 from profile import Profile
-from general import mongo_clean, max_score, shorten_settings, epoch_ago
+from general import mongo_clean, max_score, shorten_settings, lengthen_settings, epoch_ago
 from cr import cr_accumulation_curve
 import create_action
 from templates import templates
@@ -75,6 +75,12 @@ def get_leaderboard_scores(leaderboard_id, offset=0, count=30):
     return jsonify(score_data)
 
 def get_leaderboard_scores_extended(leaderboard_id, offset=0, count=10):
+    # handle short settings format if necessary
+    try:
+        leaderboard_id = leaderboard_id.split('_')[0] + '|' + lengthen_settings('_'.join(leaderboard_id.split('_')[1:]))
+    except KeyError:
+        pass
+
     leaderboard_data = list(database.get_leaderboards([leaderboard_id]))[0]
     score_data = list(database.db['scores'].find({'song_id': leaderboard_data['_id']}).sort('score', -1))[offset:offset + count]
     user_list = [score['user'] for score in score_data]
@@ -84,6 +90,9 @@ def get_leaderboard_scores_extended(leaderboard_id, offset=0, count=10):
         score['username'] = user_data[score['user']].username
         score['accuracy'] = round(score['score'] / max_score(leaderboard_data['notes']) * 100, 2)
         score['rank'] = offset + i + 1
+        score['profile_pic'] = user_data[score['user']].profile_pic
+        score['date_set'] = epoch_ago(score['time_set']) + ' ago'
+        score['banner_image'] = user_data[score['user']].score_banner
 
     return jsonify(score_data)
 
@@ -256,7 +265,7 @@ def player_rank_api(pool_id, user):
     if len(users):
         user = users[0]
         user.load_pool_scores(database, pool_id)
-        
+
         rank_history = user.rank_history[pool_id] if pool_id in user.rank_history else [0, 0]
 
         player_scores = len(user.scores)

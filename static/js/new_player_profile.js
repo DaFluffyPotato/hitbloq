@@ -1,6 +1,8 @@
 var userID = window.location.pathname.split('/');
 userID = userID[userID.length - 1];
 
+var mapPool;
+
 var rankData;
 var canvas;
 var canvasHover = false;
@@ -89,7 +91,7 @@ function genScores(status, data) {
       {
           'cover': score['song_cover'],
           'rank': score['song_rank'],
-          'name': score['song_name'],
+          'name': '<a href="/new/leaderboard/' + score['song_id'] + '?pool=' + mapPool + '" class="link">' + score['song_name'] + '</a>',
           'difficulty': score['difficulty'],
           'date': score['date_set'],
           'raw_cr': score['cr_received'],
@@ -109,7 +111,7 @@ function finishedTemplateLoading() {
 window.addEventListener('load', () => {
   let params = new URLSearchParams(location.search)
   var sortMode = (params.get('sort')) ? params.get('sort') : 'cr';
-  var mapPool = (params.get('pool')) ? params.get('pool') : 'bbbear';
+  mapPool = (params.get('pool')) ? params.get('pool') : 'bbbear';
 
   getJSON(window.location.origin + '/api/player_rank/' + mapPool + '/' + userID, updateRankHistory);
 

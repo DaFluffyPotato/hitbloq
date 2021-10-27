@@ -112,7 +112,11 @@ def leaderboard_scores_api(leaderboard_id, page):
 @app.route('/api/leaderboard/<leaderboard_id>/scores_extended/<page>')
 def leaderboard_scores_extended_api(leaderboard_id, page):
     page = int(page)
+
     count = 10
+    if request.args.get('per_page'):
+        count = min(100, int(request.args.get('per_page')))
+        
     return api.get_leaderboard_scores_extended(leaderboard_id, offset=page * count, count=count)
 
 @app.route('/api/leaderboard/<leaderboard_id>/nearby_scores/<user>')
@@ -212,6 +216,11 @@ def new_map_pools():
 @app.route('/new/ladder/<ladder>')
 def new_ladder(ladder):
     html = new_pages['ladder'](ladder)
+    return html
+
+@app.route('/new/leaderboard/<leaderboard_id>')
+def new_leaderboard(leaderboard_id):
+    html = new_pages['leaderboard'](leaderboard_id)
     return html
 
 @app.route('/new/user/<int:user_id>')

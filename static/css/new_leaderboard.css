@@ -1,0 +1,158 @@
+.leaderboard-info-container {
+  margin: 1em auto 1em auto;
+  box-shadow: 0.4em 0.4em 0 rgb(0, 0, 0);
+  padding: 2em;
+  font-size: 1.4em;
+  max-width: 50em;
+  position: relative;
+}
+
+.leaderboard-container {
+  margin: 1em auto 1em auto;
+  box-shadow: 0.4em 0.4em 0 rgb(0, 0, 0);
+  padding: 2em;
+  font-size: 1.4em;
+  max-width: 50em;
+}
+
+.leaderboard-info-background {
+  margin: -2em;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: 0% 50%;
+  opacity: 0.5;
+}
+
+.leaderboard-info-content {
+  position: relative;
+  display: flex;
+}
+
+.leaderboard-cover {
+  height: 12em;
+  width: 12em;
+  box-shadow: 0.3em 0.3em 0 rgb(255, 0, 68);
+  border: 3px solid rgb(0, 0, 0);
+}
+
+.leaderboard-info-left {
+  margin: 1em;
+}
+
+.leaderboard-info-right {
+  right: 0;
+  margin: 4em 0;
+  text-align: right;
+  font-size: 0.5em;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.7);
+  position: absolute;
+  display: none;
+}
+
+.leaderboard-title {
+  font-size: 1.3em;
+}
+
+.leaderboard-mapper {
+  font-size: 0.8em;
+  margin-bottom: 1em;
+}
+
+.leaderboard-data {
+  font-size: 0.8em;
+  line-height: 1.4em;
+  font-style: italic;
+}
+
+.leaderboard-header {
+  height: 2.5em;
+  margin: 1em 1em 0 1em;
+}
+
+.leaderboard-footer {
+  height: 2.5em;
+  margin: 1em 1em 0 1em;
+}
+
+.leaderboard-entry {
+  display: grid;
+  grid-template-columns: 2em 9% 36% 22% auto;
+  gap: 1em;
+  height: 2em;
+  background-color: rgb(24, 20, 37);
+  border-radius: 0.5em;
+  overflow: hidden;
+  margin: 0.5em 0;
+  font-size: 0.8em;
+}
+
+.leaderboard-entry:hover {
+  background-color: rgb(0, 0, 0);
+}
+
+.leaderboard-entry:hover .leaderboard-pfp {
+  box-shadow: 0.2em 0 0 rgb(255, 0, 68);
+}
+
+.leaderboard-pfp {
+  grid-column: 1;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0.2em 0 0 rgb(0, 0, 0);
+}
+
+.leaderboard-rank {
+  grid-column: 2;
+  margin: auto 0;
+}
+
+.leaderboard-username {
+  grid-column: 3;
+  margin: auto 0;
+  white-space: nowrap;
+}
+
+.leaderboard-accuracy {
+  grid-column: 4;
+  margin: auto 0;
+  white-space: nowrap;
+}
+
+.leaderboard-score {
+  font-size: 0.7em;
+  font-style: italic;
+  color: rgb(255, 0, 68);
+}
+
+.leaderboard-cr {
+  grid-column: 5;
+  margin: auto;
+}
+
+.leaderboard-date {
+  grid-column: 6;
+  margin: auto 2em auto auto;
+  display: none;
+}
+
+@media only screen and (min-width: 1020px) {
+  .leaderboard-entry {
+    grid-template-columns: 2em 9% 30% 15% 13% auto;
+  }
+
+  .leaderboard-cr {
+    margin: auto 0 auto auto;
+  }
+
+  .leaderboard-date {
+    display: block;
+  }
+
+  .leaderboard-info-right {
+    display: block;
+  }
+}

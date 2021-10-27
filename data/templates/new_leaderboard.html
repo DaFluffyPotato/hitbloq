@@ -1,0 +1,40 @@
+<div id="leaderboard-info-container" class="leaderboard-info-container card popup-element">
+  <div class="leaderboard-info-background" style="\@leaderboard_info_styling"></div>
+  <div class="leaderboard-info-content">
+    <img class="leaderboard-cover" src="\@cover">
+    <div class="leaderboard-info-left">
+      <div class="leaderboard-title">\@name</div>
+      <div class="leaderboard-artist">\@artist</div>
+      <div class="leaderboard-mapper">\@mapper</div>
+      <div class="leaderboard-data">
+        \@difficulty<br>
+        \@stars<br>
+        \@nps nps<br>
+      </div>
+    </div>
+    <div class="leaderboard-info-right">
+      \@key<br>
+      \@hash
+    </div>
+  </div>
+</div>
+<div id="leaderboard-container" class="leaderboard-container card popup-element">
+  <div class="leaderboard-header">
+    <button class="icon-button nav-button-l" onclick="window.location.href='\@page_left';">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <button class="icon-button nav-button-r" onclick="window.location.href='\@page_right';">
+      <i class="fas fa-arrow-right"></i>
+    </button>
+  </div>
+  <div id="leaderboard-entries-container" class="player-leaderboard-entries-container">
+  </div>
+  <div class="leaderboard-footer">
+    <button class="icon-button nav-button-l" onclick="window.location.href='\@page_left';">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <button class="icon-button nav-button-r" onclick="window.location.href='\@page_right';">
+      <i class="fas fa-arrow-right"></i>
+    </button>
+  </div>
+</div>

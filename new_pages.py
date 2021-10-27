@@ -4,7 +4,7 @@ from templates import templates
 from db import database
 from profile import Profile
 from pages import get_map_pool
-from general import epoch_to_date
+from general import epoch_to_date, lengthen_settings
 import urllib.parse
 
 new_pages = {}
@@ -120,4 +120,47 @@ def user(user_id):
     }
 
     html = templates.inject('new_base', {'header': header, 'cont_styling': background_style, 'content': templates.inject('new_player_profile', profile_insert)})
+    return html
+
+@page
+def leaderboard(leaderboard_id):
+    header = generate_header(additional_css=['new_leaderboard.css'], additional_js=['new_leaderboard.js'])
+    setup_data = page_setup()
+
+    pool_id = get_map_pool()
+    try:
+        shown_name = database.db['ranked_lists'].find_one({'_id': pool_id})['shown_name']
+    except:
+        shown_name = None
+
+    next_page = int(request.args.get('page')) + 1 if request.args.get('page') else 1
+    last_page = max(int(request.args.get('page')) - 1, 0) if request.args.get('page') else 0
+    next_page = request.path + '?page=' + str(next_page) + '&pool=' + pool_id
+    last_page = request.path + '?page=' + str(last_page) + '&pool=' + pool_id
+
+    try:
+        leaderboard_data = database.search_leaderboards({'key': leaderboard_id.split('_')[0], 'difficulty_settings': lengthen_settings('_'.join(leaderboard_id.split('_')[1:]))})[0]
+    except IndexError:
+        leaderboard_data = database.search_leaderboards({'hash': leaderboard_id.split('_')[0], 'difficulty_settings': lengthen_settings('_'.join(leaderboard_id.split('_')[1:]))})[0]
+
+    star_rating = 0
+    if pool_id in leaderboard_data['star_rating']:
+        star_rating = leaderboard_data['star_rating'][pool_id]
+
+    leaderboard_insert = {
+        'leaderboard_info_styling': 'background-image: url(' + leaderboard_data['cover'] + '); -webkit-filter: blur(2px);',
+        'cover': leaderboard_data['cover'],
+        'name': leaderboard_data['name'],
+        'artist': leaderboard_data['artist'],
+        'mapper': leaderboard_data['mapper'],
+        'difficulty': leaderboard_data['difficulty'],
+        'stars': str(star_rating) + '★ ' + (('(' + shown_name + ')') if shown_name else ''),
+        'nps': str(round(leaderboard_data['notes'] / leaderboard_data['length'], 2)),
+        'key': leaderboard_data['key'],
+        'hash': leaderboard_data['hash'],
+        'page_left': last_page,
+        'page_right': next_page,
+    }
+
+    html = templates.inject('new_base', {'header': header, 'content': templates.inject('new_leaderboard', leaderboard_insert)})
     return html
