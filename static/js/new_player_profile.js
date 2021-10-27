@@ -9,10 +9,25 @@ var canvasHover = false;
 var rankCircle;
 var rankDataDiv;
 
-window.onload = () => {
-  canvas = document.getElementById('rank-history');
-  rankCircle = document.getElementById('rank-circle');
-  rankDataDiv = document.getElementById('rank-data');
+var lastUserUpdate;
+
+function refreshUpdateButton() {
+  epoch = new Date() / 1000;
+  if (epoch - lastUserUpdate < 60 * 3) {
+    document.getElementById('user-update-button').innerHTML = 'update cooldown - ' + Math.ceil(60 * 3 - (epoch - lastUserUpdate)) + 's';
+  } else {
+    document.getElementById('user-update-button').innerHTML = 'request update';
+  }
+}
+
+function manualRefresh() {
+  if (epoch - lastUserUpdate >= 60 * 3) {
+    getJSON('/api/update_user/' + location.pathname.split('/')[location.pathname.split('/').length - 1], setLastRefresh);
+  }
+}
+
+function setLastRefresh(status, data) {
+  lastUserUpdate = data['time'];
 }
 
 window.onresize = () => {
@@ -109,6 +124,12 @@ function finishedTemplateLoading() {
 }
 
 window.addEventListener('load', () => {
+  canvas = document.getElementById('rank-history');
+  rankCircle = document.getElementById('rank-circle');
+  rankDataDiv = document.getElementById('rank-data');
+  lastUserUpdate = document.getElementById('last-manual-refresh').innerHTML;
+  setInterval(refreshUpdateButton, 500);
+
   let params = new URLSearchParams(location.search)
   var sortMode = (params.get('sort')) ? params.get('sort') : 'cr';
   mapPool = (params.get('pool')) ? params.get('pool') : 'bbbear';

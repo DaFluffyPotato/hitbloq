@@ -227,6 +227,22 @@ p {
   float: left;
 }
 
+.general-button {
+	border: 1px solid rgb(255, 255, 255);
+	background-color: inherit;
+	font-size: inherit;
+	color: inherit;
+	font: inherit;
+  border-radius: 5px;
+  padding: 5px;
+  box-shadow: 4px 4px 0px 0px rgb(0, 0, 0);
+}
+
+.general-button:hover {
+  transition: all 0.2s;
+  background-color: rgb(255, 0, 68);
+}
+
 @media only screen and (min-width: 1020px) {
   .content {
     padding-top: 3em;

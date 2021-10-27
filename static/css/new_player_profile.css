@@ -195,6 +195,12 @@
   font-size: 0.85em;
 }
 
+.user-update-button {
+  position: absolute;
+  top: 2em;
+  right: 2em;
+}
+
 @media only screen and (min-width: 1020px) {
   .score-date {
     display: block;

@@ -117,6 +117,7 @@ def user(user_id):
         'sort_cr': sort_change_url.replace('sort_replace', 'cr'),
         'sort_oldest': sort_change_url.replace('sort_replace', 'oldest'),
         'player_banner_styling': banner_style,
+        'last_manual_refresh': str(profile_obj.user.last_manual_refresh),
     }
 
     html = templates.inject('new_base', {'header': header, 'cont_styling': background_style, 'content': templates.inject('new_player_profile', profile_insert)})
