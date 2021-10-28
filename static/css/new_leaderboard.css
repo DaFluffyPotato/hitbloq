@@ -140,6 +140,14 @@
 }
 
 @media only screen and (min-width: 1020px) {
+  .leaderboard-info-container {
+    font-size: 1.2em;
+  }
+
+  .leaderboard-container {
+    font-size: 1.2em;
+  }
+
   .leaderboard-entry {
     grid-template-columns: 2em 9% 30% 15% 13% auto;
   }

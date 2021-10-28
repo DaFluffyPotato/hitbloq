@@ -1,4 +1,4 @@
-var poolD;
+var poolID;
 
 function genPlayerLeaderboard(status, jsonData) {
   for (const player of jsonData['ladder']) {

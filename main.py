@@ -83,6 +83,14 @@ def ranked_list_page_api(pool_id, page):
     page = int(page)
     return api.ranked_list(pool_id, offset=page * count)
 
+@app.route('/api/ranked_list_detailed/<pool_id>/<int:page>')
+def ranked_list_detailed_api(pool_id, page):
+    count = 30
+    if request.args.get('per_page'):
+        count = min(100, int(request.args.get('per_page')))
+
+    return api.ranked_list_detailed(pool_id, page, count=count)
+
 @app.route('/api/map_pools')
 def map_pools_api():
     return api.ranked_lists()
@@ -116,7 +124,7 @@ def leaderboard_scores_extended_api(leaderboard_id, page):
     count = 10
     if request.args.get('per_page'):
         count = min(100, int(request.args.get('per_page')))
-        
+
     return api.get_leaderboard_scores_extended(leaderboard_id, offset=page * count, count=count)
 
 @app.route('/api/leaderboard/<leaderboard_id>/nearby_scores/<user>')
@@ -226,6 +234,11 @@ def new_leaderboard(leaderboard_id):
 @app.route('/new/user/<int:user_id>')
 def new_user(user_id):
     html = new_pages['user'](user_id)
+    return html
+
+@app.route('/new/ranked_list/<pool_id>')
+def new_ranked_list(pool_id):
+    html = new_pages['ranked_list'](pool_id)
     return html
 
 if __name__ == "__main__":

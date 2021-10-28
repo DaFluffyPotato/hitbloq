@@ -1,0 +1,68 @@
+.ranked-list-container {
+  margin: 1em auto 1em auto;
+  box-shadow: 0.4em 0.4em 0 rgb(0, 0, 0);
+  padding: 2em;
+  font-size: 1.4em;
+  max-width: 50em;
+}
+
+.leaderboard-title {
+  display: inline-block;
+}
+
+.ranked-list-header {
+  text-align: center;
+  height: 2.5em;
+  margin: 0 0 1em 0;
+}
+
+.ranked-list-footer {
+  height: 2.5em;
+}
+
+.ranked-list-entry {
+  display: grid;
+  grid-template-columns: 4em 40% 16% 0% auto;
+  gap: 1em;
+  height: 4em;
+  background-color: rgb(24, 20, 37);
+  border-radius: 0.7em;
+  overflow: hidden;
+  margin: 0.5em 0;
+}
+
+.song-name {
+  margin: auto auto auto 0;
+}
+
+.song-difficulty {
+  margin: auto auto auto 0;
+}
+
+.song-play-count {
+  margin: auto auto auto 0;
+  display: none;
+}
+
+.song-rating {
+  margin: auto 2em auto auto;
+}
+
+.song-cover {
+  width: 4em;
+  height: 4em;
+}
+
+@media only screen and (min-width: 1020px) {
+  .ranked-list-container {
+    font-size: 1.2em;
+  }
+
+  .ranked-list-entry {
+    grid-template-columns: 4em 40% 16% 16% auto;
+  }
+
+  .song-play-count {
+    display: block;
+  }
+}

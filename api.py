@@ -34,6 +34,31 @@ def ranked_list(pool_id, offset=0, count=30):
     ranked_list_data['leaderboard_id_list'] = ranked_list_data['leaderboard_id_list'][offset:offset + count]
     return jsonify(ranked_list_data)
 
+def ranked_list_detailed(pool_id, page=0, count=30):
+    ranked_list_data = database.get_ranked_list(mongo_clean(pool_id))
+    leaderboard_list = database.get_leaderboards(ranked_list_data['leaderboard_id_list'])
+
+    leaderboard_list.sort(key=lambda x: x['star_rating'][pool_id], reverse=True)
+    leaderboard_list = leaderboard_list[page * count : (page + 1) * count]
+
+    output_data = []
+
+    for leaderboard in leaderboard_list:
+        star_rating = 0
+        if pool_id in leaderboard['star_rating']:
+            star_rating = leaderboard['star_rating'][pool_id]
+
+        output_data.append({
+            'song_cover': leaderboard['cover'],
+            'song_name': leaderboard['name'],
+            'song_id': leaderboard['hash'] + '_' + shorten_settings(leaderboard['difficulty_settings']),
+            'song_plays': len(list(database.db['scores'].find({'song_id': leaderboard['_id']}))),
+            'song_stars': star_rating,
+            'song_difficulty': leaderboard['difficulty'][0].upper() + leaderboard['difficulty'][1:],
+        })
+
+    return jsonify(output_data)
+
 def ranked_lists():
     return jsonify(database.get_pool_ids(False))
 

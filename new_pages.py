@@ -165,3 +165,25 @@ def leaderboard(leaderboard_id):
 
     html = templates.inject('new_base', {'header': header, 'content': templates.inject('new_leaderboard', leaderboard_insert)})
     return html
+
+@page
+def ranked_list(pool_id):
+    header = generate_header(additional_css=['new_ranked_list.css'], additional_js=['new_ranked_list.js'])
+    setup_data = page_setup()
+
+    pool_id = request.path.split('/')[-1]
+    pool_data = database.db['ranked_lists'].find_one({'_id': pool_id})
+
+    next_page = int(request.args.get('page')) + 1 if request.args.get('page') else 1
+    last_page = max(int(request.args.get('page')) - 1, 0) if request.args.get('page') else 0
+    next_page = request.path + '?page=' + str(next_page)
+    last_page = request.path + '?page=' + str(last_page)
+
+    ranked_list_insert = {
+        'shown_name': pool_data['shown_name'],
+        'page_left': last_page,
+        'page_right': next_page,
+    }
+
+    html = templates.inject('new_base', {'header': header, 'content': templates.inject('new_ranked_list', ranked_list_insert)})
+    return html
