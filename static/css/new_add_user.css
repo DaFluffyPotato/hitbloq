@@ -1,0 +1,21 @@
+.add-user-container {
+  margin: 1em auto 1em auto;
+  box-shadow: 0.4em 0.4em 0 rgb(0, 0, 0);
+  padding: 2em;
+  font-size: 1.4em;
+  max-width: 50em;
+}
+
+.add-user-button {
+  margin-left: 1.3em;
+}
+
+.add-user-input-section {
+  margin-top: 2em;
+}
+
+@media only screen and (min-width: 1020px) {
+  .add-user-container {
+    font-size: 1.2em;
+  }
+}

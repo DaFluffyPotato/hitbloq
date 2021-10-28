@@ -50,6 +50,22 @@ p {
   transform: scaleX(1);
 }
 
+.simple-input {
+  border: 1px solid transparent;
+  height: 2em;
+  width: 20em;
+  border-radius: 0.5em;
+  padding: 1em;
+  background-color: rgb(0, 0, 0);
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.simple-input:hover {
+  border: 1px solid rgb(255, 255, 255);
+}
+
 .highlight {
   color: rgb(255, 0, 68);
 }

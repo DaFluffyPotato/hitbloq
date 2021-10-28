@@ -241,5 +241,10 @@ def new_ranked_list(pool_id):
     html = new_pages['ranked_list'](pool_id)
     return html
 
+@app.route('/new/add_user')
+def new_add_user():
+    html = new_pages['add_user']()
+    return html
+
 if __name__ == "__main__":
     app.run()

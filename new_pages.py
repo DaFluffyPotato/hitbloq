@@ -187,3 +187,11 @@ def ranked_list(pool_id):
 
     html = templates.inject('new_base', {'header': header, 'content': templates.inject('new_ranked_list', ranked_list_insert)})
     return html
+
+@page
+def add_user():
+    header = generate_header(additional_css=['new_add_user.css'], additional_js=['new_add_user.js'])
+    setup_data = page_setup()
+
+    html = templates.inject('new_base', {'header': header, 'content': templates.inject('new_add_user', {})})
+    return html
