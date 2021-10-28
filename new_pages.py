@@ -41,6 +41,7 @@ def generate_header(title='Hitbloq', desc='a competitive beat saber service', im
 
 def page_setup():
     setup_data = {}
+    database.inc_counter('views')
     return setup_data
 
 @page
@@ -181,6 +182,8 @@ def leaderboard(leaderboard_id):
 def ranked_list(pool_id):
     header = generate_header(additional_css=['new_ranked_list.css'], additional_js=['new_ranked_list.js'])
     setup_data = page_setup()
+
+    database.log_interest(user_ip, pool_id)
 
     pool_id = request.path.split('/')[-1]
     pool_data = database.db['ranked_lists'].find_one({'_id': pool_id})
