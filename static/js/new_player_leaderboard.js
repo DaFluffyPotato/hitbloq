@@ -15,7 +15,7 @@ function genPlayerLeaderboard(status, jsonData) {
 
     var newHTML = useTemplate('new_player_leaderboard_entry',
         {
-            'username': '<a class="link" href="/new/user/' + player['user'] + '?pool=' + poolID + '">' + player['username'] + '</a>',
+            'username': '<a class="link" href="/user/' + player['user'] + '?pool=' + poolID + '">' + player['username'] + '</a>',
             'pfp': player['profile_pic'],
             'rank': (player['rank'] != null) ? '#' + player['rank'] : '',
             'cr': Math.round(player['cr'] * 100) / 100 + 'cr',

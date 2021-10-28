@@ -106,7 +106,7 @@ function genScores(status, data) {
       {
           'cover': score['song_cover'],
           'rank': score['song_rank'],
-          'name': '<a href="/new/leaderboard/' + score['song_id'] + '?pool=' + mapPool + '" class="link">' + score['song_name'] + '</a>',
+          'name': '<a href="/leaderboard/' + score['song_id'] + '?pool=' + mapPool + '" class="link">' + score['song_name'] + '</a>',
           'difficulty': score['difficulty'],
           'date': score['date_set'],
           'raw_cr': score['cr_received'],

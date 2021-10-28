@@ -3,11 +3,22 @@ from flask import request
 from templates import templates
 from db import database
 from profile import Profile
-from pages import get_map_pool
 from general import epoch_to_date, lengthen_settings
 import urllib.parse
 
 new_pages = {}
+
+def get_map_pool():
+    user_ip = request.remote_addr
+    map_pool = request.cookies.get('map_pool')
+    # a temp hack to get around people with global_main as their cached pool
+    if (not map_pool) or (map_pool == 'global_main'):
+        map_pool = 'bbbear'
+    else:
+        database.log_interest(user_ip, map_pool)
+    if request.args.get('pool'):
+        map_pool = request.args.get('pool')
+    return map_pool
 
 def page(page_func):
     new_pages[page_func.__name__] = page_func

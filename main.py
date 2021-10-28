@@ -4,66 +4,12 @@ import time
 from flask import Flask, request, make_response
 
 from db import database
-import pages
-from new_pages import new_pages
+from new_pages import new_pages, get_map_pool
 import api
 from user import User
 import create_action
 
-#me = database.get_users([0])[0]
-#database.update_user_cr_total(me)
-
 app = Flask(__name__)
-
-@app.route('/')
-def home():
-    return pages.home_page()
-
-@app.route('/map_pools')
-def ranked_lists():
-    return pages.ranked_lists_page()
-
-@app.route('/map_pools/<page>')
-def ranked_lists_page(page):
-    page = int(page)
-    return pages.ranked_lists_page(page=page)
-
-@app.route('/ranked_list/<group_id>')
-def ranked_list(group_id):
-    return pages.ranked_list_page(group_id)
-
-@app.route('/ranked_list/<group_id>/<page>')
-def ranked_list_page(group_id, page):
-    page = int(page)
-    return pages.ranked_list_page(group_id, page=page)
-
-@app.route('/ladder/<leaderboard_id>')
-def player_leaderboards(leaderboard_id):
-    return pages.player_leaderboard_page(leaderboard_id, request.args.get('page'))
-
-@app.route('/user/<int:user_id>')
-def profile(user_id):
-    return pages.profile_page(user_id, request.args.get('page'))
-
-@app.route('/leaderboard/<leaderboard_id>')
-def leaderboard(leaderboard_id):
-    return pages.leaderboard_page(leaderboard_id, request.args.get('page'))
-
-@app.route('/search/<search_str>')
-def search(search_str):
-    return pages.search_page(search_str)
-
-@app.route('/about')
-def about():
-    return pages.about_page()
-
-@app.route('/actions')
-def actions_ui():
-    return pages.actions_page()
-
-@app.route('/add_user')
-def add_user_page():
-    return pages.add_user()
 
 @app.route('/api/actions')
 def actions():
@@ -184,7 +130,7 @@ def user_api(user_id):
         sort_mode = request.args.get('sort')
     if request.args.get('page'):
         page = int(request.args.get('page'))
-    return api.get_user_scores(user_id, pages.get_map_pool(), sort_mode=sort_mode, page=page)
+    return api.get_user_scores(user_id, get_map_pool(), sort_mode=sort_mode, page=page)
 
 @app.route('/api/update_user/<int:user_id>')
 def update_user(user_id):
@@ -209,47 +155,47 @@ def get_template(template_id):
 def get_current_event():
     return api.get_current_event()
 
-@app.route('/new')
+@app.route('/')
 def new_home():
     html = new_pages['home']()
     return html
 
-@app.route('/new/about')
+@app.route('/about')
 def new_about():
     html = new_pages['about']()
     return html
 
-@app.route('/new/map_pools')
+@app.route('/map_pools')
 def new_map_pools():
     html = new_pages['map_pools']()
     return html
 
-@app.route('/new/ladder/<ladder>')
+@app.route('/ladder/<ladder>')
 def new_ladder(ladder):
     html = new_pages['ladder'](ladder)
     return html
 
-@app.route('/new/leaderboard/<leaderboard_id>')
+@app.route('/leaderboard/<leaderboard_id>')
 def new_leaderboard(leaderboard_id):
     html = new_pages['leaderboard'](leaderboard_id)
     return html
 
-@app.route('/new/user/<int:user_id>')
+@app.route('/user/<int:user_id>')
 def new_user(user_id):
     html = new_pages['user'](user_id)
     return html
 
-@app.route('/new/ranked_list/<pool_id>')
+@app.route('/ranked_list/<pool_id>')
 def new_ranked_list(pool_id):
     html = new_pages['ranked_list'](pool_id)
     return html
 
-@app.route('/new/add_user')
+@app.route('/add_user')
 def new_add_user():
     html = new_pages['add_user']()
     return html
 
-@app.route('/new/actions')
+@app.route('/actions')
 def new_actions():
     html = new_pages['actions']()
     return html

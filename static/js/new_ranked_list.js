@@ -5,7 +5,7 @@ function genRankedList(status, data) {
   for (const song of data) {
     var newHTML = useTemplate('new_ranked_list_entry',
         {
-            'name': '<a class="link" href="/new/leaderboard/' + song['song_id'] + '?pool=' + poolID + '">' + song['song_name'] + '</a>',
+            'name': '<a class="link" href="/leaderboard/' + song['song_id'] + '?pool=' + poolID + '">' + song['song_name'] + '</a>',
             'cover': song['song_cover'],
             'difficulty': song['song_difficulty'],
             'play_count': song['song_plays'],

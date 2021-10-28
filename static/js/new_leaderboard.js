@@ -4,7 +4,7 @@ function genLeaderboard(status, data) {
   for (const score of data) {
     var newHTML = useTemplate('new_leaderboard_entry',
         {
-            'username': '<a class="link" href="/new/user/' + score['user'] + '?pool=' + poolID + '">' + score['username'] + '</a>',
+            'username': '<a class="link" href="/user/' + score['user'] + '?pool=' + poolID + '">' + score['username'] + '</a>',
             'pfp': score['profile_pic'],
             'rank': '#' + score['rank'],
             'cr': Math.round(score['cr'][poolID] * 100) / 100 + 'cr',
