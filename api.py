@@ -38,7 +38,7 @@ def ranked_list_detailed(pool_id, page=0, count=30):
     ranked_list_data = database.get_ranked_list(mongo_clean(pool_id))
     leaderboard_list = database.get_leaderboards(ranked_list_data['leaderboard_id_list'])
 
-    leaderboard_list.sort(key=lambda x: x['star_rating'][pool_id], reverse=True)
+    leaderboard_list.sort(key=lambda x: x['star_rating'][pool_id] if pool_id in x['star_rating'] else 0, reverse=True)
     leaderboard_list = leaderboard_list[page * count : (page + 1) * count]
 
     output_data = []
