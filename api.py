@@ -4,6 +4,7 @@ from flask import jsonify
 
 from db import database
 from profile import Profile
+from user import User
 from general import mongo_clean, max_score, shorten_settings, lengthen_settings, epoch_ago
 from cr import cr_accumulation_curve
 import create_action
@@ -162,20 +163,41 @@ def leaderboard_scores_friends(leaderboard_id, friends_list):
 
     return jsonify(score_data)
 
-def ranked_ladder(pool_id, page, players_per_page=10):
+def ranked_ladder(pool_id, page, players_per_page=10, search=None):
 
-    ladder_data = database.get_ranking_slice(pool_id, page * players_per_page, (page + 1) * players_per_page)
-    user_list = [user['user'] for user in ladder_data['ladder']]
-    user_data = {user.id : user for user in database.get_users(user_list)}
+    if search:
+        users = [User().load(user) for user in list(database.db['users'].find({'username': {'$regex': search, '$options': 'i'}}).sort('total_cr.' + pool_id, -1).limit(50))]
+        output_data = {
+            '_id': pool_id,
+            'ladder': [],
+        }
 
-    for i, player in enumerate(ladder_data['ladder']):
-        player['username'] = user_data[player['user']].username
-        player['rank'] = page * players_per_page + i + 1
-        player['profile_pic'] = user_data[player['user']].profile_pic
-        player['rank_change'] = user_data[player['user']].rank_change(pool_id, player['rank'])
-        player['banner_image'] = user_data[player['user']].score_banner
+        for player in users:
+            output_data['ladder'].append({
+                'username': player.username,
+                'rank': None,
+                'profile_pic': player.profile_pic,
+                'rank_change': None,
+                'user': player.id,
+                'banner_image': player.score_banner,
+                'cr': player.cr_totals[pool_id] if pool_id in player.cr_totals else 0,
+            })
 
-    return jsonify(ladder_data)
+        return jsonify(output_data)
+
+    else:
+        ladder_data = database.get_ranking_slice(pool_id, page * players_per_page, (page + 1) * players_per_page)
+        user_list = [user['user'] for user in ladder_data['ladder']]
+        user_data = {user.id : user for user in database.get_users(user_list)}
+
+        for i, player in enumerate(ladder_data['ladder']):
+            player['username'] = user_data[player['user']].username
+            player['rank'] = page * players_per_page + i + 1
+            player['profile_pic'] = user_data[player['user']].profile_pic
+            player['rank_change'] = user_data[player['user']].rank_change(pool_id, player['rank'])
+            player['banner_image'] = user_data[player['user']].score_banner
+
+        return jsonify(ladder_data)
 
 def ranked_ladder_nearby(pool_id, user_id):
     players_per_page = 10

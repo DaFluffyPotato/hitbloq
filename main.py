@@ -163,7 +163,10 @@ def ranked_ladder_api(pool_id, page):
     per_page = 10
     if request.args.get('per_page'):
         per_page = min(100, int(request.args.get('per_page')))
-    return api.ranked_ladder(pool_id, page, players_per_page=per_page)
+
+    search = request.args.get('search')
+
+    return api.ranked_ladder(pool_id, page, players_per_page=per_page, search=search)
 
 @app.route('/api/ladder/<pool_id>/nearby_players/<int:user_id>')
 def ranked_ladder_nearby_api(pool_id, user_id):

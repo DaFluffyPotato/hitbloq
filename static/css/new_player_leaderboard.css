@@ -6,6 +6,15 @@
   max-width: 50em;
 }
 
+.player-search-section {
+  display: flex;
+  justify-content: right;
+}
+
+.player-search {
+  margin: 0 0.3em 2em 0;
+}
+
 .player-leaderboard-entry {
   border-radius: 0.5em;
   background-color: rgb(24, 20, 37);
