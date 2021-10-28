@@ -131,4 +131,11 @@ function numWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-getJSON('/api/announcement', set_announcement);
+function setAnnouncement(status, data) {
+  if (data['html'] != null) {
+    document.getElementById('announcement-container').innerHTML = data['html'];
+    document.getElementById('announcement-container').style.display = 'block';
+  }
+}
+
+getJSON('/api/announcement', setAnnouncement);

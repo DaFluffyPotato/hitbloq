@@ -1,0 +1,33 @@
+.actions-container {
+  max-width: 50em;
+  margin: 2em auto;
+  padding: 2em;
+  box-shadow: 0.4em 0.4em 0 rgb(0, 0, 0);
+}
+
+.action-entry {
+  margin-bottom: 1em;
+  padding: 1em;
+  background-color: rgb(24, 20, 37);
+  position: relative;
+}
+
+.action-entry:hover {
+  background-color: rgb(0, 0, 0);
+}
+
+.action-progress-container {
+  box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.28), 0 0 1px 2px rgb(255, 255, 255);
+  background-color: transparent;
+  position: relative;
+  height: 13px;
+  width: 50%;
+  margin-top: 7px;
+  margin-bottom: 5px;
+}
+
+.action-progress {
+  background-color: rgb(255, 0, 68);
+  position: absolute;
+  height: 100%;
+}

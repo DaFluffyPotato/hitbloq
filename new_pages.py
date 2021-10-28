@@ -195,3 +195,11 @@ def add_user():
 
     html = templates.inject('new_base', {'header': header, 'content': templates.inject('new_add_user', {})})
     return html
+
+@page
+def actions():
+    header = generate_header(additional_css=['new_actions.css'], additional_js=['new_actions.js'])
+    setup_data = page_setup()
+
+    html = templates.inject('new_base', {'header': header, 'content': templates.inject('new_actions', {})})
+    return html

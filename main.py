@@ -249,5 +249,10 @@ def new_add_user():
     html = new_pages['add_user']()
     return html
 
+@app.route('/new/actions')
+def new_actions():
+    html = new_pages['actions']()
+    return html
+
 if __name__ == "__main__":
     app.run()
