@@ -30,6 +30,12 @@
   margin-top: 1em;
 }
 
+.mod-img {
+  display: none;
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
 .using-map-pools-contents {
   margin: 0em auto 2em auto;
   padding: 5% 5%;
@@ -100,9 +106,16 @@
 
   .map-pools-img {
     display: block;
-    width: 55%;
     margin-bottom: 0;
     margin-top: 0;
+    width: 55%;
+  }
+
+  .mod-img {
+    display: block;
+    margin-bottom: 0;
+    margin-top: 0;
+    width: 34em;
   }
 
   .home-add-user {
