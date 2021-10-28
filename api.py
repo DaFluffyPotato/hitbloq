@@ -268,12 +268,12 @@ def get_user_scores(user_id, pool_id, sort_mode='cr', page=0, count=10):
     for i, score in enumerate(visible_scores):
         player_score_index = scores_by_cr.index(score)
         inject_values = {
-            'song_rank': str(score['rank']),
+            'song_rank': score['rank'],
             'song_name': score['leaderboard']['name'],
             'song_id': score['leaderboard']['hash'] + '_' + shorten_settings(score['song_id'].split('|')[1]),
-            'cr_received': str(round(score['cr'][pool_id], 2)),
-            'weighted_cr': str(round(score['cr'][pool_id] * cr_accumulation_curve(player_score_index), 2)),
-            'accuracy': str(score['accuracy']),
+            'cr_received': round(score['cr'][pool_id], 2),
+            'weighted_cr': round(score['cr'][pool_id] * cr_accumulation_curve(player_score_index), 2),
+            'accuracy': score['accuracy'],
             'song_cover': score['leaderboard']['cover'],
             'date_set': epoch_ago(score['time_set']) + ' ago',
             'time': score['time_set'],
