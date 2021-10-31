@@ -130,7 +130,7 @@ class HitbloqMongo():
             valid_scores.sort(key=lambda x: x['cr'][map_pool['_id']], reverse=True)
             for score in valid_scores:
                 if score['song_id'] in map_pool['leaderboard_id_list']:
-                    cr_totals[map_pool['_id']] += cr_accumulation_curve(cr_counters[map_pool['_id']]) * score['cr'][map_pool['_id']]
+                    cr_totals[map_pool['_id']] += cr_accumulation_curve(cr_counters[map_pool['_id']], map_pool['accumulation_constant']) * score['cr'][map_pool['_id']]
                     cr_counters[map_pool['_id']] += 1
         for pool in cr_totals:
             user.cr_totals[pool] = cr_totals[pool]
@@ -323,6 +323,7 @@ class HitbloqMongo():
             'cr_curve': {'type': 'basic'},
             'player_count': 0,
             'priority': 0,
+            'accumulation_constant': 0.94,
             'owners': [],
         })
         self.db['ladders'].insert_one({

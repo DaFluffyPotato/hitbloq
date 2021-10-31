@@ -53,6 +53,5 @@ def cr_score_curve(accuracy, curve_data):
 def calculate_cr(accuracy, difficulty, curve_data):
     return difficulty * 50 * cr_score_curve(accuracy, curve_data)
 
-def cr_accumulation_curve(index):
-    accumulation_constant = 0.94
+def cr_accumulation_curve(index, accumulation_constant=0.94):
     return accumulation_constant ** index
