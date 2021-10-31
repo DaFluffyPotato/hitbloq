@@ -229,7 +229,7 @@ async def on_message(message):
                     accumulation_constant = float(message_args[2])
                     if database.is_pool_owner(pool_id, message.author.id) or is_admin(message.author):
                         database.db['ranked_lists'].update_one({'_id': pool_id}, {'$set': {'accumulation_constant': accumulation_constant}})
-                        await message.channel.send(message.author.mention + ' The accumulation constant for the ' + pool_id + ' pool has been set to `' + accumulation_constant + '`.')
+                        await message.channel.send(message.author.mention + ' The accumulation constant for the ' + pool_id + ' pool has been set to `' + str(accumulation_constant) + '`.')
                     else:
                         await message.channel.send(message.author.mention + ' You do not have permissions to modify this pool.')
                 except IndexError:
