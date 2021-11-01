@@ -149,7 +149,7 @@ async def on_message(message):
                             'description': str(event_data['description']),
                             'pool': str(event_data['pool']),
                             'urt_description': str(event_data['description']) if 'urt_description' not in event_data else str(event_data['urt_description']),
-                            'urt_title': str(event_data['description']) if 'urt_description' not in event_data else str(event_data['urt_description']),
+                            'urt_title': str(event_data['title']) if 'urt_title' not in event_data else str(event_data['urt_title']),
                         }
                         database.db['events'].replace_one({'_id': event_data['_id']}, event_data, upsert=True)
                         database.db['events'].update_one({'_id': 'current_event'}, {'$set': {'event_id': event_data['_id']}})
