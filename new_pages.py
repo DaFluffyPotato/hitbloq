@@ -168,7 +168,7 @@ def leaderboard(leaderboard_id):
         'mapper': leaderboard_data['mapper'],
         'difficulty': leaderboard_data['difficulty'],
         'stars': str(star_rating) + '★ ' + (('(' + shown_name + ')') if shown_name else ''),
-        'nps': str(round(leaderboard_data['notes'] / leaderboard_data['duration'], 2)),
+        'nps': str(round(leaderboard_data['notes'] / leaderboard_data['duration'], 2)) if leaderboard_data['duration'] else 'missing ',
         'key': leaderboard_data['key'],
         'hash': leaderboard_data['hash'],
         'page_left': last_page,
