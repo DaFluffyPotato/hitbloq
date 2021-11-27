@@ -72,8 +72,8 @@ class User():
 
     def refresh(self, database):
         ss_profile = scoresaber.ScoresaberInterface(database).ss_req('player/' + self.scoresaber_id + '/basic')
-        self.username = ss_profile['playerInfo']['playerName'].replace('<', '&lt;').replace('>', '&gt;')
-        self.profile_pic = 'https://new.scoresaber.com' + ss_profile['playerInfo']['avatar']
+        self.username = ss_profile['name'].replace('<', '&lt;').replace('>', '&gt;')
+        self.profile_pic = 'https://new.scoresaber.com' + ss_profile['profilePicture']
         database.db['users'].update_one({'_id': self.id}, {'$set': {'profile_pic': self.profile_pic, 'username': self.username}})
 
     def create(self, database, scoresaber_id):
@@ -90,14 +90,14 @@ class User():
 
         ss_profile = scoresaber.ScoresaberInterface(database).ss_req('player/' + scoresaber_id + '/basic')
         try:
-            self.username = ss_profile['playerInfo']['playerName']
+            self.username = ss_profile['name']
         except KeyError:
             print('attempted to create invalid user', scoresaber_id)
             return None
 
         pool_ids = database.get_pool_ids(False)
 
-        self.profile_pic = 'https://new.scoresaber.com' + ss_profile['playerInfo']['avatar']
+        self.profile_pic = 'https://new.scoresaber.com' + ss_profile['profilePicture']
         self.id = database.gen_new_user_id()
         self.scoresaber_id = scoresaber_id
         self.last_update = 0
