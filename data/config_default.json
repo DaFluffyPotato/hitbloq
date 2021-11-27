@@ -3,7 +3,7 @@
   "mongo_port": "27017",
   "mongo_host": "localhost"
   "scoresaber_endpoints": {
-    "0": ["https://new.scoresaber.com/api/"],
-    "1": ["https://new.scoresaber.com/api/"]
+    "0": ["https://scoresaber.com/api/"],
+    "1": ["https://scoresaber.com/api/"]
   }
 }

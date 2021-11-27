@@ -94,12 +94,15 @@ class HitbloqMongo():
             cr_curve_data = {rl['_id']: rl['cr_curve'] for rl in self.search_ranked_lists({'_id': {'$in': list(leaderboard['star_rating'])}})}
         cr_data = {}
         for pool_id in leaderboard['star_rating']:
-            cr_data[pool_id] = calculate_cr(scoresaber_json['score'] / max_score(leaderboard['notes']) * 100, leaderboard['star_rating'][pool_id], cr_curve_data[pool_id])
+            cr_data[pool_id] = calculate_cr(scoresaber_json['score']['modifiedScore'] / max_score(leaderboard['notes']) * 100, leaderboard['star_rating'][pool_id], cr_curve_data[pool_id])
         score_data = {
-            # typo in scoresaber api. lul
-            'score': scoresaber_json['unmodififiedScore'],
-            'time_set': scoresaber_json['epochTime'],
-            'song_id': scoresaber_json['songHash'] + '|' + scoresaber_json['difficultyRaw'],
+            'score': scoresaber_json['score']['modifiedScore'],
+            'max_combo': scoresaber_json['score']['maxCombo'],
+            'missed_notes': scoresaber_json['score']['missedNotes'],
+            'bad_cuts': scoresaber_json['score']['badCuts'],
+            'hmd': scoresaber_json['score']['hmd'],
+            'time_set': scoresaber_json['score']['epochTime'],
+            'song_id': scoresaber_json['leaderboard']['songHash'] + '|' + scoresaber_json['leaderboard']['difficulty']['difficultyRaw'],
             'cr': cr_data,
             'user': user.id,
         }
@@ -138,22 +141,22 @@ class HitbloqMongo():
         user.unload_scores()
 
     def add_score(self, user, scoresaber_json):
-        leaderboard_id = scoresaber_json['songHash'] + '|' + scoresaber_json['difficultyRaw']
+        leaderboard_id = scoresaber_json['leaderboard']['songHash'] + '|' + scoresaber_json['leaderboard']['difficulty']['difficultyRaw']
         valid_leaderboard = True
         leaderboard = list(self.db['leaderboards'].find({'_id': leaderboard_id}))
         if len(leaderboard) == 0:
-            leaderboard = self.create_leaderboard(leaderboard_id, scoresaber_json['songHash'])
+            leaderboard = self.create_leaderboard(leaderboard_id, scoresaber_json['leaderboard']['songHash'])
             if not leaderboard:
                 return False
         else:
             leaderboard = leaderboard[0]
 
         if valid_leaderboard:
-            if scoresaber_json['mods'] not in ['']:
+            if scoresaber_json['score']['modifiers'] not in ['']:
                 return False
 
             # delete old score data
-            matching_scores = self.db['scores'].find({'user': user.id, 'song_id': scoresaber_json['songHash'] + '|' + scoresaber_json['difficultyRaw']})
+            matching_scores = self.db['scores'].find({'user': user.id, 'song_id': scoresaber_json['leaderboard']['songHash'] + '|' + scoresaber_json['leaderboard']['difficulty']['difficultyRaw']})
             matching_scores = [score['_id'] for score in matching_scores]
             self.delete_scores(leaderboard_id, matching_scores)
 
