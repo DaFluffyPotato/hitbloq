@@ -59,20 +59,11 @@ class HitbloqMongo():
         if len(new_scores):
             fresh_user = self.get_users([user.id])[0]
             self.update_user_cr_total(fresh_user)
-            for map_pool_id in fresh_user.cr_totals:
-                self.update_user_ranking(fresh_user, map_pool_id)
 
         self.update_user(user, {'$set': {'last_update': time.time()}})
 
     def update_user_profile(self, user):
         scoresaber_api = scoresaber.ScoresaberInterface(self.db)
-
-    def update_user_ranking(self, user, map_pool_id):
-        if map_pool_id in user.cr_totals:
-            resp = self.db['ladders'].update_one({'_id': map_pool_id, 'ladder.user': user.id}, {'$set': {'ladder.$.cr': user.cr_totals[map_pool_id]}})
-            if not resp.matched_count:
-                self.db['ladders'].update_one({'_id': map_pool_id}, {'$push': {'ladder': {'user': user.id, 'cr': user.cr_totals[map_pool_id]}}})
-        self.sort_ladder(map_pool_id)
 
     def get_user_ranking(self, user, map_pool_id):
         if map_pool_id in user.cr_totals:
@@ -94,9 +85,6 @@ class HitbloqMongo():
             ladder_data['ladder'].append({'user': user['_id'], 'cr': user['total_cr'][map_pool_id]})
 
         return ladder_data
-
-    def sort_ladder(self, map_pool_id):
-        self.db['ladders'].update_one({'_id': map_pool_id}, {'$push': {'ladder': {'$each': [], '$sort': {'cr': -1}}}})
 
     def format_score(self, user, scoresaber_json, leaderboard):
         cr_curve_data = {}
@@ -184,17 +172,6 @@ class HitbloqMongo():
 
     def delete_user(self, user_id):
         self.delete_user_scores(user_id)
-        for ladder in self.db['ladders'].find({}):
-            for user in ladder['ladder']:
-                if 'user' not in user:
-                    print('user with no user?')
-                    ladder['ladder'].remove(user)
-                    continue
-                if user['user'] == user_id:
-                    print('removed', user, 'from', ladder['_id'])
-                    ladder['ladder'].remove(user)
-                    break
-            self.db['ladders'].update_one({'_id': ladder['_id']}, {'$set': {'ladder': ladder['ladder']}})
         self.db['users'].delete_one({'_id': user_id})
         print('deleted user', user_id)
 
@@ -339,13 +316,11 @@ class HitbloqMongo():
             'accumulation_constant': 0.94,
             'owners': [],
         })
-        self.db['ladders'].insert_one({
-            '_id': name,
-            'ladder': [],
-        })
         if not third_party:
             self.db['users'].update_many({}, {'$set': {'total_cr.' + name : 0}})
             self.db['users'].update_many({}, {'$set': {'rank_history.' + name : []}})
+
+        database.db['users'].create_index([('total_cr.' + name, pymongo.DESCENDING)])
 
     def set_pool_owners(self, map_pool, owners):
         self.db['ranked_lists'].update_one({'_id': map_pool}, {'$set': {'owners': owners}})
@@ -364,7 +339,6 @@ class HitbloqMongo():
         self.db['users'].update_many({}, {'$unset': {'rank_history.' + name: 1, 'max_rank.' + name: 1, 'total_cr.' + name: 1}})
         self.db['leaderboards'].update_many({}, {'$unset': {'star_rating.' + name: 1, 'forced_star_rating.' + name: 1}})
         self.db['scores'].update_many({}, {'$unset': {'cr.' + name: 1}})
-        self.db['ladders'].delete_one({'_id': name})
         self.db['ranked_lists'].delete_one({'_id': name})
         print('successfully deleted map pool:', name)
 
