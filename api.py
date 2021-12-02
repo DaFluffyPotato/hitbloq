@@ -222,23 +222,20 @@ def ranked_ladder_nearby(pool_id, user_id):
     return jsonify(ladder_data)
 
 def ranked_ladder_friends(pool_id, friends_list):
-    ladder_data = database.db['ladders'].find_one({'_id': pool_id})
-    matched_friends = []
-    for i, user in enumerate(ladder_data['ladder']):
-        if user['user'] in friends_list:
-            matched_friends.append({
-                'rank': len(matched_friends) + 1,
-                'user': user['user'],
-                'cr': user['cr'],
-            })
+    ladder_data = {
+        '_id': pool_id,
+        'ladder': [],
+    }
 
-    ladder_data['ladder'] = matched_friends
+    friend_users = sorted(database.get_users(friends_list), key=lambda x: x.cr_totals[pool_id], reverse=True)
 
-    user_list = [user['user'] for user in ladder_data['ladder']]
-    user_data = {user.id : user for user in database.get_users(user_list)}
-
-    for player in ladder_data['ladder']:
-        player['username'] = user_data[player['user']].username
+    for i, friend in enumerate(friend_users):
+        ladder_data['ladder'].append({
+            'rank': i + 1,
+            'user': friend.id,
+            'cr': friend.cr_totals[pool_id],
+            'username': friend.username,
+        })
 
     return jsonify(ladder_data)
 
