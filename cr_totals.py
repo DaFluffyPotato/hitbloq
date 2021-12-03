@@ -10,12 +10,12 @@ class BulkCRTotalUpdate:
         self.db = db
 
     def safe_bulk_update_cr_totals(self, users, pools, all_users=False, all_pools=False):
-        if len(users) > 5000:
+        if len(users) > 1000:
             all_users = False
 
         while len(users):
-            user_batch = users[:5000]
-            users = users[5000:]
+            user_batch = users[:1000]
+            users = users[1000:]
             self.bulk_update_cr_totals(user_batch, pools, all_users=all_users, all_pools=all_pools)
 
     def bulk_update_cr_totals(self, users, pools, all_users=False, all_pools=False):
