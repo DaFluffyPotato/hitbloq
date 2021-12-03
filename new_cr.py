@@ -121,7 +121,7 @@ class CRRecalc:
 
                 # update score CR rewards
                 for score in leaderboard_scores:
-                    score['cr'][self.pool_id] = calculate_cr(score['score'] / self.max_scores[leaderboard_id] * 100, new_ratings[leaderboard_id], self.pool_data['curve_data'])
+                    score['cr'][self.pool_id] = calculate_cr(score['score'] / self.max_scores[leaderboard_id] * 100, new_ratings[leaderboard_id], self.pool_data['cr_curve'])
 
                 # apply changes
                 if len(leaderboard_scores):
