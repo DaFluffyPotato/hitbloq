@@ -6,7 +6,7 @@ from db import database
 from profile import Profile
 from user import User
 from general import mongo_clean, max_score, shorten_settings, lengthen_settings, epoch_ago
-from cr import cr_accumulation_curve
+from cr_formulas import cr_accumulation_curve
 import create_action
 from templates import templates
 

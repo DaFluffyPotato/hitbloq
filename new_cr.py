@@ -6,10 +6,12 @@ from cr_formulas import *
 SCORE_CONSIDERATION_RANGE = 100
 
 class CRRecalc:
-    def __init__(self, pool_id, debug=False):
+    def __init__(self, pool_id, debug=False, action_id=None):
         self.db = database.db
         self.pool_id = pool_id
         self.pool_data = None
+
+        self.action_id = action_id
 
         self.user_scores = {}
         self.user_rank_ratios = {}
@@ -130,7 +132,17 @@ class CRRecalc:
             print('starting')
 
         self.get_pool_data()
+        if self.action_id:
+            database.set_action_progress(self.action_id, 0.1)
+
         self.create_score_mappings()
+        if self.action_id:
+            database.set_action_progress(self.action_id, 0.7)
+
         self.generate_leaderboard_difficulties()
+        if self.action_id:
+            database.set_action_progress(self.action_id, 0.9)
+
         new_ratings = self.adjust_difficulty_results()
         self.update_leaderboard_cr_rewards(new_ratings)
+        self.db['ranked_lists'].update_one({'_id': self.pool_id}, {'$set': {'needs_cr_total_recalc': True}})

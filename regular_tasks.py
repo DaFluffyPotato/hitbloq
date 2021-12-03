@@ -9,7 +9,7 @@ DAY = 24 * HOUR
 
 timer = 0
 while True:
-    if timer % (HOUR * 3) == 0:
+    if timer % (DAY * 7) == 0:
         if len(list(database.get_actions())) < 20:
             user_ids = [i for i in range(database.get_counter('user_id')['count'])]
             create_action.update_users(user_ids)
@@ -23,6 +23,6 @@ while True:
     if timer % (DAY * 7) == 0:
         create_action.refresh_pool_popularity()
         create_action.refresh_profiles()
-        
+
     time.sleep(1)
     timer += 1

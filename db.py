@@ -32,6 +32,9 @@ class HitbloqMongo():
     def add_user(self, user):
         self.db['users'].insert_one(user.jsonify())
 
+    def get_all_user_ids(self):
+        return [user['_id'] for user in database.db['users'].find({}, {'_id': 1}).hint('_id_')]
+
     def get_all_users(self):
         return [user.User().load(user_found) for user_found in self.db['users'].find({})]
 
@@ -315,6 +318,7 @@ class HitbloqMongo():
             'priority': 0,
             'accumulation_constant': 0.94,
             'owners': [],
+            'needs_cr_total_recalc': False,
         })
         if not third_party:
             self.db['users'].update_many({}, {'$set': {'total_cr.' + name : 0}})
@@ -378,6 +382,9 @@ class HitbloqMongo():
 
     def get_ranked_lists(self):
         return list(self.db['ranked_lists'].find({}).sort('priority', -1))
+
+    def get_ranked_list_ids(self):
+        return [rl['_id'] for rl in database.db['ranked_lists'].find({}, {'_id': 1}).hint('_id_')]
 
     def search_ranked_lists(self, search):
         return list(self.db['ranked_lists'].find(search))
