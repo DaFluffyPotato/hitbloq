@@ -7,7 +7,7 @@ MINUTE = 60
 HOUR = 60 * MINUTE
 DAY = 24 * HOUR
 
-timer = 0
+timer = 1
 while True:
     if timer % (DAY * 7) == 0:
         if len(list(database.get_actions())) < 20:
