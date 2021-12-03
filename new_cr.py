@@ -103,12 +103,15 @@ class CRRecalc:
 
                     map_difficulty = total_difficulty / total_weight
 
-            self.updated_map_difficulties[leaderboard_id] = map_difficulty
+            self.updated_map_difficulties[leaderboard_id] = (map_difficulty, (leaderboard_id in self.skip_list))
 
     def adjust_difficulty_results(self):
         new_ratings = {}
         for leaderboard in self.updated_map_difficulties:
-            new_ratings[leaderboard] = round(self.updated_map_difficulties[leaderboard] * 20, 2)
+            if not self.updated_map_difficulties[leaderboard][1]:
+                new_ratings[leaderboard] = round(self.updated_map_difficulties[leaderboard][0] * 20, 2)
+            else:
+                new_ratings[leaderboard] = round(self.updated_map_difficulties[leaderboard][0], 2)
         return new_ratings
 
     def update_leaderboard_cr_rewards(self, new_ratings):
