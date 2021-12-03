@@ -40,7 +40,7 @@ def process_action(action):
 
     if action['type'] == 'recalculate_cr':
         for pool in action['map_pools']:
-            new_cr.CRRecalc(pool, action['_id']).run()
+            new_cr.CRRecalc(pool, action_id=action['_id']).run()
 
     if action['type'] == 'rank_song':
         database.rank_song(action['song_id'], action['map_pool'])
