@@ -115,6 +115,7 @@ class CRRecalc:
         for leaderboard_id in self.pool_data['leaderboard_id_list']:
             if self.old_ratings[leaderboard_id] != new_ratings[leaderboard_id]:
                 leaderboard_scores = self.db['scores'].find({'song_id': leaderboard_id})
+                found_scores = False
 
                 # update star rating
                 self.db['leaderboards'].update_one({'_id': leaderboard_id}, {'$set': {'star_rating.' + self.pool_id: new_ratings[leaderboard_id]}})
@@ -122,9 +123,10 @@ class CRRecalc:
                 # update score CR rewards
                 for score in leaderboard_scores:
                     score['cr'][self.pool_id] = calculate_cr(score['score'] / self.max_scores[leaderboard_id] * 100, new_ratings[leaderboard_id], self.pool_data['cr_curve'])
+                    found_scores = True
 
                 # apply changes
-                if len(leaderboard_scores):
+                if found_scores:
                     database.replace_scores(leaderboard_scores)
 
     def run(self):
