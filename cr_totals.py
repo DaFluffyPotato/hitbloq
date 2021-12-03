@@ -6,17 +6,24 @@ from db import database
 from cr_formulas import cr_accumulation_curve
 
 class BulkCRTotalUpdate:
-    def __init__(self, db):
+    def __init__(self, db, debug=True):
         self.db = db
+        self.debug = debug
 
     def safe_bulk_update_cr_totals(self, users, pools, all_users=False, all_pools=False):
         if len(users) > 1000:
             all_users = False
 
+        i = 0
         while len(users):
+            if self.debug:
+                print('batch', i)
+
             user_batch = users[:1000]
             users = users[1000:]
             self.bulk_update_cr_totals(user_batch, pools, all_users=all_users, all_pools=all_pools)
+            
+            i += 1
 
     def bulk_update_cr_totals(self, users, pools, all_users=False, all_pools=False):
         leaderboard_ids = {}
