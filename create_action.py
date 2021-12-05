@@ -9,8 +9,7 @@ def update_user(user_id, queue_id=0):
     return action_id
 
 def update_users(user_ids):
-    actions = [{'type': 'update_user', 'user_id': user_id} for user_id in user_ids]
-    action_id = database.add_actions(actions)
+    action_id = database.add_action({'type': 'update_users', 'user_ids': user_ids})
     return action_id
 
 def recalculate_cr(map_pools):
