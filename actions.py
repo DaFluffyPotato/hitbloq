@@ -40,7 +40,7 @@ def process_action(action):
 
     if action['type'] == 'update_users':
         users = database.get_users(action['user_ids'])
-        for i, user in enumerate(action['user_ids']):
+        for i, user in enumerate(users):
             user.refresh_scores(database)
             if i % 10 == 0:
                 self.set_action_progress(action['_id'], (i + 1) / len(action['user_ids']))
