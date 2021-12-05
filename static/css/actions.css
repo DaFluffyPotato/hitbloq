@@ -5,6 +5,7 @@
   background-color: rgb(36, 41, 49);
   box-shadow: -1px 0px 0px 0px rgb(224, 53, 53), 0px 0px 6px 0px rgba(0, 0, 0, 0.28) inset;
   position: relative;
+  overflow-x: scroll;
 }
 
 .actions-card {
