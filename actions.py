@@ -39,11 +39,11 @@ def process_action(action):
             print('Invalid user for update:', action['user_id'])
 
     if action['type'] == 'update_users':
-        users = database.get_users(actions['user_ids'])
+        users = database.get_users(action['user_ids'])
         for i, user in enumerate(action['user_ids']):
             user.refresh_scores(database)
             if i % 10 == 0:
-                self.set_action_progress(action['_id'], (i + 1) / len(actions['user_ids']))
+                self.set_action_progress(action['_id'], (i + 1) / len(action['user_ids']))
 
     if action['type'] == 'recalculate_cr':
         for pool in action['map_pools']:
