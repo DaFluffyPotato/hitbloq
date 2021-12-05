@@ -14,8 +14,10 @@ for img in os.listdir():
         i = pygame.image.load(img).convert_alpha()
         for y in range(i.get_height()):
             for x in range(i.get_width()):
-                i.set_at((x, y), (255, 0, 255, 255))
-        #pygame.image.save(i, img)
+                if i.get_at((x, y))[:3] == (255, 0, 255):
+                    i.set_at((x, y), (0, 0, 0, 0))
+        #i.set_colorkey((255, 0, 255))
+        pygame.image.save(i, '../default/' + img)
 
 # Loop ------------------------------------------------------- #
 while True:
