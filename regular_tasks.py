@@ -25,6 +25,9 @@ while True:
             if user_update_cycle * USER_UPDATE_BATCH > total_users:
                 user_update_cycle = 0
 
+            if len(user_ids):
+                print('updating users', user_ids[0], 'to', user_ids[-1])
+
             create_action.update_users(user_ids)
     if timer % (DAY) == 0:
         for pool_id in database.get_pool_ids(False):
