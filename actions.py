@@ -43,7 +43,7 @@ def process_action(action):
         for i, user in enumerate(users):
             user.refresh_scores(database)
             if i % 10 == 0:
-                self.set_action_progress(action['_id'], (i + 1) / len(action['user_ids']))
+                database.set_action_progress(action['_id'], (i + 1) / len(action['user_ids']))
 
     if action['type'] == 'recalculate_cr':
         for pool in action['map_pools']:
