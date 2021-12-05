@@ -201,13 +201,67 @@
   right: 2em;
 }
 
+.player-profile-header-text {
+  font-size: 1.6em;
+  text-align: center;
+}
+
+.player-rank-entry {
+  display: grid;
+  grid-template-columns: 53% 5.5em auto;
+  gap: 1em;
+  height: 2.5em;
+  background-color: rgb(24, 20, 37);
+  border-radius: 0.7em;
+  overflow: hidden;
+  margin: 0.25em 0;
+  font-size: 1.2em;
+}
+
+.player-rank-entry:hover {
+  background-color: rgb(0, 0, 0);
+}
+
+.player-rank-pool {
+  margin: auto 2em;
+  overflow-x: hidden;
+  grid-column: 1;
+  white-space: nowrap;
+}
+
+.player-rank-rank-img {
+  margin: auto 0 auto auto;
+  grid-column: 2;
+  width: 5em;
+}
+
+.player-rank-rank {
+  margin: auto 0;
+  grid-column: 3;
+}
+
+.player-rank-cr {
+  margin: auto 0;
+  grid-column: 4;
+  text-align: left;
+  display: none;
+}
+
 @media only screen and (min-width: 1020px) {
   .score-date {
     display: block;
   }
 
+  .player-rank-cr {
+    display: block;
+  }
+
   .player-score-entry {
     grid-template-columns: 4em 7% 30% 12% 15% auto;
+  }
+
+  .player-rank-entry {
+    grid-template-columns: 53% 5.5em 12% auto;
   }
 
   .player-profile-top {

@@ -104,6 +104,12 @@ def player_rank_api(pool_id, user):
     user = int(user)
     return api.player_rank_api(pool_id, user)
 
+@app.route('/api/player_ranks', methods=['POST'])
+def player_ranks_api():
+    user = request.json['user']
+    pool_ids = request.json['pools']
+    return api.player_ranks_api(pool_ids, user)
+
 @app.route('/api/ladder/<pool_id>/players/<int:page>')
 def ranked_ladder_api(pool_id, page):
     per_page = 10
@@ -154,6 +160,11 @@ def get_template(template_id):
 @app.route('/api/event')
 def get_current_event():
     return api.get_current_event()
+
+@app.route('/api/popular_pools')
+def get_popular_pools():
+    popular_pool_threshold = 15
+    return api.get_popular_pools(popular_pool_threshold)
 
 @app.route('/')
 def new_home():

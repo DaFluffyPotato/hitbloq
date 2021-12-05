@@ -119,6 +119,28 @@ function genScores(status, data) {
   }
 }
 
+function fetchRanks(status, data) {
+  sendJSON(window.location.origin + '/api/player_ranks', {'user': parseInt(userID), 'pools': data}, genRanks);
+}
+
+function genRanks(status, data) {
+  for (const rank of data) {
+    if (rank['ratio'] < 0.5) {
+      var newHTML = useTemplate('new_player_profile_rank',
+        {
+            'pool_name': rank['pool_shown_name'],
+            'rank_img': rank['tier'] + '.png',
+            'rank_rank': rank['rank'],
+            'rank_cr': rank['cr'],
+            'pool_id': rank['pool'],
+        }
+      );
+    }
+
+    document.getElementById('player-ranks').appendChild(newHTML);
+  }
+}
+
 function finishedTemplateLoading() {
   getJSON(window.location.origin + '/api/user/' + userID + '/scores' + window.location.search, genScores);
 }
@@ -136,7 +158,9 @@ window.addEventListener('load', () => {
 
   getJSON(window.location.origin + '/api/player_rank/' + mapPool + '/' + userID, updateRankHistory);
 
+  getJSON(window.location.origin + '/api/popular_pools', fetchRanks);
+
   document.getElementById(sortMode + '-sort-link').style.boxShadow = '0px -2px 0px rgb(255, 0, 68) inset';
 
-  loadTemplates(['new_player_profile_score'], finishedTemplateLoading);
+  loadTemplates(['new_player_profile_score', 'new_player_profile_rank'], finishedTemplateLoading);
 })

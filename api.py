@@ -297,8 +297,7 @@ def mass_ss_to_hitbloq_id(id_list):
 
     return jsonify(result)
 
-def player_rank_api(pool_id, user):
-    users = database.get_users([user])
+def player_rank_base(pool_id, users, short=False):
     pool_data = database.get_ranked_list(pool_id)
 
     player_rank = 0
@@ -306,23 +305,28 @@ def player_rank_api(pool_id, user):
     player_cr = 0
     player_tier = 'none'
     player_scores = 0
+    rank_history = []
+    player_rank_ratio = 1
     if len(users):
         user = users[0]
-        user.load_pool_scores(database, pool_id)
 
-        rank_history = user.rank_history[pool_id] if pool_id in user.rank_history else [0, 0]
+        if not short:
+            user.load_pool_scores(database, pool_id)
 
-        player_scores = len(user.scores)
+            rank_history = user.rank_history[pool_id] if pool_id in user.rank_history else [0, 0]
+
+            player_scores = len(user.scores)
+
         player_name = user.username
         if pool_id in user.cr_totals:
             player_rank = database.get_user_ranking(user, pool_id)
-            player_cr = user.cr_totals[pool_id]
+            player_cr = round(user.cr_totals[pool_id], 2)
 
         if pool_data:
             player_rank_ratio = (player_rank - 1) / pool_data['player_count']
-            if not len(user.scores):
+            if player_cr == 0:
                 player_tier = 'none'
-            elif player_rank_ratio < 0.001:
+            if player_rank_ratio < 0.001:
                 player_tier = 'myth'
             elif player_rank_ratio < 0.01:
                 player_tier = 'master'
@@ -337,16 +341,43 @@ def player_rank_api(pool_id, user):
             else:
                 player_tier = 'bronze'
 
-    response = {
-        'username': player_name,
-        'rank': player_rank,
-        'cr': player_cr,
-        'tier': 'default/' + player_tier,
-        'ranked_score_count': player_scores,
-        'history': rank_history,
-    }
+    if short:
+        response = {
+            'rank': player_rank,
+            'cr': player_cr,
+            'tier': 'default/' + player_tier,
+            'pool': pool_id,
+            'pool_shown_name': pool_data['shown_name'],
+            'ratio': player_rank_ratio,
+        }
+    else:
+        response = {
+            'username': player_name,
+            'rank': player_rank,
+            'cr': player_cr,
+            'tier': 'default/' + player_tier,
+            'ranked_score_count': player_scores,
+            'history': rank_history,
+            'pool': pool_id,
+            'pool_shown_name': pool_data['shown_name'],
+            'ratio': player_rank_ratio,
+        }
 
-    return jsonify(response)
+    return response
+
+
+def player_rank_api(pool_id, user):
+    users = database.get_users([user])
+    return jsonify(player_rank_base(pool_id, users))
+
+def player_ranks_api(pool_ids, user):
+    users = database.get_users([user])
+
+    # don't do more than 20 pools
+    pool_ids = pool_ids[:20]
+
+    ranks_data = sorted([player_rank_base(pool_id, users, short=True) for pool_id in pool_ids], key=lambda x : x['rank'])
+    return jsonify(ranks_data)
 
 def user_basic_api(user_id):
     try:
@@ -380,3 +411,8 @@ def get_current_event():
         del current_event['_id']
 
     return jsonify(current_event)
+
+def get_popular_pools(threshold):
+    popular_pools = [pool['_id'] for pool in database.db['ranked_lists'].find({}, {'_id': 1, 'priority': 1}).sort('priority', -1).limit(threshold)]
+
+    return jsonify(popular_pools)
