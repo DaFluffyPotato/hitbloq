@@ -10,6 +10,7 @@
   padding: 1em;
   background-color: rgb(24, 20, 37);
   position: relative;
+  overflow-x: scroll;
 }
 
 .action-entry:hover {
