@@ -497,5 +497,11 @@ class HitbloqMongo():
                 if rank % 200 == 0:
                     self.set_action_progress(action_id, rank / len(ranked_ladder))
 
+    def create_badge(self, badge_id, description):
+        self.db['badges'].update_one({'_id': badge_id}, {'$set': {'description': description}}, upsert=True)
+
+    def give_badge(self, user_id, badge_id):
+        self.db['users'].update_one({'_id': user_id}, {'$push': {'badges': badge_id}})
+
 print('MongoDB requires a password!')
 database = HitbloqMongo(getpass())

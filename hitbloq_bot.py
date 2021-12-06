@@ -134,6 +134,18 @@ async def on_message(message):
             if message_args[0] == '!views':
                 await message.channel.send(message.author.mention + ' Hitbloq has accumulated ' + str(int(database.get_counter('views')['count'])) + ' views!')
         if message.channel.name == ADMIN_COMMANDS_CHANNEL:
+            if message_args[0] == '!create_badge':
+                badge_id = message_args[1]
+                badge_description = ' '.join(message_args[2:])
+                database.create_badge(badge_id, badge_description)
+                await message.channel.send(message.author.mention + ' the `' + badge_id + '` badge has been created.')
+
+            if message_args[0] == '!give_badge':
+                badge_id = message_args[1]
+                user_id = int(message_args[2])
+                database.give_badge(user_id, badge_id)
+                await message.channel.send(message.author.mention + ' user `' + str(user_id) + '` has been given the `' + badge_id + '` badge.')
+
             if message_args[0] == '!set_event':
                 event_data = ' '.join(message_args[1:])
                 if event_data == '':

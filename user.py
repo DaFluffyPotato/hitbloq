@@ -17,6 +17,7 @@ class User():
         self.max_rank = {}
         self.rank_history = {}
         self.last_manual_refresh = 0
+        self.badges = []
 
         # temp values
         self.scores = []
@@ -127,6 +128,7 @@ class User():
         self.profile_banner = json_data['profile_banner']
         self.profile_background = json_data['profile_background']
         self.last_manual_refresh = json_data['last_manual_refresh']
+        self.badges = json_data['badges']
         return self
 
     def jsonify(self):
@@ -144,6 +146,7 @@ class User():
             'profile_banner': self.profile_banner,
             'profile_background': self.profile_background,
             'last_manual_refresh': self.last_manual_refresh,
+            'badges': self.badges,
         }
         return json_data
 
