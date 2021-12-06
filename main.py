@@ -166,6 +166,10 @@ def get_popular_pools():
     popular_pool_threshold = 15
     return api.get_popular_pools(popular_pool_threshold)
 
+@app.route('/api/player_badges/<int:user_id>')
+def get_player_badges(user_id):
+    return api.get_player_badges(user_id)
+
 @app.route('/')
 def new_home():
     html = new_pages['home']()

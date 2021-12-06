@@ -416,3 +416,14 @@ def get_popular_pools(threshold):
     popular_pools = [pool['_id'] for pool in database.db['ranked_lists'].find({}, {'_id': 1, 'priority': 1}).sort('priority', -1).limit(threshold)]
 
     return jsonify(popular_pools)
+
+def get_player_badges(user_id):
+    user = database.db['users'].find_one({'_id': user_id})
+    response = []
+    if user:
+        user_badges = user['badges']
+        badge_data = {badge['_id'] : badge for badge in database.db['badges'].find({'_id': {'$in': user_badges}})}
+        for badge in user_badges:
+            if badge in badge_data:
+                response.append(badge_data[badge])
+    return jsonify(response)

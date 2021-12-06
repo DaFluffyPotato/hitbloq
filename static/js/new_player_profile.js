@@ -31,7 +31,7 @@ function setLastRefresh(status, data) {
 }
 
 window.onresize = () => {
-  updateRankHistory(200, ranData);
+  updateRankHistory(200, rankData);
 }
 
 window.onmousemove = () => {
@@ -141,6 +141,15 @@ function genRanks(status, data) {
   }
 }
 
+function genBadges(status, data) {
+  badgeContainer = document.getElementById('player-badges');
+  console.log(data);
+  for (const badge of data) {
+    badgeHTML = '<img class="profile-badge-img" title="' + badge['description'] + '" src="/static/badges/' + badge['_id'] + '.png">';
+    badgeContainer.innerHTML += badgeHTML;
+  }
+}
+
 function finishedTemplateLoading() {
   getJSON(window.location.origin + '/api/user/' + userID + '/scores' + window.location.search, genScores);
 }
@@ -157,6 +166,8 @@ window.addEventListener('load', () => {
   mapPool = (params.get('pool')) ? params.get('pool') : 'bbbear';
 
   getJSON(window.location.origin + '/api/player_rank/' + mapPool + '/' + userID, updateRankHistory);
+
+  getJSON(window.location.origin + '/api/player_badges/' + userID, genBadges);
 
   getJSON(window.location.origin + '/api/popular_pools', fetchRanks);
 
