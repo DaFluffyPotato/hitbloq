@@ -205,9 +205,9 @@ async def on_message(message):
                 print(desc)
                 if pool_id in database.get_pool_ids(True):
                     if database.is_pool_owner(pool_id, message.author.id):
-                        if message_args[0] == ['!set_short_desc']:
+                        if message_args[0] == '!set_short_desc':
                             database.db['ranked_lists'].update_one({'_id': pool_id}, {'$set': {'short_description': desc}})
-                        if message_args[0] == ['!set_long_desc']:
+                        if message_args[0] == '!set_long_desc':
                             database.db['ranked_lists'].update_one({'_id': pool_id}, {'$set': {'long_description': desc}})
                         await message.channel.send(message.author.mention + ' updated the description for the `' + pool_id + '` map pool.')
                     else:
