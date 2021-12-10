@@ -319,6 +319,7 @@ class HitbloqMongo():
             'accumulation_constant': 0.94,
             'owners': [],
             'needs_cr_total_recalc': False,
+            'force_recalc': False,
         })
         if not third_party:
             self.db['users'].update_many({}, {'$set': {'total_cr.' + name : 0}})
@@ -486,7 +487,7 @@ class HitbloqMongo():
         return pool_popularity
 
     def set_pool_curve(self, pool_id, curve_data):
-        self.db['ranked_lists'].update_one({'_id': pool_id}, {'$set': {'cr_curve': curve_data}})
+        self.db['ranked_lists'].update_one({'_id': pool_id}, {'$set': {'cr_curve': curve_data, 'force_recalc': True}})
 
     def update_rank_histories(self, pool_id, action_id=None):
         ranked_ladder = [user['_id'] for user in self.db['users'].find({}, {'_id': 1}).sort('total_cr.' + pool_id, -1)]
