@@ -217,3 +217,33 @@ def actions():
 
     html = templates.inject('new_base', {'header': header, 'content': templates.inject('new_actions', {})})
     return html
+
+@page
+def map_pool(pool_id):
+    header = generate_header(additional_css=['new_map_pools.css', 'new_map_pool.css'], additional_js=['new_map_pool.js'])
+    setup_data = page_setup()
+
+    download_url = '/static/hashlists/' + pool_id + '.bplist'
+
+    pool_data = database.db['ranked_lists'].find_one({'_id': pool_id})
+
+    owner_discord_accounts = {user['_id'] : user['tag'] for user in database.get_discord_users(pool_data['owners'])}
+    owner_text = ''
+    for owner in pool_data['owners']:
+        if owner_text != '':
+             owner_text += '<br>'
+        if owner in owner_discord_accounts:
+            owner_text += owner_discord_accounts[owner]
+        else:
+            owner_text += str(owner) + ' (ID)'
+
+    inject_data = {
+        'shown_name': pool_data['shown_name'],
+        'download_url': download_url,
+        'pool_id': pool_id,
+        'pool_description': pool_data['long_description'],
+        'owners': owner_text,
+    }
+
+    html = templates.inject('new_base', {'header': header, 'content': templates.inject('new_map_pool', inject_data)})
+    return html

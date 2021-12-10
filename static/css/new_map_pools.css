@@ -66,6 +66,8 @@
 
 .map-pool-description {
   margin: 0.15cm;
+  white-space: nowrap;
+  overflow-x: clip;
 }
 
 @media only screen and (min-width: 1020px) {

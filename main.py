@@ -185,6 +185,11 @@ def new_map_pools():
     html = new_pages['map_pools']()
     return html
 
+@app.route('/map_pool/<pool_id>')
+def new_map_pool(pool_id):
+    html = new_pages['map_pool'](pool_id)
+    return html
+
 @app.route('/ladder/<ladder>')
 def new_ladder(ladder):
     html = new_pages['ladder'](ladder)

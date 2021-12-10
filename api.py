@@ -79,7 +79,7 @@ def get_map_pools_detailed():
             'image': pool['playlist_cover'] if pool['playlist_cover'] else 'https://hitbloq.com/static/hitbloq.png',
             'id': pool['_id'],
             'description': RANKED_LIST_DESCRIPTION.replace('<map_pool_name>', pool['shown_name']),
-            'short_description': 'The ' + pool['shown_name'] + ' map pool.',
+            'short_description': 'The ' + pool['shown_name'] + ' map pool.' if not pool['short_description'] else pool['short_description'],
             'player_count': pool['player_count'],
             'popularity': pool['priority'],
             'download_url': 'https://hitbloq.com/static/hashlists/' + pool['_id'] + '.bplist'
