@@ -148,4 +148,4 @@ class CRRecalc:
 
         new_ratings = self.adjust_difficulty_results()
         self.update_leaderboard_cr_rewards(new_ratings)
-        self.db['ranked_lists'].update_one({'_id': self.pool_id}, {'$set': {'needs_cr_total_recalc': True}})
+        self.db['ranked_lists'].update_one({'_id': self.pool_id}, {'$set': {'needs_cr_total_recalc': True, 'force_recalc': False}})
