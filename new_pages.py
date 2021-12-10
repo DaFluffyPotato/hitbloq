@@ -227,7 +227,7 @@ def map_pool(pool_id):
         additional_js=['new_map_pool.js'],
         image='https://hitbloq.com/static/hitbloq.png' if not pool_data['playlist_cover'] else pool_data['playlist_cover'],
         title='Hitbloq - ' + pool_data['shown_name'] + ' Map Pool',
-        description='The ' + pool_data['shown_name'] + ' map pool.' if not pool_data['short_description'] else pool_data['short_description']
+        desc='The ' + pool_data['shown_name'] + ' map pool.' if not pool_data['short_description'] else pool_data['short_description']
     )
 
     setup_data = page_setup()
