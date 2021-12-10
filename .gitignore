@@ -4,3 +4,4 @@ data/token.txt
 data/token_2.txt
 data/config.json
 backups/
+start_hitbloq_tmux.sh

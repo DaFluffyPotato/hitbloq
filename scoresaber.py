@@ -57,7 +57,7 @@ class ScoresaberInterface():
             if new_dat == []:
                 looking = False
             else:
-                for score in new_dat:
+                for score in new_dat['playerScores']:
                     if convert_epoch(score['score']['timeSet']) < (epoch - 300): # -300 to be safe
                         looking = False
                     else:
