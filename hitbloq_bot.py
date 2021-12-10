@@ -202,6 +202,7 @@ async def on_message(message):
             if message_args[0] in ['!set_short_desc', '!set_long_desc']:
                 pool_id = message_args[1]
                 desc = ' '.join(message_args[2:]).replace('<', '').replace('>', '')
+                print(desc)
                 if pool_id in database.get_pool_ids(True):
                     if database.is_pool_owner(pool_id, message.author.id):
                         if message_args[0] == ['!set_short_desc']:
