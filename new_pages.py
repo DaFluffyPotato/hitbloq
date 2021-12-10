@@ -82,9 +82,6 @@ def ladder(ladder_id):
 
 @page
 def user(user_id):
-    header = generate_header(additional_css=['new_player_profile.css'], additional_js=['new_player_profile.js'])
-    setup_data = page_setup()
-
     next_page = int(request.args.get('page')) + 1 if request.args.get('page') else 1
     last_page = max(int(request.args.get('page')) - 1, 0) if request.args.get('page') else 0
 
@@ -131,6 +128,20 @@ def user(user_id):
         'player_banner_styling': banner_style,
         'last_manual_refresh': str(profile_obj.user.last_manual_refresh),
     }
+
+    desc_text = 'Rank: ' + '{:,}'.format(profile_obj.user.pool_rank) + '<br>'
+    desc_text += 'Tier: ' + profile_obj.user.pool_tier + '<br>'
+    desc_text += 'Competitive Rating: ' + '{:,}'.format(round(profile_obj.user.pool_cr_total, 2)) + '<br>'
+    desc_text += 'Scores Set: ' + '{:,}'.format(len(profile_obj.user.scores))
+
+    header = generate_header(
+        additional_css=['new_player_profile.css'],
+        additional_js=['new_player_profile.js']
+        title=profile_obj.user.username + '\'s Profile - ' + pool_data['shown_name'],
+        image=profile_obj.user.profile_pic
+        desc=desc_text
+    )
+    setup_data = page_setup()
 
     html = templates.inject('new_base', {'header': header, 'cont_styling': background_style, 'content': templates.inject('new_player_profile', profile_insert)})
     return html
@@ -226,7 +237,7 @@ def map_pool(pool_id):
         additional_css=['new_map_pools.css', 'new_map_pool.css'],
         additional_js=['new_map_pool.js'],
         image='https://hitbloq.com/static/hitbloq.png' if not pool_data['playlist_cover'] else pool_data['playlist_cover'],
-        title='Hitbloq - ' + pool_data['shown_name'] + ' Map Pool',
+        title=pool_data['shown_name'] + ' Map Pool',
         desc='The ' + pool_data['shown_name'] + ' map pool.' if not pool_data['short_description'] else pool_data['short_description']
     )
 
