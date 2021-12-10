@@ -136,9 +136,9 @@ def user(user_id):
 
     header = generate_header(
         additional_css=['new_player_profile.css'],
-        additional_js=['new_player_profile.js']
+        additional_js=['new_player_profile.js'],
         title=profile_obj.user.username + '\'s Profile - ' + pool_data['shown_name'],
-        image=profile_obj.user.profile_pic
+        image=profile_obj.user.profile_pic,
         desc=desc_text
     )
     setup_data = page_setup()
