@@ -201,7 +201,7 @@ async def on_message(message):
         if message.channel.name == POOL_ADMIN_COMMANDS_CHANNEL:
             if message_args[0] in ['!set_short_desc', '!set_long_desc']:
                 pool_id = message_args[1]
-                desc = ' '.join(message_args[2:]).replace('<', '').replace('>', '')
+                desc = ' '.join(message_args[2:]).replace('<', '').replace('>', '')[:2000]
                 print(desc)
                 if pool_id in database.get_pool_ids(True):
                     if database.is_pool_owner(pool_id, message.author.id):
@@ -267,7 +267,7 @@ async def on_message(message):
             if message_args[0] == '!set_shown_name':
                 try:
                     pool_id = message_args[1]
-                    shown_name = ' '.join(message_args[2:]).replace('<', '').replace('>', '')
+                    shown_name = ' '.join(message_args[2:]).replace('<', '').replace('>', '')[:40]
                     if shown_name == '':
                         await message.channel.send(message.author.mention + ' shown name must not be an empty string.')
                     elif database.is_pool_owner(pool_id, message.author.id) or is_admin(message.author):
