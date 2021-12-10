@@ -508,7 +508,7 @@ class HitbloqMongo():
 
     def update_discord_tags(self, users):
         for user in users:
-            self.db['discord_users'].updateOne({'_id': user}, {'$set': {'tag': users[user]}}, upsert=True)
+            self.db['discord_users'].update_one({'_id': user}, {'$set': {'tag': users[user]}}, upsert=True)
 
 print('MongoDB requires a password!')
 database = HitbloqMongo(getpass())
