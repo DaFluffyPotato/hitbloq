@@ -220,12 +220,19 @@ def actions():
 
 @page
 def map_pool(pool_id):
-    header = generate_header(additional_css=['new_map_pools.css', 'new_map_pool.css'], additional_js=['new_map_pool.js'])
+    pool_data = database.db['ranked_lists'].find_one({'_id': pool_id})
+
+    header = generate_header(
+        additional_css=['new_map_pools.css', 'new_map_pool.css'],
+        additional_js=['new_map_pool.js'],
+        image='https://hitbloq.com/static/hitbloq.png' if not pool_data['playlist_cover'] else pool_data['playlist_cover'],
+        title='Hitbloq - ' + pool_data['shown_name'] + ' Map Pool',
+        description='The ' + pool_data['shown_name'] + ' map pool.' if not pool_data['short_description'] else pool_data['short_description']
+    )
+
     setup_data = page_setup()
 
     download_url = '/static/hashlists/' + pool_id + '.bplist'
-
-    pool_data = database.db['ranked_lists'].find_one({'_id': pool_id})
 
     owner_discord_accounts = {user['_id'] : user['tag'] for user in database.get_discord_users(pool_data['owners'])}
     owner_text = ''
