@@ -289,8 +289,10 @@ async def on_message(message):
 
                     if valid_permissions:
                         owner_list = [user.id for user in message.mentions]
+                        owner_tags = {user.id : user.name + "#" + user.descriminator for user in message.mentions}
                         if message.author.id in owner_list:
                             database.set_pool_owners(pool_id, owner_list)
+                            database.update_discord_tags(owner_tags)
 
                             # add map pool people role to all owners
                             role = get(active_guild.roles, name='map pool people')
