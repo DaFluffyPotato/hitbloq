@@ -320,6 +320,8 @@ class HitbloqMongo():
             'owners': [],
             'needs_cr_total_recalc': False,
             'force_recalc': False,
+            'short_description': None,
+            'long_description': "",
         })
         if not third_party:
             self.db['users'].update_many({}, {'$set': {'total_cr.' + name : 0}})

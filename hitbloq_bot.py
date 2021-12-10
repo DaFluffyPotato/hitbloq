@@ -199,6 +199,21 @@ async def on_message(message):
                 create_action.update_user(rewind_id)
                 await message.channel.send(message.author.mention + ' user ' + str(rewind_id) + ' will be rewinded and updated.')
         if message.channel.name == POOL_ADMIN_COMMANDS_CHANNEL:
+            if message_args[0] in ['!set_short_desc', '!set_long_desc']:
+                pool_id = message_args[1]
+                desc = ' '.join(message_args[2:]).replace('<', '').replace('>', '')
+                if pool_id in database.get_pool_ids(True):
+                    if database.is_pool_owner(pool_id, message.author.id):
+                        if message_args[0] == ['!set_short_desc']:
+                            database.db['ranked_lists'].update_one({'_id': pool_id}, {'$set': {'short_description': desc}})
+                        if message_args[0] == ['!set_long_desc']:
+                            database.db['ranked_lists'].update_one({'_id': pool_id}, {'$set': {'long_description': desc}})
+                        await message.channel.send(message.author.mention + ' updated the description for the `' + pool_id + '` map pool.')
+                    else:
+                        await message.channel.send(message.author.mention + ' you don\'t have permissions to modify this pool')
+                else:
+                    await message.channel.send(message.author.mention + ' that pool ID appears to be invalid')
+
             if message_args[0] == '!regenerate_playlists':
                 create_action.regenerate_playlists()
                 await message.channel.send(message.author.mention + ' hashlist generation has been added to the action queue.\nhttps://hitbloq.com/actions')
@@ -251,7 +266,7 @@ async def on_message(message):
             if message_args[0] == '!set_shown_name':
                 try:
                     pool_id = message_args[1]
-                    shown_name = ' '.join(message_args[2:])
+                    shown_name = ' '.join(message_args[2:]).replace('<', '').replace('>', '')
                     if shown_name == '':
                         await message.channel.send(message.author.mention + ' shown name must not be an empty string.')
                     elif database.is_pool_owner(pool_id, message.author.id) or is_admin(message.author):
