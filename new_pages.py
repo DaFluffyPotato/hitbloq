@@ -129,9 +129,9 @@ def user(user_id):
         'last_manual_refresh': str(profile_obj.user.last_manual_refresh),
     }
 
-    desc_text = 'Rank: ' + '{:,}'.format(profile_obj.user.pool_rank) + '\n'
+    desc_text = 'Rank: #' + '{:,}'.format(profile_obj.user.pool_rank) + '\n'
     desc_text += 'Tier: ' + profile_obj.user.pool_tier + '\n'
-    desc_text += 'Competitive Rating: ' + '{:,}'.format(round(profile_obj.user.pool_cr_total, 2)) + '\n'
+    desc_text += 'Competitive Rating: ' + '{:,}'.format(round(profile_obj.user.pool_cr_total, 2)) + 'cr\n'
     desc_text += 'Scores Set: ' + '{:,}'.format(len(profile_obj.user.scores))
 
     header = generate_header(
