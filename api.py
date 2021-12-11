@@ -90,7 +90,6 @@ def get_map_pools_detailed():
 def get_leaderboard_info(leaderboard_id):
     leaderboard_data = list(database.get_leaderboards([leaderboard_id]))[0]
     leaderboard_data['_id'] = str(leaderboard_data['_id'])
-    print(leaderboard_data)
     return jsonify(leaderboard_data)
 
 def get_leaderboard_scores(leaderboard_id, offset=0, count=30):
