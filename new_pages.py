@@ -208,14 +208,6 @@ def leaderboard(leaderboard_id):
 
 @page
 def ranked_list(pool_id):
-    header = generate_header(
-        title=pool_data['shown_name'] + ' Ranked List',
-        desc='The list of ranked maps in the ' + pool_data['shown_name'] + ' map pool.',
-        additional_css=['new_ranked_list.css'],
-        additional_js=['new_ranked_list.js']
-    )
-    setup_data = page_setup()
-
     database.log_interest(request.remote_addr, pool_id)
 
     pool_id = request.path.split('/')[-1]
@@ -231,6 +223,14 @@ def ranked_list(pool_id):
         'page_left': last_page,
         'page_right': next_page,
     }
+    
+    header = generate_header(
+        title=pool_data['shown_name'] + ' Ranked List',
+        desc='The list of ranked maps in the ' + pool_data['shown_name'] + ' map pool.',
+        additional_css=['new_ranked_list.css'],
+        additional_js=['new_ranked_list.js']
+    )
+    setup_data = page_setup()
 
     html = templates.inject('new_base', {'header': header, 'content': templates.inject('new_ranked_list', ranked_list_insert)})
     return html
