@@ -26,6 +26,7 @@ def page(page_func):
 def generate_header(title='Hitbloq', desc='a competitive beat saber service', image='https://hitbloq.com/static/hitbloq.png', additional_css=[], additional_js=[]):
     header = '<title>' + title + '</title>\n'
     header += '<link rel="icon" href="https://hitbloq.com/static/hitbloq.png">\n'
+    header += '<meta name="theme-color" content="#2ce8f5">'
     header += '<meta property="og:image" content="' + image + '">\n'
     header += '<meta property="og:image:secure_url" content="' + image + '">\n'
     header += '<meta property="og:title" content="' + title + '">\n'
