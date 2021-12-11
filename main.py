@@ -2,6 +2,8 @@ import json
 import time
 
 from flask import Flask, request, make_response
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 from db import database
 from new_pages import new_pages, get_map_pool
@@ -10,6 +12,12 @@ from user import User
 import create_action
 
 app = Flask(__name__)
+limiter = Limiter(
+    app,
+    key_func=get_remote_address,
+    application_limits=['80/minute'],
+    default_limits=['120/minute']
+)
 
 @app.route('/api/actions')
 def actions():
