@@ -287,3 +287,15 @@ def map_pool(pool_id):
 
     html = templates.inject('new_base', {'header': header, 'content': templates.inject('new_map_pool', inject_data)})
     return html
+
+@page
+def contact():
+    header = generate_header(
+        image='https://hitbloq.com/static/hitbloq.png',
+        title='Contact',
+        desc='Contact Hitbloq at hitbloqbs@gmail.com'
+    )
+    setup_data = page_setup()
+
+    html = templates.inject('new_base', {'header': header, 'content': templates.inject('new_contact', {})})
+    return html

@@ -220,5 +220,10 @@ def new_actions():
     html = new_pages['actions']()
     return html
 
+@app.route('/contact')
+def contact():
+    html = new_pages['contact']()
+    return html
+
 if __name__ == "__main__":
     app.run()
