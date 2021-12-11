@@ -15,8 +15,8 @@ app = Flask(__name__)
 limiter = Limiter(
     app,
     key_func=get_remote_address,
-    application_limits=['80/minute'],
-    default_limits=['120/minute']
+    application_limits=['120/minute'],
+    default_limits=['80/minute']
 )
 
 @app.route('/api/actions')
