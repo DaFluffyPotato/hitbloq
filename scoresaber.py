@@ -36,7 +36,7 @@ class ScoresaberInterface():
         total_dat = []
         c = 0
         while looking:
-            req_url = 'player/' + ss_id + '/scores/?sort=recent&page=' + str(c + 1) + '&limit=' + str(limit)
+            req_url = 'player/' + ss_id + '/scores/?sort=recent&withMetadata=false&page=' + str(c + 1) + '&limit=' + str(limit)
             print('checking', req_url)
             try:
                 new_dat = self.ss_req(req_url)
