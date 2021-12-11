@@ -192,7 +192,7 @@ def leaderboard(leaderboard_id):
     desc_text = 'Artist: ' + leaderboard_data['artist'] + '\n'
     desc_text += 'Mapper: ' + leaderboard_data['mapper'] + '\n'
     desc_text += 'Difficulty: ' + leaderboard_data['difficulty'] + '\n'
-    desc_text += 'Stars (' + shown_name + '): ' + leaderboard_insert['stars']
+    desc_text += 'Stars: ' + leaderboard_insert['stars']
 
     header = generate_header(
         title=leaderboard_data['name'],
@@ -223,7 +223,7 @@ def ranked_list(pool_id):
         'page_left': last_page,
         'page_right': next_page,
     }
-    
+
     header = generate_header(
         title=pool_data['shown_name'] + ' Ranked List',
         desc='The list of ranked maps in the ' + pool_data['shown_name'] + ' map pool.',
