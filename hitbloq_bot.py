@@ -203,7 +203,7 @@ async def on_message(message):
                 pool_id = message_args[1]
                 desc = ' '.join(message_args[2:]).replace('<', '').replace('>', '')[:2000]
                 if message_args[0] == '!set_long_desc':
-                    desc = desc.replace('\n','<br>')
+                    desc = desc.replace('!newline!','<br>')
                 print(desc)
                 if pool_id in database.get_pool_ids(True):
                     if database.is_pool_owner(pool_id, message.author.id):
