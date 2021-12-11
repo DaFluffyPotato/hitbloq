@@ -321,7 +321,9 @@ class HitbloqMongo():
             'needs_cr_total_recalc': False,
             'force_recalc': False,
             'short_description': None,
-            'long_description': "",
+            'long_description': '',
+            'date_created': time.time(),
+            'views': 0,
         })
         if not third_party:
             self.db['users'].update_many({}, {'$set': {'total_cr.' + name : 0}})
@@ -461,6 +463,7 @@ class HitbloqMongo():
         self.db['ratelimits'].update_one({'_id': ip_hash}, {'$inc': {field: 1}})
 
     def log_interest(self, ip_address, pool_id):
+        self.db['ranked_lists'].update_one({'_id': pool_id}, {'$inc': {'views': 1}})
         self.db['pool_interest'].update_one({'_id': hash_ip(ip_address)}, {'$set': {'pools_viewed.' + pool_id: time.time()}}, upsert=True)
 
     def calculate_pool_popularity(self):

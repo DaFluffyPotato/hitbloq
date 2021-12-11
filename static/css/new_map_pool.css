@@ -26,7 +26,7 @@
   font-size: 0.85em;
 }
 
-.pool-owners-card {
+.pool-owners-card, .pool-info-card {
   box-shadow: 0.4em 0.4em 0 rgb(0, 0, 0);
   padding: 2em;
   margin-bottom: 1em;
@@ -36,6 +36,11 @@
 .map-pool-owners-list {
   margin-top: 1em;
   font-size: 0.85em;
+}
+
+.pool-info-container {
+  margin-top: 1em;
+  font-size: 0.75em;
 }
 
 .pool-leaderboard-card {
@@ -118,7 +123,7 @@
     margin: 0 0 1em 0;
   }
 
-  .pool-owners-card {
+  .pool-owners-card, .pool-info-card {
     font-size: 1em;
   }
 

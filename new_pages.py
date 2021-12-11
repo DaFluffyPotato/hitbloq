@@ -1,3 +1,5 @@
+import json
+
 from flask import request
 
 from templates import templates
@@ -253,6 +255,8 @@ def actions():
 
 @page
 def map_pool(pool_id):
+    database.log_interest(request.remote_addr, pool_id)
+    
     pool_data = database.db['ranked_lists'].find_one({'_id': pool_id})
 
     header = generate_header(
@@ -283,6 +287,12 @@ def map_pool(pool_id):
         'pool_id': pool_id,
         'pool_description': pool_data['long_description'],
         'owners': owner_text,
+        'creation_date': epoch_to_date(pool_data['date_created']),
+        'popularity': str(pool_data['priority']),
+        'views': '{:,}'.format(int(pool_data['views'])),
+        'ranked_maps': str(len(pool_data['leaderboard_id_list'])),
+        'accumulation_constant': str(pool_data['accumulation_constant']),
+        'curve_data': json.dumps(pool_data['cr_curve']),
     }
 
     html = templates.inject('new_base', {'header': header, 'content': templates.inject('new_map_pool', inject_data)})

@@ -269,6 +269,14 @@ p {
   background-color: rgb(255, 0, 68);
 }
 
+.code-block {
+  padding: 0.4em;
+  background-color: rgb(24, 20, 37);
+  border-radius: 0.3em;
+  font-family: monospace, monospace;
+  margin: 0.3em 0 0.3em 0;
+}
+
 @media only screen and (min-width: 1020px) {
   .content {
     padding-top: 3em;
