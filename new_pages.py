@@ -54,24 +54,29 @@ def home():
 
 @page
 def about():
-    header = generate_header(additional_css=['new_about.css'])
+    header = generate_header(title='About Hitbloq', additional_css=['new_about.css'])
     setup_data = page_setup()
     html = templates.inject('new_base', {'header': header, 'content': templates.inject('new_about', {})})
     return html
 
 @page
 def map_pools():
-    header = generate_header(additional_css=['new_map_pools.css'], additional_js=['new_map_pools.js'])
+    header = generate_header(title='Map Pools', desc='Hitbloq Map Pools', additional_css=['new_map_pools.css'], additional_js=['new_map_pools.js'])
     setup_data = page_setup()
     html = templates.inject('new_base', {'header': header, 'content': templates.inject('new_map_pools', {})})
     return html
 
 @page
 def ladder(ladder_id):
-    header = generate_header(additional_css=['new_player_leaderboard.css'], additional_js=['new_player_leaderboard.js'])
-    setup_data = page_setup()
-
     shown_name = database.db['ranked_lists'].find_one({'_id': ladder_id})['shown_name']
+
+    header = generate_header(
+        title=shown_name + ' Ladder',
+        desc='The competitive ladder for the ' + shown_name + ' map pool.',
+        additional_css=['new_player_leaderboard.css'],
+        additional_js=['new_player_leaderboard.js']
+    )
+    setup_data = page_setup()
 
     next_page = int(request.args.get('page')) + 1 if request.args.get('page') else 1
     last_page = max(int(request.args.get('page')) - 1, 0) if request.args.get('page') else 0
@@ -149,9 +154,6 @@ def user(user_id):
 
 @page
 def leaderboard(leaderboard_id):
-    header = generate_header(additional_css=['new_leaderboard.css'], additional_js=['new_leaderboard.js'])
-    setup_data = page_setup()
-
     pool_id = get_map_pool()
     try:
         shown_name = database.db['ranked_lists'].find_one({'_id': pool_id})['shown_name']
@@ -187,12 +189,31 @@ def leaderboard(leaderboard_id):
         'page_right': next_page,
     }
 
+    desc_text = 'Artist: ' + leaderboard_data['artist'] + '\n'
+    desc_text += 'Mapper: ' + leaderboard_data['mapper'] + '\n'
+    desc_text += 'Difficulty: ' + leaderboard_data['difficulty'] + '\n
+    desc_text += 'Stars (' + shown_name + '): ' + leaderboard_insert['stars']
+    
+    header = generate_header(
+        title=leaderboard_data['name'],
+        image=leaderboard_data['cover'],
+        desc=desc_text,
+        additional_css=['new_leaderboard.css'],
+        additional_js=['new_leaderboard.js']
+    )
+    setup_data = page_setup()
+
     html = templates.inject('new_base', {'header': header, 'content': templates.inject('new_leaderboard', leaderboard_insert)})
     return html
 
 @page
 def ranked_list(pool_id):
-    header = generate_header(additional_css=['new_ranked_list.css'], additional_js=['new_ranked_list.js'])
+    header = generate_header(
+        title=pool_data['shown_name'] + ' Ranked List',
+        desc='The list of ranked maps in the ' + pool_data['shown_name'] + ' map pool.',
+        additional_css=['new_ranked_list.css'],
+        additional_js=['new_ranked_list.js']
+    )
     setup_data = page_setup()
 
     database.log_interest(request.remote_addr, pool_id)
