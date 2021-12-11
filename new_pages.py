@@ -191,9 +191,9 @@ def leaderboard(leaderboard_id):
 
     desc_text = 'Artist: ' + leaderboard_data['artist'] + '\n'
     desc_text += 'Mapper: ' + leaderboard_data['mapper'] + '\n'
-    desc_text += 'Difficulty: ' + leaderboard_data['difficulty'] + '\n
+    desc_text += 'Difficulty: ' + leaderboard_data['difficulty'] + '\n'
     desc_text += 'Stars (' + shown_name + '): ' + leaderboard_insert['stars']
-    
+
     header = generate_header(
         title=leaderboard_data['name'],
         image=leaderboard_data['cover'],
