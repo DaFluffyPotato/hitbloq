@@ -305,7 +305,7 @@ class HitbloqMongo():
         self.db['leaderboards'].update({'_id': leaderboard_id}, updates)
 
     def create_map_pool(self, name, cover='/static/default_pool_cover.png', third_party=False):
-        self.db['ranked_lists'].insert_one({
+        map_pool_data = {
             '_id': name,
             'leaderboard_id_list': [],
             'shown_name': name,
@@ -324,7 +324,12 @@ class HitbloqMongo():
             'long_description': '',
             'date_created': time.time(),
             'views': 0,
-        })
+        }
+
+        print('creating map pool:')
+        print(map_pool_data)
+
+        self.db['ranked_lists'].insert_one(map_pool_data)
         if not third_party:
             self.db['users'].update_many({}, {'$set': {'total_cr.' + name : 0}})
             self.db['users'].update_many({}, {'$set': {'rank_history.' + name : []}})
