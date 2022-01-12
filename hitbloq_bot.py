@@ -132,7 +132,7 @@ async def on_message(message):
                 create_action.create_user(scoresaber_id)
                 await message.channel.send(message.author.mention + ' user ' + scoresaber_id + ' has been added to the action queue.\nhttps://hitbloq.com/actions')
             if message_args[0] == '!views':
-                await message.channel.send(message.author.mention + ' Hitbloq has accumulated ' + '{:.}'.format(int(database.get_counter('views')['count'])) + ' views!')
+                await message.channel.send(message.author.mention + ' Hitbloq has accumulated ' + '{:,}'.format(int(database.get_counter('views')['count'])) + ' views!')
         if message.channel.name == ADMIN_COMMANDS_CHANNEL:
             if message_args[0] == '!create_badge':
                 badge_id = message_args[1]
