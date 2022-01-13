@@ -44,7 +44,7 @@ def generate_header(title='Hitbloq', desc='a competitive beat saber service', im
 
 def page_setup():
     setup_data = {}
-    database.inc_counter('views')
+    database.register_request(category='website', user_agent=request.headers.get('User-Agent'), ip=request.remote_addr)
     return setup_data
 
 @page

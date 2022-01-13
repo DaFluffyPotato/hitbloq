@@ -3,6 +3,7 @@ from getpass import getpass
 from hashlib import sha256
 
 import pymongo
+from pymongo import UpdateOne
 from bson.objectid import ObjectId
 
 import scoresaber, beatsaver
@@ -520,6 +521,21 @@ class HitbloqMongo():
 
     def get_discord_users(self, users):
         return list(self.db['discord_users'].find({'_id': {'$in': users}}))
+
+    def register_request(self, category='api', user_agent=None, ip=None):
+        user_agent_base = user_agent.split(' ')[0]
+        user_agent_name = user_agent_base.split('/')[0]
+        user_agent_ver = user_agent_base.split('/')[1] if len(user_agent_base.split('/')) > 1 else '1.0'
+
+        bulk_ops = []
+
+        if category == 'website':
+            bulk_ops.append(UpdateOne({'type': 'views'}, {'$inc': {'count': 1}}, upsert=True))
+        else:
+            bulk_ops.append(UpdateOne({'type': 'api_reqs'}, {'$inc': {'count': 1}}, upsert=True))
+
+        bulk_ops.append(UpdateOne({'_id': 'ua_' + user_agent_name, 'type': 'user_agent_reqs'}, {'$inc': {'count': 1}}, upsert=True))
+        self.db['counters'].bulk_write(bulk_ops)
 
 print('MongoDB requires a password!')
 database = HitbloqMongo(getpass())
