@@ -131,8 +131,19 @@ async def on_message(message):
                 scoresaber_id = message_args[1]
                 create_action.create_user(scoresaber_id)
                 await message.channel.send(message.author.mention + ' user ' + scoresaber_id + ' has been added to the action queue.\nhttps://hitbloq.com/actions')
-            if message_args[0] == '!views':
-                await message.channel.send(message.author.mention + '\nHitbloq has accumulated ' + '{:,}'.format(int(database.get_counter('views')['count'])) + ' views and ' + '{:,}'.format(int(database.get_counter('api_reqs')['count'])) + ' api requests!')
+            if message_args[0] == '!stats':
+                stats = {
+                    'Website Views': '{:,}'.format(int(database.get_counter('views')['count'])),
+                    'API Requests': '{:,}'.format(int(database.get_counter('api_reqs')['count'])),
+                    'Users': '{:,}'.format(int(database.db['users'].find({}).count())),
+                    'Scores': '{:,}'.format(int(database.db['scores'].find({}).count())),
+                    'Leaderboards': '{:,}'.format(int(database.db['leaderboards'].find({}).count())),
+                    'Pools': '{:,}'.format(int(database.db['pools'].find({}).count())),
+                }
+                msg_text = message.author.mention + '\nHitbloq Stats:'
+                for stat in stats:
+                    msg_text += '\n' + stat + ': ' + stats[stat]
+                await message.channel.send(msg_text)
         if message.channel.name == ADMIN_COMMANDS_CHANNEL:
             if message_args[0] == '!create_badge':
                 badge_id = message_args[1]
