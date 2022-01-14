@@ -138,10 +138,10 @@ async def on_message(message):
                     'Users': '{:,}'.format(int(database.db['users'].find({}).count())),
                     'Scores': '{:,}'.format(int(database.db['scores'].find({}).count())),
                     'Leaderboards': '{:,}'.format(int(database.db['leaderboards'].find({}).count())),
-                    'Pools': '{:,}'.format(int(database.db['pools'].find({}).count())),
+                    'Pools': '{:,}'.format(int(database.db['ranked_lists'].find({}).count())),
                 }
                 msg_text = message.author.mention + '\nHitbloq Stats:'
-                for stat in stats:
+                for stat in ['Website Views', 'API Requests', 'Users', 'Scores', 'Leaderboards', 'Pools']:
                     msg_text += '\n' + stat + ': ' + stats[stat]
                 await message.channel.send(msg_text)
         if message.channel.name == ADMIN_COMMANDS_CHANNEL:
