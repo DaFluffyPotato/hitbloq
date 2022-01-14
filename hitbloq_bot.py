@@ -10,7 +10,7 @@ import create_action
 from db import database
 import beatsaver
 from cr_formulas import curves
-from general import full_clean
+from general import full_clean, format_num
 
 beatsaver_interface = beatsaver.BeatSaverInterface()
 
@@ -140,9 +140,10 @@ async def on_message(message):
                     'Leaderboards': '{:,}'.format(int(database.db['leaderboards'].find({}).count())),
                     'Pools': '{:,}'.format(int(database.db['ranked_lists'].find({}).count())),
                 }
-                msg_text = message.author.mention + '\nHitbloq Stats:'
+                msg_text = message.author.mention + '\nHitbloq Stats:```'
                 for stat in ['Website Views', 'API Requests', 'Users', 'Scores', 'Leaderboards', 'Pools']:
                     msg_text += '\n' + stat + ': ' + stats[stat]
+                msg_text += '```'
                 await message.channel.send(msg_text)
         if message.channel.name == ADMIN_COMMANDS_CHANNEL:
             if message_args[0] == '!create_badge':

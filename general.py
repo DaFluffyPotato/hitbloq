@@ -11,6 +11,16 @@ def max_score(notes):
         max_score = score_table[notes - 1]
     return max_score
 
+def format_num(number):
+    if number >= 1000000000:
+        return str(round(number / 1000000000, 2)) + 'B'
+    if number >= 1000000:
+        return str(round(number / 1000000, 2)) + 'M'
+    elif number >= 1000:
+        return str(round(number / 1000, 2)) + 'K'
+    else:
+        return str(number)
+
 diff_shorten = {
     'ExpertPlus': 'ep',
     'Expert': 'ex',
