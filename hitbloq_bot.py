@@ -136,12 +136,13 @@ async def on_message(message):
                     'Website Views': format_num(int(database.get_counter('views')['count'])),
                     'API Requests': format_num(int(database.get_counter('api_reqs')['count'])),
                     'Users': format_num(int(database.db['users'].find({}).count())),
+                    'New Users (24h)': format_num(int(database.db['users'].find({'date_created': {'$gt': time.time() - (60 * 60 * 24)}}).count())),
                     'Scores': format_num(int(database.db['scores'].find({}).count())),
                     'Leaderboards': format_num(int(database.db['leaderboards'].find({}).count())),
                     'Pools': format_num(int(database.db['ranked_lists'].find({}).count())),
                 }
                 msg_text = message.author.mention + '\nHitbloq Stats:```'
-                for stat in ['Website Views', 'API Requests', 'Users', 'Scores', 'Leaderboards', 'Pools']:
+                for stat in ['Website Views', 'API Requests', 'Users', 'Scores', 'Leaderboards', 'Pools', 'New Users (24h)']:
                     msg_text += '\n' + stat + ': ' + stats[stat]
                 msg_text += '```'
                 await message.channel.send(msg_text)
