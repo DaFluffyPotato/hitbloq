@@ -133,12 +133,12 @@ async def on_message(message):
                 await message.channel.send(message.author.mention + ' user ' + scoresaber_id + ' has been added to the action queue.\nhttps://hitbloq.com/actions')
             if message_args[0] == '!stats':
                 stats = {
-                    'Website Views': '{:,}'.format(int(database.get_counter('views')['count'])),
-                    'API Requests': '{:,}'.format(int(database.get_counter('api_reqs')['count'])),
-                    'Users': '{:,}'.format(int(database.db['users'].find({}).count())),
-                    'Scores': '{:,}'.format(int(database.db['scores'].find({}).count())),
-                    'Leaderboards': '{:,}'.format(int(database.db['leaderboards'].find({}).count())),
-                    'Pools': '{:,}'.format(int(database.db['ranked_lists'].find({}).count())),
+                    'Website Views': format_num(int(database.get_counter('views')['count'])),
+                    'API Requests': format_num(int(database.get_counter('api_reqs')['count'])),
+                    'Users': format_num(int(database.db['users'].find({}).count())),
+                    'Scores': format_num(int(database.db['scores'].find({}).count())),
+                    'Leaderboards': format_num(int(database.db['leaderboards'].find({}).count())),
+                    'Pools': format_num(int(database.db['ranked_lists'].find({}).count())),
                 }
                 msg_text = message.author.mention + '\nHitbloq Stats:```'
                 for stat in ['Website Views', 'API Requests', 'Users', 'Scores', 'Leaderboards', 'Pools']:
