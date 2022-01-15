@@ -190,7 +190,7 @@ async def on_message(message):
             if message_args[0] == '!set_pool_ratelimits':
                 user_list = message_args[2:]
                 new_count = message_args[1]
-                database.db['ratelimits'].update_many({'_id': {'$in': user_list}}, {'$set': {'pools_created': new_count}})
+                database.db['ratelimits'].update_many({'_id': {'$in': [int(v) for v in user_list]}}, {'$set': {'pools_created': new_count}})
                 await message.channel.send(message.author.mention + ' updated ratelimits for\n' + '\n'.join(user_list))
 
             if message_args[0] == '!stop_bot':
