@@ -532,6 +532,8 @@ class HitbloqMongo():
             user_agent_name = 'unknown'
             user_agent_ver = 'unknown'
 
+        request_path = '/'.join(request_path.split('/')[:3])
+
         bulk_ops = []
 
         if category == 'website':
