@@ -232,7 +232,7 @@ class HitbloqMongo():
             return leaderboard_data
 
         elif transfer:
-            print('transferring scores on leaderboard', leaderboard_id)
+            print('transferring data from leaderboard', leaderboard_id)
             old_leaderboard_data = self.db['leaderboards'].find_one({'_id': leaderboard_id})
 
         leaderboard_difficulty = leaderboard_id.split('|')[-1]
@@ -279,8 +279,8 @@ class HitbloqMongo():
                 'notes': difficulty_data['notes'],
                 'obstacles': difficulty_data['obstacles'],
                 'hash': leaderboard_hash,
-                'star_rating': {},
-                'forced_star_rating': {},
+                'star_rating': old_leaderboard_data['star_rating'] if transfer else {},
+                'forced_star_rating': old_leaderboard_data['forced_star_rating'] if transfer else {},
             }
 
             # remove old instances
@@ -390,6 +390,12 @@ class HitbloqMongo():
         for score in scores:
             score['cr'][map_pool] = 0
         self.replace_scores(scores)
+
+    def reimport_song(self, leaderboard_id):
+        current_leaderboard = self.db['leaderboards'].find_one({'_id': leaderboard_id})
+        if current_leaderboard and current_leaderboard['key']:
+            self.create_leaderboard(self, leaderboard_id, leaderboard_id.split('|')[0], transfer=True)
+            print('reimporting', leaderboard_id)
 
     def get_ranked_lists(self):
         return list(self.db['ranked_lists'].find({}).sort('priority', -1))

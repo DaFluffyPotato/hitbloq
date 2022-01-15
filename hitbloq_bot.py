@@ -238,6 +238,11 @@ async def on_message(message):
                 else:
                     await message.channel.send(message.author.mention + ' that pool ID appears to be invalid')
 
+            if message_args[0] == '!reimport':
+                leaderboard_id = message_args[1]
+                database.reimport_song(leaderboard_id)
+                await message.channel.send(message.author.mention + ' attempted map reimport.')
+
             if message_args[0] == '!regenerate_playlists':
                 create_action.regenerate_playlists()
                 await message.channel.send(message.author.mention + ' hashlist generation has been added to the action queue.\nhttps://hitbloq.com/actions')
