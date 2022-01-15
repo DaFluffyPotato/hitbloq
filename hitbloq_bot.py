@@ -186,8 +186,9 @@ async def on_message(message):
                 pool_id = message_args[1]
                 database.delete_map_pool(pool_id)
                 await message.channel.send(message.author.mention + ' deleted the `' + pool_id + '` map pool.')
+
             if message_args[0] == '!set_pool_ratelimits':
-                user_list = [str(user.id) for user in message.mentions]
+                user_list = message_args[2:]
                 new_count = message_args[1]
                 #database.db['ratelimits'].update_many({'_id': {'$in': user_list}}, {'$set': {'pools_created': new_count}})
                 await message.channel.send(message.author.mention + ' updated ratelimits for\n' + '\n'.join(user_list) + '.')
@@ -195,6 +196,7 @@ async def on_message(message):
             if message_args[0] == '!stop_bot':
                 await message.channel.send(message.author.mention + ' stopping... :(')
                 sys.exit()
+
             if message_args[0] == '!recalculate_cr':
                 map_pools = message_args[1].split(',')
                 create_action.recalculate_cr(map_pools)
