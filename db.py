@@ -394,7 +394,7 @@ class HitbloqMongo():
     def reimport_song(self, leaderboard_id):
         current_leaderboard = self.db['leaderboards'].find_one({'_id': leaderboard_id})
         if current_leaderboard and current_leaderboard['key']:
-            self.create_leaderboard(self, leaderboard_id, leaderboard_id.split('|')[0], transfer=True)
+            self.create_leaderboard(leaderboard_id, leaderboard_id.split('|')[0], transfer=True)
             print('reimporting', leaderboard_id)
 
     def get_ranked_lists(self):
