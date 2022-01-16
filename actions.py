@@ -76,7 +76,7 @@ def process_action(action):
                 except:
                     pass
 
-            authors = database.db['discord_users'].find({'_id': {'$in': map_pools[pool]['owners']}})
+            authors = list(database.db['discord_users'].find({'_id': {'$in': map_pools[pool]['owners']}}))
             authors_text = ''
             for i, author in enumerate(authors):
                 authors_text += author['tag'].split('#')[0]
