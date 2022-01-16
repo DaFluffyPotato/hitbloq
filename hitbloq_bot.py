@@ -81,6 +81,11 @@ async def on_message(message):
     for line in message.content.split('\n'):
         message_args = line.split(' ')
         if message.channel.name == PATRON_COMMANDS_CHANNEL:
+            if message_args[0] == '!link_account':
+                user_id = int(message_args[1])
+                print(message.author.id)
+                await message.channel.send(message.author.mention + ' the following account has been linked to your Discord account:\nhttps://hitbloq.com/user/' + str(user_id))
+
             if message_args[0] in ['!set_banner', '!set_profile_banner', '!set_profile_background']:
                 field = {'!set_banner': 'score_banner', '!set_profile_banner': 'profile_banner', '!set_profile_background': 'profile_background'}[message_args[0]]
                 banner_url = message_args[1]
@@ -92,6 +97,7 @@ async def on_message(message):
                         await message.channel.send(message.author.mention + ' a new score banner has been set!')
                 else:
                     await message.channel.send(message.author.mention + ' banner URLs must be https://i.imgur.com links and they must be png or jpeg/jpg. You can get these by right clicking the image and clicking "open image in new tab".')
+
             if message_args[0] == '!create_pool':
                 try:
                     new_pool_id = message_args[1]
