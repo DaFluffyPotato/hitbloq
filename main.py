@@ -20,7 +20,7 @@ limiter = Limiter(
 )
 
 def api_endpoint():
-    database.register_request(category='api', user_agent=request.headers.get('User-Agent'), ip=request.remote_addr, request_path=request.path)
+    database.register_request(category='api', user_agent=request.headers.get('User-Agent'), ip=request.remote_addr, request_path=str(request.url_rule))
 
 @app.route('/api/actions')
 def actions():
