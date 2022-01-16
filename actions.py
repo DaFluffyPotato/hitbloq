@@ -23,6 +23,14 @@ def get_web_img_b64(url):
     os.remove(output_file)
     return b64_data
 
+def playlist_song_diff(song_data):
+    max_diff = 0
+    for char in song_data['hitbloq']['difficulties']:
+        for diff in song_data['hitbloq']['difficulties'][char]:
+            diff_v = song_data['hitbloq']['difficulties'][char][diff]
+            max_diff = max(diff_v, max_diff)
+    return max_diff
+
 def process_action(action):
     if action['type'] == 'add_user':
         u = User().create(database, action['user_id'])
@@ -96,7 +104,7 @@ def process_action(action):
                 'syncURL': 'https://hitbloq.com/static/hashlists/' + pool + '.bplist',
             }
             song_dict = {}
-            for hash in sorted(map_lists[pool], key=lambda x: leaderboard_data[x[0]]['star_rating'][pool] if pool in leaderboard_data[x[0]]['star_rating'] else 0, reverse=True):
+            for hash in map_lists[pool]:
                 characteristic = hash[1][1].split('_')[2].replace('Solo', '')
                 difficulty = hash[1][1].split('_')[1][0].lower() + hash[1][1].split('_')[1][1:]
                 #print(pool, leaderboard_data[hash[0]])
@@ -122,6 +130,8 @@ def process_action(action):
 
             for song_id in song_dict:
                 hash_list_json['songs'].append(song_dict[song_id])
+
+                hash_list_json['songs'].sort(key=playlist_song_diff, reverse=True)
 
             f = open('static/hashlists/' + pool + '.bplist', 'w')
             json.dump(hash_list_json, f)
