@@ -99,6 +99,21 @@ def get_leaderboard_scores(leaderboard_id, offset=0, count=30):
         del score['_id']
     return jsonify(score_data)
 
+def extend_scores(leaderboard_data, score_data, base_rank):
+    user_list = [score['user'] for score in score_data]
+    user_data = {user.id : user for user in database.get_users(user_list)}
+    for i, score in enumerate(score_data):
+        if '_id' in score:
+            del score['_id']
+        score['username'] = user_data[score['user']].username
+        score['accuracy'] = round(score['score'] / max_score(leaderboard_data['notes']) * 100, 2)
+        score['rank'] = base_rank + i + 1
+        score['profile_pic'] = user_data[score['user']].profile_pic
+        score['date_set'] = epoch_ago(score['time_set']) + ' ago'
+        score['banner_image'] = user_data[score['user']].score_banner
+
+    return score_data
+
 def get_leaderboard_scores_extended(leaderboard_id, offset=0, count=10):
     # handle short settings format if necessary
     try:
@@ -108,20 +123,11 @@ def get_leaderboard_scores_extended(leaderboard_id, offset=0, count=10):
 
     leaderboard_data = list(database.get_leaderboards([leaderboard_id]))[0]
     score_data = list(database.db['scores'].find({'song_id': leaderboard_data['_id']}).sort('score', -1))[offset:offset + count]
-    user_list = [score['user'] for score in score_data]
-    user_data = {user.id : user for user in database.get_users(user_list)}
-    for i, score in enumerate(score_data):
-        del score['_id']
-        score['username'] = user_data[score['user']].username
-        score['accuracy'] = round(score['score'] / max_score(leaderboard_data['notes']) * 100, 2)
-        score['rank'] = offset + i + 1
-        score['profile_pic'] = user_data[score['user']].profile_pic
-        score['date_set'] = epoch_ago(score['time_set']) + ' ago'
-        score['banner_image'] = user_data[score['user']].score_banner
+    score_data = extend_scores(leaderboard_data, score_data, offset)
 
     return jsonify(score_data)
 
-def get_leaderboard_scores_nearby(leaderboard_id, user):
+def get_leaderboard_scores_nearby(leaderboard_id, user, extend=False):
     leaderboard_data = list(database.get_leaderboards([leaderboard_id]))[0]
     score_data = list(database.db['scores'].find({'song_id': leaderboard_data['_id']}).sort('score', -1))
 
@@ -143,9 +149,12 @@ def get_leaderboard_scores_nearby(leaderboard_id, user):
         score['accuracy'] = round(score['score'] / max_score(leaderboard_data['notes']) * 100, 2)
         score['rank'] = base_index + i + 1
 
+    if extend:
+        score_data = extend_scores(leaderboard_data, score_data, base_index)
+
     return jsonify(score_data)
 
-def leaderboard_scores_friends(leaderboard_id, friends_list):
+def leaderboard_scores_friends(leaderboard_id, friends_list, extend=False):
     # induce error if the request contents are invalid
     l = [int(v) for v in friends_list]
 
@@ -159,6 +168,9 @@ def leaderboard_scores_friends(leaderboard_id, friends_list):
         score['username'] = user_data[score['user']].username
         score['accuracy'] = round(score['score'] / max_score(leaderboard_data['notes']) * 100, 2)
         score['rank'] = i + 1
+
+    if extend:
+        score_data = extend_scores(leaderboard_data, score_data, 0)
 
     return jsonify(score_data)
 

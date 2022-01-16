@@ -102,10 +102,21 @@ def laderboard_scores_nearby_api(leaderboard_id, user):
     user = int(user)
     return api.get_leaderboard_scores_nearby(leaderboard_id, user)
 
+@app.route('/api/leaderboard/<leaderboard_id>/nearby_scores_extended/<user>')
+def laderboard_scores_nearby_extended_api(leaderboard_id, user):
+    api_endpoint()
+    user = int(user)
+    return api.get_leaderboard_scores_nearby(leaderboard_id, user, extend=True)
+
 @app.route('/api/leaderboard/<leaderboard_id>/friends', methods=['POST'])
 def leaderboard_scores_friends_api(leaderboard_id):
     api_endpoint()
     return api.leaderboard_scores_friends(leaderboard_id, request.json['friends'])
+
+@app.route('/api/leaderboard/<leaderboard_id>/friends_extended', methods=['POST'])
+def leaderboard_scores_friends_extended_api(leaderboard_id):
+    api_endpoint()
+    return api.leaderboard_scores_friends(leaderboard_id, request.json['friends'], extend=True)
 
 @app.route('/api/tools/mass_ss_to_hitbloq', methods=['POST'])
 def mass_ss_to_hitbloq_id():
