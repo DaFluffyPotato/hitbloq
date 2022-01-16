@@ -95,7 +95,7 @@ async def on_message(message):
                 if (banner_url[:20] == 'https://i.imgur.com/') and (banner_url.split('.')[-1] in ['png', 'jpeg', 'jpg']):
                     user_id = database.get_linked_account(message.author.id)
                     if user_id == -1:
-                        await message.channel.send(message.author.mention + ' please link your Hitbloq account user !link_account first.')
+                        await message.channel.send(message.author.mention + ' please link your Hitbloq account using `!link_account` first.')
                     else:
                         users = database.get_users([user_id])
                         if len(users):
@@ -103,6 +103,27 @@ async def on_message(message):
                             await message.channel.send(message.author.mention + ' a new score banner has been set!')
                 else:
                     await message.channel.send(message.author.mention + ' banner URLs must be https://i.imgur.com links and they must be png or jpeg/jpg. You can get these by right clicking the image and clicking "open image in new tab".')
+
+            if message_args[0] == '!set_color':
+                custom_color = message_args[1]
+                invalid_color = False
+                if (custom_color[0] != '#') or (len(custom_color) != 7):
+                    invalid_color = True
+                try:
+                    a = int(custom_color[1:], 16)
+                except ValueError:
+                    invalid_color = True
+
+                if invalid_color:
+                    await message.channel.send(message.author.mention + ' that hex color is invalid. Must be between #000000 and #ffffff.')
+                else:
+                    user_id = database.get_linked_account(message.author.id)
+                    if user_id == -1:
+                        await message.channel.send(message.author.mention + ' please link your Hitbloq account using `!link_account` first.')
+                    else:
+                        users = database.get_users([user_id])
+                        if len(users):
+                            database.update_user(users[0], {'$set': {'custom_color': custom_color}})
 
             if message_args[0] == '!create_pool':
                 try:
