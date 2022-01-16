@@ -96,7 +96,7 @@ def process_action(action):
                 'syncURL': 'https://hitbloq.com/static/hashlists/' + pool + '.bplist',
             }
             song_dict = {}
-            for hash in sorted(map_lists[pool], key=lambda x: leaderboard_data[x[0]]['star_rating'][pool] if pool in leaderboard_data[hash[0]]['star_rating'] else 0, reverse=True):
+            for hash in sorted(map_lists[pool], key=lambda x: leaderboard_data[x[0]]['star_rating'][pool] if pool in leaderboard_data[x[0]]['star_rating'] else 0, reverse=True):
                 characteristic = hash[1][1].split('_')[2].replace('Solo', '')
                 difficulty = hash[1][1].split('_')[1][0].lower() + hash[1][1].split('_')[1][1:]
                 #print(pool, leaderboard_data[hash[0]])
