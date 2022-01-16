@@ -124,6 +124,7 @@ async def on_message(message):
                         users = database.get_users([user_id])
                         if len(users):
                             database.update_user(users[0], {'$set': {'custom_color': custom_color}})
+                        await message.channel.send(message.author.mention + ' updated your custom color to `' + custom_color + '`.')
 
             if message_args[0] == '!create_pool':
                 try:
