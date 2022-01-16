@@ -83,7 +83,8 @@ async def on_message(message):
         if message.channel.name == PATRON_COMMANDS_CHANNEL:
             if message_args[0] == '!link_account':
                 user_id = int(message_args[1])
-                print(message.author.id)
+                database.update_discord_tags({message.author.id: message.author.name + "#" + message.author.discriminator})
+                database.link_discord_account(message.author.id, user_id)
                 await message.channel.send(message.author.mention + ' the following account has been linked to your Discord account:\nhttps://hitbloq.com/user/' + str(user_id))
 
             if message_args[0] in ['!set_banner', '!set_profile_banner', '!set_profile_background']:

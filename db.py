@@ -525,6 +525,9 @@ class HitbloqMongo():
         for user in users:
             self.db['discord_users'].update_one({'_id': user}, {'$set': {'tag': users[user]}}, upsert=True)
 
+    def link_discord_account(self, discord_id, hitbloq_id):
+        self.db['discord_users'].update_one({'_id': discord_id}, {'$set': {'user_id': hitbloq_id}})
+
     def get_discord_users(self, users):
         return list(self.db['discord_users'].find({'_id': {'$in': users}}))
 
