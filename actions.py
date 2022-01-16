@@ -76,10 +76,19 @@ def process_action(action):
                 except:
                     pass
 
+            authors = database.db['discord_users'].find({'_id': {'$in': map_pools[pool]['owners']}})
+            authors_text = ''
+            for i, author in enumerate(authors):
+                authors_text += authors['tag'].split('#')[0]
+                if i == len(authors) - 2:
+                    authors_text += ', and '
+                elif i < len(authors) - 2:
+                    authors_text += ', '
+
             hash_list_json = {
                 'playlistTitle': map_pools[pool]['shown_name'],
-                'playlistAuthor': 'Hitbloq',
-                'playlistDescription': 'Hitbloq',
+                'playlistAuthor': authors_text,
+                'playlistDescription': map_pools[pool]['long_description'],
                 'image': playlist_img_b64,
                 'songs': [],
                 'syncURL': 'https://hitbloq.com/static/hashlists/' + pool + '.bplist',
