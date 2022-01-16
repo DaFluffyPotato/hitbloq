@@ -84,6 +84,8 @@ def process_action(action):
                     authors_text += ', and '
                 elif i < len(authors) - 2:
                     authors_text += ', '
+            if authors_text == '':
+                authors_text = 'unknown'
 
             hash_list_json = {
                 'playlistTitle': map_pools[pool]['shown_name'],
