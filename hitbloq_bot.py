@@ -93,11 +93,14 @@ async def on_message(message):
                 field = {'!set_banner': 'score_banner', '!set_profile_banner': 'profile_banner', '!set_profile_background': 'profile_background'}[message_args[0]]
                 banner_url = message_args[1]
                 if (banner_url[:20] == 'https://i.imgur.com/') and (banner_url.split('.')[-1] in ['png', 'jpeg', 'jpg']):
-                    user_id = int(message_args[2])
-                    users = database.get_users([user_id])
-                    if len(users):
-                        database.update_user(users[0], {'$set': {field: banner_url}})
-                        await message.channel.send(message.author.mention + ' a new score banner has been set!')
+                    user_id = database.get_linked_account(message.author.id)
+                    if user_id == -1:
+                        await message.channel.send(message.author.mention + ' please link your Hitbloq account user !link_account first.')
+                    else:
+                        users = database.get_users([user_id])
+                        if len(users):
+                            database.update_user(users[0], {'$set': {field: banner_url}})
+                            await message.channel.send(message.author.mention + ' a new score banner has been set!')
                 else:
                     await message.channel.send(message.author.mention + ' banner URLs must be https://i.imgur.com links and they must be png or jpeg/jpg. You can get these by right clicking the image and clicking "open image in new tab".')
 
