@@ -200,6 +200,7 @@ def ranked_ladder(pool_id, page, players_per_page=10, search=None):
                 'rank_change': None,
                 'user': player.id,
                 'banner_image': player.score_banner,
+                'custom_color': player.custom_color,
                 'cr': player.cr_totals[pool_id] if pool_id in player.cr_totals else 0,
             })
 
