@@ -84,7 +84,7 @@ async def on_message(message):
             if message_args[0] == '!link_account':
                 user_id = int(message_args[1])
                 database.update_discord_tags({message.author.id: message.author.name + "#" + message.author.discriminator})
-                if database.link_discord_account(message.author.id, user_id)
+                if database.link_discord_account(message.author.id, user_id):
                     await message.channel.send(message.author.mention + ' the following account has been linked to your Discord account:\nhttps://hitbloq.com/user/' + str(user_id))
                 else:
                     await message.channel.send(message.author.mention + ' you appear to have already claimed an account. Contact and admin for assistance if you believe this is an error.')
