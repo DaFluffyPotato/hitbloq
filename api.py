@@ -88,7 +88,11 @@ def get_map_pools_detailed():
     return jsonify(response)
 
 def get_leaderboard_info(leaderboard_id):
-    leaderboard_data = list(database.get_leaderboards([leaderboard_id]))[0]
+    try:
+        leaderboard_data = list(database.get_leaderboards([leaderboard_id]))[0]
+    except IndexError:
+        return jsonify({'error': 'not found'})
+        
     leaderboard_data['_id'] = str(leaderboard_data['_id'])
     return jsonify(leaderboard_data)
 

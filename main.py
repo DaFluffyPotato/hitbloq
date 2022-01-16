@@ -143,7 +143,8 @@ def user_basic_api(user_id):
 def player_rank_api(pool_id, user):
     api_endpoint()
     user = int(user)
-    
+
+    # catching mod bug from versions <= 1.2.1
     if pool_id == 'None':
         return 'stop lol', 500
 
