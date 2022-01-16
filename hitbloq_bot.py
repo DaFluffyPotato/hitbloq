@@ -115,7 +115,7 @@ async def on_message(message):
                     invalid_color = True
 
                 if invalid_color:
-                    await message.channel.send(message.author.mention + ' that hex color is invalid. Must be between #000000 and #ffffff.')
+                    await message.channel.send(message.author.mention + ' that hex color is invalid. Must be between `#000000` and `#ffffff`.')
                 else:
                     user_id = database.get_linked_account(message.author.id)
                     if user_id == -1:

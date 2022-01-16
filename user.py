@@ -18,6 +18,7 @@ class User():
         self.rank_history = {}
         self.last_manual_refresh = 0
         self.badges = []
+        self.custom_color = None
 
         # temp values
         self.scores = []
@@ -108,6 +109,7 @@ class User():
         self.profile_banner = None
         self.profile_background = None
         self.last_manual_refresh = 0
+        self.custom_color = '#ffffff'
 
         self.cr_totals = {pool_id : 0 for pool_id in pool_ids}
 
@@ -129,6 +131,7 @@ class User():
         self.profile_background = json_data['profile_background']
         self.last_manual_refresh = json_data['last_manual_refresh']
         self.badges = json_data['badges']
+        self.custom_color = json_data['custom_color']
         return self
 
     def jsonify(self):
@@ -147,6 +150,7 @@ class User():
             'profile_background': self.profile_background,
             'last_manual_refresh': self.last_manual_refresh,
             'badges': self.badges,
+            'custom_color': self.custom_color,
         }
         return json_data
 

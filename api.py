@@ -92,7 +92,7 @@ def get_leaderboard_info(leaderboard_id):
         leaderboard_data = list(database.get_leaderboards([leaderboard_id]))[0]
     except IndexError:
         return jsonify({'error': 'not found'})
-        
+
     leaderboard_data['_id'] = str(leaderboard_data['_id'])
     return jsonify(leaderboard_data)
 
@@ -103,9 +103,11 @@ def get_leaderboard_scores(leaderboard_id, offset=0, count=30):
         del score['_id']
     return jsonify(score_data)
 
-def extend_scores(leaderboard_data, score_data, base_rank):
+def extend_scores(leaderboard_data, score_data, base_rank, user_data=None):
     user_list = [score['user'] for score in score_data]
-    user_data = {user.id : user for user in database.get_users(user_list)}
+    if not user_data:
+        user_data = {user.id : user for user in database.get_users(user_list)}
+
     for i, score in enumerate(score_data):
         if '_id' in score:
             del score['_id']
@@ -115,6 +117,7 @@ def extend_scores(leaderboard_data, score_data, base_rank):
         score['profile_pic'] = user_data[score['user']].profile_pic
         score['date_set'] = epoch_ago(score['time_set']) + ' ago'
         score['banner_image'] = user_data[score['user']].score_banner
+        score['custom_color'] = user_data[score['user']].custom_color
 
     return score_data
 
@@ -155,7 +158,7 @@ def get_leaderboard_scores_nearby(leaderboard_id, user, extend=False):
 
     # TODO remove spaghetti with doubled up user requests
     if extend:
-        score_data = extend_scores(leaderboard_data, score_data, base_index)
+        score_data = extend_scores(leaderboard_data, score_data, base_index, user_data=user_data)
 
     return jsonify(score_data)
 
@@ -176,7 +179,7 @@ def leaderboard_scores_friends(leaderboard_id, friends_list, extend=False):
 
     # TODO remove spaghetti with doubled up user requests
     if extend:
-        score_data = extend_scores(leaderboard_data, score_data, 0)
+        score_data = extend_scores(leaderboard_data, score_data, 0, user_data=user_data)
 
     return jsonify(score_data)
 
