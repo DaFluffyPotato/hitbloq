@@ -149,6 +149,7 @@ def get_leaderboard_scores_nearby(leaderboard_id, user, extend=False):
         score['accuracy'] = round(score['score'] / max_score(leaderboard_data['notes']) * 100, 2)
         score['rank'] = base_index + i + 1
 
+    # TODO remove spaghetti with doubled up user requests
     if extend:
         score_data = extend_scores(leaderboard_data, score_data, base_index)
 
@@ -169,6 +170,7 @@ def leaderboard_scores_friends(leaderboard_id, friends_list, extend=False):
         score['accuracy'] = round(score['score'] / max_score(leaderboard_data['notes']) * 100, 2)
         score['rank'] = i + 1
 
+    # TODO remove spaghetti with doubled up user requests
     if extend:
         score_data = extend_scores(leaderboard_data, score_data, 0)
 

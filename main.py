@@ -143,6 +143,8 @@ def user_basic_api(user_id):
 def player_rank_api(pool_id, user):
     api_endpoint()
     user = int(user)
+    if pool_id == 'None':
+        print(request.headers.get('User-Agent'))
     return api.player_rank_api(pool_id, user)
 
 @app.route('/api/player_ranks', methods=['POST'])
