@@ -79,7 +79,7 @@ def process_action(action):
             authors = database.db['discord_users'].find({'_id': {'$in': map_pools[pool]['owners']}})
             authors_text = ''
             for i, author in enumerate(authors):
-                authors_text += authors['tag'].split('#')[0]
+                authors_text += author['tag'].split('#')[0]
                 if i == len(authors) - 2:
                     authors_text += ', and '
                 elif i < len(authors) - 2:
