@@ -2,6 +2,8 @@ def calculate_weight(constant, index):
     return constant ** index
 
 def base_curve(accuracy, curve_data):
+    accuracy = min(accuracy, 100)
+    
     # https://www.desmos.com/calculator/bkyq4lsq2l
     # baseline: z
     # cutoff: w
@@ -25,6 +27,8 @@ def base_curve(accuracy, curve_data):
         return accuracy / 100 * cutoff + (1 - cutoff) * ((accuracy - baseline)/(100 - baseline)) ** exponential
 
 def linear_curve(accuracy, curve_data):
+    accuracy = min(accuracy, 100)
+
     defaults = {'points': [[0, 0], [0.8, 0.5], [1, 1]]}
     defaults.update(curve_data)
     curve_data = defaults
