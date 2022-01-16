@@ -217,6 +217,7 @@ def ranked_ladder(pool_id, page, players_per_page=10, search=None):
             player['profile_pic'] = user_data[player['user']].profile_pic
             player['rank_change'] = user_data[player['user']].rank_change(pool_id, player['rank'])
             player['banner_image'] = user_data[player['user']].score_banner
+            player['custom_color'] = user_data[player['user']].custom_color
 
         return jsonify(ladder_data)
 
@@ -239,6 +240,8 @@ def ranked_ladder_nearby(pool_id, user_id):
     for i, player in enumerate(ladder_data['ladder']):
         player['username'] = user_data[player['user']].username
         player['rank'] = base_index + i + 1
+        player['banner_image'] = user_data[player['user']].score_banner
+        player['custom_color'] = user_data[player['user']].custom_color
 
     return jsonify(ladder_data)
 
@@ -256,6 +259,8 @@ def ranked_ladder_friends(pool_id, friends_list):
             'user': friend.id,
             'cr': friend.cr_totals[pool_id],
             'username': friend.username,
+            'banner_image': friend.score_banner,
+            'custom_color': friend.custom_color,
         })
 
     return jsonify(ladder_data)
