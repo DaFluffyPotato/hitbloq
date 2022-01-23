@@ -2,6 +2,7 @@ import asyncio
 import json
 import time
 import sys
+import os
 
 import discord
 from discord.utils import get
@@ -235,6 +236,21 @@ async def on_message(message):
                 if len(endpoints):
                     output_text = output_text[:-1]
                 output_text += '```'
+                await message.channel.send(message.author.mention + '\n' + output_text)
+
+            if message_args[0] == '!error_groups':
+                output_text = '```'
+                for error_log in os.listdir('logs'):
+                    output_text += error_log + '\n'
+                output_text += '```'
+                await message.channel.send(message.author.mention + '\n' + output_text)
+
+            if message_args[0] == '!errors':
+                error_group = message_args[1]
+                f = open('logs/' + error_group, 'r')
+                dat = f.read()
+                f.close()
+                output_text = '```' + dat[-5000:] + '```'
                 await message.channel.send(message.author.mention + '\n' + output_text)
 
             if message_args[0] == '!stop_bot':
