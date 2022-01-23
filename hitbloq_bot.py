@@ -247,6 +247,7 @@ async def on_message(message):
 
             if message_args[0] == '!errors':
                 error_group = message_args[1]
+                error_group = error_group.replace('/', '').replace('..', '')
                 f = open('logs/' + error_group, 'r')
                 dat = f.read()
                 f.close()
