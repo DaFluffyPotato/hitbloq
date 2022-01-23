@@ -250,7 +250,7 @@ async def on_message(message):
                 f = open('logs/' + error_group, 'r')
                 dat = f.read()
                 f.close()
-                output_text = '```' + dat[-5000:] + '```'
+                output_text = '```' + dat[-3500:] + '```'
                 await message.channel.send(message.author.mention + '\n' + output_text)
 
             if message_args[0] == '!stop_bot':
