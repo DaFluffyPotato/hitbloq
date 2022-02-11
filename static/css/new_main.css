@@ -110,7 +110,7 @@ p {
 }
 
 .navbar {
-  background-color: rgb(0, 153, 219, 0.9);
+  background-color: rgb(0, 153, 219, 0.7);
   font-size: 300%;
   position: fixed;
   width: 100%;
@@ -315,7 +315,7 @@ p {
   }
 
   .navbar {
-    background-color: rgba(0, 153, 219, 0.9);
+    background-color: rgba(0, 153, 219, 0.7);
     font-size: 200%;
     position: fixed;
     width: 100%;
