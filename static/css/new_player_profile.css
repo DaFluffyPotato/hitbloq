@@ -92,7 +92,7 @@
   grid-template-columns: 4em 7% 30% 12% 0% auto;
   gap: 1em;
   height: 4em;
-  background-color: rgb(24, 20, 37);
+  background-color: rgb(13, 13, 14);
   border-radius: 0.7em;
   overflow: hidden;
   margin: 0.5em 0;
@@ -103,7 +103,7 @@
 }
 
 .player-score-entry:hover .score-cover {
-  box-shadow: 0.2em 0 0 rgb(255, 0, 68);
+  box-shadow: 0.2em 0 0 rgb(0, 153, 219);
 }
 
 .score-cover {
@@ -172,7 +172,7 @@
 }
 
 .rank-circle {
-  border: 2px solid rgb(255, 0, 68);
+  border: 2px solid rgb(0, 153, 219);
   background-color: rgb(0, 0, 0);
   width: 1em;
   height: 1em;
@@ -211,7 +211,7 @@
   grid-template-columns: 53% 5.5em auto;
   gap: 1em;
   height: 2.5em;
-  background-color: rgb(24, 20, 37);
+  background-color: rgb(13, 13, 14);
   border-radius: 0.7em;
   overflow: hidden;
   margin: 0.25em 0;

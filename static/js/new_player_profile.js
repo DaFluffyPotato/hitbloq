@@ -56,7 +56,7 @@ function updateRankHistory(status, data, mouse) {
   var ctx = canvas.getContext('2d');
   var baseline = canvas.height / 2;
   var dayWidth = canvas.width / (rankData.history.length - 1);
-  ctx.strokeStyle = 'rgb(255, 0, 68)';
+  ctx.strokeStyle = 'rgb(0, 153, 219)';
 
   var maxRank = Math.max(...rankData.history);
   var minRank = Math.min(...rankData.history);
@@ -171,7 +171,7 @@ window.addEventListener('load', () => {
 
   getJSON(window.location.origin + '/api/popular_pools', fetchRanks);
 
-  document.getElementById(sortMode + '-sort-link').style.boxShadow = '0px -2px 0px rgb(255, 0, 68) inset';
+  document.getElementById(sortMode + '-sort-link').style.boxShadow = '0px -2px 0px rgb(0, 153, 219) inset';
 
   loadTemplates(['new_player_profile_score', 'new_player_profile_rank'], finishedTemplateLoading);
 })

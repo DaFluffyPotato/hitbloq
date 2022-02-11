@@ -21,7 +21,7 @@
 }
 
 .map-pool-card:hover {
-  box-shadow: 0.25cm 0.25cm 0cm rgb(255, 0, 68);
+  box-shadow: 0.25cm 0.25cm 0cm rgb(0, 153, 219);
   left: -0.1em;
   top: -0.1em;
 }
@@ -36,7 +36,7 @@
 }
 
 .map-pool-link:hover {
-  color: rgb(255, 0, 68);
+  color: rgb(0, 153, 219);
   transition: all 250ms;
 }
 

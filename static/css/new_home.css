@@ -17,11 +17,11 @@
 }
 
 .map-pools-info {
-  background-color: rgb(38, 43, 68);
+  background-color: rgb(40, 42, 54);
 }
 
 .using-map-pools {
-  background-color: rgb(38, 43, 68);
+  background-color: rgb(40, 42, 54);
 }
 
 .map-pools-img {
@@ -77,13 +77,13 @@
   }
 
   .map-pools-info {
-    background-color: rgb(38, 43, 68);
+    background-color: rgb(40, 42, 54);
     margin: 20vh 0 3.5cm 0;
     display: flex;
   }
 
   .using-map-pools {
-    background-color: rgb(38, 43, 68);
+    background-color: rgb(40, 42, 54);
     margin: 20vh 0 3.5cm 0;
     display: flex;
   }

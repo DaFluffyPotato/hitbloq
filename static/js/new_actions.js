@@ -18,7 +18,7 @@ function updateActions(status, action_data) {
     }
 
     if (action['progress'] != 0) {
-      newHTML += '<div class="action-entry" style="box-shadow: -1px 0px 0px 0px rgb(255, 0, 68), 0px 0px 6px 0px rgba(0, 0, 0, 0.28) inset;">' + action['type'] + ' <i>(created ' + timePassedStr + ' ago)</i><br><div class="action-progress-container"><div class="action-progress" style="width: ' + (action['progress'] * 100) + '%"></div></div>';
+      newHTML += '<div class="action-entry" style="box-shadow: -1px 0px 0px 0px rgb(0, 153, 219), 0px 0px 6px 0px rgba(0, 0, 0, 0.28) inset;">' + action['type'] + ' <i>(created ' + timePassedStr + ' ago)</i><br><div class="action-progress-container"><div class="action-progress" style="width: ' + (action['progress'] * 100) + '%"></div></div>';
     } else {
       newHTML += '<div class="action-entry">' + action['type'] + ' <i>(created ' + timePassedStr + ' ago)</i><br>';
     }

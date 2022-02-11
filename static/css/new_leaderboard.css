@@ -34,7 +34,7 @@
 .leaderboard-cover {
   height: 12em;
   width: 12em;
-  box-shadow: 0.3em 0.3em 0 rgb(255, 0, 68);
+  box-shadow: 0.3em 0.3em 0 rgb(0, 153, 219);
   border: 3px solid rgb(0, 0, 0);
 }
 
@@ -83,7 +83,7 @@
   grid-template-columns: 2em 9% 36% 22% auto;
   gap: 1em;
   height: 2em;
-  background-color: rgb(24, 20, 37);
+  background-color: rgb(13, 13, 14);
   border-radius: 0.5em;
   overflow: hidden;
   margin: 0.5em 0;
@@ -95,7 +95,7 @@
 }
 
 .leaderboard-entry:hover .leaderboard-pfp {
-  box-shadow: 0.2em 0 0 rgb(255, 0, 68);
+  box-shadow: 0.2em 0 0 rgb(0, 153, 219);
 }
 
 .leaderboard-pfp {
@@ -125,7 +125,7 @@
 .leaderboard-score {
   font-size: 0.7em;
   font-style: italic;
-  color: rgb(255, 0, 68);
+  color: rgb(0, 153, 219);
 }
 
 .leaderboard-cr {

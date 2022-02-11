@@ -28,7 +28,7 @@ function genPlayerLeaderboard(status, data) {
           changeStr = '<span style="color: #42B129">+' + changeStr + '</span>';
         }
       } else {
-        changeStr = '<span style="color: rgb(255, 0, 68)">' + changeStr + '</span>';
+        changeStr = '<span style="color: rgb(0, 153, 219)">' + changeStr + '</span>';
       }
     }
 
