@@ -41,14 +41,16 @@ class User():
         if self.scores == []:
             player_tier = 'none'
         elif player_rank_ratio < 0.001:
-            player_tier = 'myth'
+            player_tier = 'mystic'
         elif player_rank_ratio < 0.01:
+            player_tier = 'myth'
+        elif player_rank_ratio < 0.025:
             player_tier = 'master'
-        elif player_rank_ratio < 0.05:
+        elif player_rank_ratio < 0.07:
             player_tier = 'diamond'
-        elif player_rank_ratio < 0.1:
+        elif player_rank_ratio < 0.15:
             player_tier = 'platinum'
-        elif player_rank_ratio < 0.2:
+        elif player_rank_ratio < 0.25:
             player_tier = 'gold'
         elif player_rank_ratio < 0.5:
             player_tier = 'silver'
