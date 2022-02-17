@@ -1,11 +1,12 @@
 import json
+import time
 
 from flask import request
 
 from templates import templates
 from db import database
 from profile import Profile
-from general import epoch_to_date, lengthen_settings
+from general import epoch_to_date, lengthen_settings, format_num
 import urllib.parse
 
 new_pages = {}
@@ -58,7 +59,16 @@ def home():
 def about():
     header = generate_header(title='About Hitbloq', additional_css=['new_about.css'])
     setup_data = page_setup()
-    html = templates.inject('new_base', {'header': header, 'content': templates.inject('new_about', {})})
+    about_stats = {
+        'website_views': format_num(int(database.get_counter('views')['count'])),
+        'api_requests': format_num(int(database.get_counter('api_reqs')['count'])),
+        'users': format_num(int(database.db['users'].find({}).count())),
+        'scores': format_num(int(database.db['scores'].find({}).count())),
+        'leaderboards': format_num(int(database.db['leaderboards'].find({}).count())),
+        'pools': format_num(int(database.db['ranked_lists'].find({}).count())),
+        'new_users': format_num(int(database.db['users'].find({'date_created': {'$gt': time.time() - (60 * 60 * 24)}}).count())),
+    }
+    html = templates.inject('new_base', {'header': header, 'content': templates.inject('new_about', about_stats)})
     return html
 
 @page
