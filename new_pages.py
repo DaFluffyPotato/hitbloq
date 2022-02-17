@@ -319,3 +319,15 @@ def contact():
 
     html = templates.inject('new_base', {'header': header, 'content': templates.inject('new_contact', {})})
     return html
+
+@page
+def discord():
+    header = generate_header(
+        image='https://hitbloq.com/static/hitbloq.png',
+        title='Discord',
+        desc='Join the Hitbloq Discord!'
+    )
+    setup_data = page_setup()
+
+    html = templates.inject('new_base', {'header': header, 'content': templates.inject('new_discord', {})})
+    return html

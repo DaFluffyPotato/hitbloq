@@ -282,5 +282,10 @@ def contact():
     html = new_pages['contact']()
     return html
 
+@app.route('/discord')
+def discord():
+    html = new_pages['discord']()
+    return html
+
 if __name__ == "__main__":
     app.run()
