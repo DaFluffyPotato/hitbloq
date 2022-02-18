@@ -346,7 +346,7 @@ class HitbloqMongo():
                 '_id': user['_id'],
                 'cr_total': 0,
                 'rank_history': [],
-                'max_rank': None,
+                'max_rank': 999999999,
             }
             bulk_insert.append(user_pool_data)
             if i % 5000 == 4999:
