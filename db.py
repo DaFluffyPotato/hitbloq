@@ -341,7 +341,7 @@ class HitbloqMongo():
         database.db['za_pool_users_' + name].create_index([('cr_total', pymongo.DESCENDING)])
 
         i = 0
-        for user in self.db['users'].find({}, {_id: 1}):
+        for user in self.db['users'].find({}, {'_id': 1}):
             user_pool_data = {
                 '_id': user['_id'],
                 'cr_total': 0,
