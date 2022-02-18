@@ -337,6 +337,26 @@ class HitbloqMongo():
 
         database.db['users'].create_index([('total_cr.' + name, pymongo.DESCENDING)])
 
+        bulk_insert = []
+        database.db['za_pool_users_' + name].create_index([('cr_total', pymongo.DESCENDING)])
+
+        i = 0
+        for user in self.db['users'].find({}, {_id: 1}):
+            user_pool_data = {
+                '_id': user['_id'],
+                'cr_total': 0,
+                'rank_history': [],
+                'max_rank': 0,
+            }
+            bulk_insert.append(user_pool_data)
+            if i % 5000 == 4999:
+                self.db['za_pool_users_' + name].insert_many(bulk_insert)
+                bulk_insert = []
+            i += 1
+
+        if len(bulk_insert):
+            self.db['za_pool_users_' + name].insert_many(bulk_insert)
+
     def set_pool_owners(self, map_pool, owners):
         self.db['ranked_lists'].update_one({'_id': map_pool}, {'$set': {'owners': owners}})
 
@@ -355,6 +375,7 @@ class HitbloqMongo():
         self.db['leaderboards'].update_many({}, {'$unset': {'star_rating.' + name: 1, 'forced_star_rating.' + name: 1}})
         self.db['scores'].update_many({}, {'$unset': {'cr.' + name: 1}})
         self.db['ranked_lists'].delete_one({'_id': name})
+        self.db['za_pool_users_' + name].drop()
         print('successfully deleted map pool:', name)
 
     def unrank_song(self, leaderboard_id, map_pool):
