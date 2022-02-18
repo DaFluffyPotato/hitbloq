@@ -102,11 +102,12 @@ function updateRankHistory(status, data, mouse) {
 
 function genScores(status, data) {
   for (const score of data) {
+    var scorePage = Math.floor((score['song_rank'] - 1) / 20);
     var newHTML = useTemplate('new_player_profile_score',
       {
           'cover': score['song_cover'],
           'rank': score['song_rank'],
-          'name': '<a href="/leaderboard/' + score['song_id'] + '?pool=' + mapPool + '" class="link">' + score['song_name'] + '</a>',
+          'name': '<a href="/leaderboard/' + score['song_id'] + '?pool=' + mapPool + '&page=' + scorePage + '" class="link">' + score['song_name'] + '</a>',
           'difficulty': score['difficulty'],
           'date': score['date_set'],
           'raw_cr': score['cr_received'],
