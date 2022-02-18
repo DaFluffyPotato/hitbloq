@@ -116,7 +116,7 @@ class User():
         self.cr_totals = {pool_id : 0 for pool_id in pool_ids}
 
         for pool_id in pool_ids:
-            pool_stats = {'_id': self.id, 'rank_history': [], 'cr_total': 0, 'max_rank': 0}
+            pool_stats = {'_id': self.id, 'rank_history': [], 'cr_total': 0, 'max_rank': None}
             database.db['za_pool_users_' + pool_id].insert_one(pool_stats)
 
         database.add_user(self)

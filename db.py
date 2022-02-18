@@ -346,7 +346,7 @@ class HitbloqMongo():
                 '_id': user['_id'],
                 'cr_total': 0,
                 'rank_history': [],
-                'max_rank': 0,
+                'max_rank': None,
             }
             bulk_insert.append(user_pool_data)
             if i % 5000 == 4999:
@@ -532,6 +532,7 @@ class HitbloqMongo():
         # this will need to be bundled into one request somehow later on
         for rank, user in enumerate(ranked_ladder):
             self.db['users'].update_one({'_id': user}, {'$push': {'rank_history.' + pool_id: {'$each': [rank + 1], '$slice': -60}}, '$min': {'max_rank.' + pool_id: rank + 1}})
+            #self.db['za_pool_users_' + pool_id].update_one({'_id': user}, {'$push': {'rank_history': {'$each': [rank + 1], '$slice': -60}}, '$min': {'max_rank': rank + 1}})
             if action_id:
                 if rank % 200 == 0:
                     self.set_action_progress(action_id, rank / len(ranked_ladder))
