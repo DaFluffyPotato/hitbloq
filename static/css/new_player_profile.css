@@ -196,7 +196,17 @@
 .user-update-button {
   position: absolute;
   top: 2em;
+  right: 5em;
+}
+
+.user-ss-button {
+  position: absolute;
+  top: 1.9em;
   right: 2em;
+}
+
+.user-ss-button:hover {
+  top: 2.05em;
 }
 
 .player-profile-header-text {

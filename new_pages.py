@@ -134,8 +134,8 @@ def user(user_id):
         'total_scores': '{:,}'.format(profile_obj.user.scores_total),
         'pool_scores_set': '{:,}'.format(len(profile_obj.user.scores)),
         'rank_img': '/static/ranks/default/' + profile_obj.user.pool_tier + '.png',
-        'pool_rank': '{:,}'.format(profile_obj.user.pool_rank),
-        'pool_max_rank': '{:,}'.format(profile_obj.user.pool_max_rank),
+        'pool_rank': '<a href="/ladder/' + pool_id + '?page=' + str(int((profile_obj.user.pool_rank - 1) / 50)) + '" class="link">#' + '{:,}'.format(profile_obj.user.pool_rank) + '</a>',
+        'pool_max_rank': '#' + '{:,}'.format(profile_obj.user.pool_max_rank),
         'pool_cr': '{:,}'.format(round(profile_obj.user.pool_cr_total, 2)),
         'selected_pool': pool_data['shown_name'],
         'page_left': last_page,
@@ -145,6 +145,7 @@ def user(user_id):
         'sort_oldest': sort_change_url.replace('sort_replace', 'oldest'),
         'player_banner_styling': banner_style,
         'last_manual_refresh': str(profile_obj.user.last_manual_refresh),
+        'scoresaber_id': profile_obj.user.scoresaber_id,
     }
 
     desc_text = 'Rank: #' + '{:,}'.format(profile_obj.user.pool_rank) + '\n'

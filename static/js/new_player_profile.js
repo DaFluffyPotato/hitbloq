@@ -131,9 +131,10 @@ function genRanks(status, data) {
         {
             'pool_name': rank['pool_shown_name'],
             'rank_img': rank['tier'] + '.png',
-            'rank_rank': rank['rank'],
+            'rank_rank': '<a href="/ladder/' + rank['pool'] + '?page=' + Math.floor((rank['rank'] - 1) / 50) + '" class="link">#' + rank['rank'] + '</a>',
             'rank_cr': rank['cr'],
             'pool_id': rank['pool'],
+            'user_id': userID,
         }
       );
     }
