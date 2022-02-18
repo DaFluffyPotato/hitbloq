@@ -138,4 +138,33 @@ function setAnnouncement(status, data) {
   }
 }
 
+var selectedMapPool;
+
+function getSelectedPool() {
+  let params = new URLSearchParams(location.search)
+
+  selectedMapPool = params.get('pool');
+  if (selectedMapPool == null) {
+    if (window.location.pathname.split('/')[1] == 'ladder') {
+      selectedMapPool = window.location.pathname.split('/')[2];
+    } else if (window.location.pathname.split('/')[1] == 'map_pool') {
+      selectedMapPool = window.location.pathname.split('/')[2];
+    } else if (window.location.pathname.split('/')[1] == 'ranked_list') {
+      selectedMapPool = window.location.pathname.split('/')[2];
+    }
+  }
+}
+
 getJSON('/api/announcement', setAnnouncement);
+
+window.addEventListener('load', () => {
+  getSelectedPool();
+
+  if (selectedMapPool == null) {
+    document.getElementById('second-navbar').style.display = 'none';
+  } else {
+    document.getElementById('second-navbar').style.opacity = 1;
+    document.getElementById('second-navbar-pool').innerHTML = 'Map Pool: <a href="/map_pool/' + selectedMapPool + '" class="link highlight">' + selectedMapPool + '</a>';
+    document.getElementById('second-navbar-links').innerHTML = '<a href="/ladder/' + selectedMapPool + '" class="link highlight">Ladder</a> - <a href="/ranked_list/' + selectedMapPool + '" class="link highlight">Ranked List</a> -  <a href="/static/hashlists/' + selectedMapPool + '.bplist" class="link highlight">Download</a>';
+  }
+});
