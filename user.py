@@ -26,6 +26,9 @@ class User():
     def generate_rank_info(self, database, map_pool):
         pool_data = self.load_pool_scores(database, map_pool)
 
+        if map_pool not in self.cr_totals:
+            self.load_pool_stats(database, map_pool)
+
         player_cr_total = 0
         if map_pool in self.cr_totals:
             player_cr_total = self.cr_totals[map_pool]
@@ -113,7 +116,7 @@ class User():
         self.last_manual_refresh = 0
         self.custom_color = '#ffffff'
 
-        self.cr_totals = {pool_id : 0 for pool_id in pool_ids}
+        self.cr_totals = {}
 
         for pool_id in pool_ids:
             pool_stats = {'_id': self.id, 'rank_history': [], 'cr_total': 0, 'max_rank': 999999999}
@@ -122,16 +125,26 @@ class User():
         database.add_user(self)
         return self
 
-    def load(self, json_data):
+    def load_pool_stats(self, database, pool_id):
+        pool_stats = database.db['za_pool_users_' + pool_id].find_one({'_id': self.id})
+        self.cr_totals[pool_id] = pool_stats['cr_total']
+        self.rank_history[pool_id] = pool_stats['rank_history']
+        self.max_rank[pool_id] = pool_stats['max_rank']
+
+    def load(self, json_data, pool_id=None):
         self.username = json_data['username']
         self.id = json_data['_id']
         self.scoresaber_id = json_data['scoresaber_id']
         self.last_update = json_data['last_update']
-        self.cr_totals = json_data['total_cr']
+
+        if pool_id:
+            if 'pool_stats' in json_data:
+                self.cr_totals = {pool_id: json_data['pool_stats'][0]['cr_total']}
+                self.rank_history = {pool_id: json_data['pool_stats'][0]['rank_history']}
+                self.max_rank = {pool_id: json_data['pool_stats'][0]['max_rank']}
+
         self.profile_pic = json_data['profile_pic']
         self.date_created = json_data['date_created']
-        self.max_rank = json_data['max_rank']
-        self.rank_history = json_data['rank_history']
         self.score_banner = json_data['score_banner']
         self.profile_banner = json_data['profile_banner']
         self.profile_background = json_data['profile_background']
@@ -146,7 +159,6 @@ class User():
             'username': self.username,
             'scoresaber_id': self.scoresaber_id,
             'last_update': self.last_update,
-            'total_cr': self.cr_totals,
             'profile_pic': self.profile_pic,
             'date_created': self.date_created,
             'max_rank': self.max_rank,

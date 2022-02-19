@@ -39,8 +39,16 @@ class HitbloqMongo():
     def get_all_users(self):
         return [user.User().load(user_found) for user_found in self.db['users'].find({})]
 
-    def get_users(self, users):
-        return [user.User().load(user_found) for user_found in self.db['users'].find({'_id': {'$in': users}})]
+    def get_users(self, users, pool_id=None):
+        if pool_id:
+            aggregation_results = database.db['users'].aggregate([
+                {'$match': {'_id': {'$in': users}}},
+                {'$lookup': {'from': 'za_pool_users_' + pool_id, 'localField': '_id', 'foreignField': '_id', 'as': 'pool_stats'}}
+                ])
+
+            return [user.User().load(user_found, pool_id=pool_id) for user_found in aggregation_results]
+        else:
+            return [user.User().load(user_found) for user_found in self.db['users'].find({'_id': {'$in': users}})]
 
     def search_users(self, search):
         return [user.User().load(user_found) for user_found in self.db['users'].find(search)]
@@ -54,15 +62,17 @@ class HitbloqMongo():
     def update_user_scores(self, user, action_id=None, queue_id=0):
         scoresaber_api = scoresaber.ScoresaberInterface(self.db, queue_id=queue_id)
         new_scores = scoresaber_api.fetch_until(user.scoresaber_id, user.last_update)
+        new_score_ids = []
         for i, score in enumerate(new_scores):
             print('adding score', i, '/', len(new_scores))
-            self.add_score(user, score)
+            new_score_id = self.add_score(user, score)
+            new_score_ids.append(new_score_id)
             if i % 10 == 0:
                 self.set_action_progress(action_id, i / len(new_scores))
 
         if len(new_scores):
             fresh_user = self.get_users([user.id])[0]
-            self.update_user_cr_total(fresh_user)
+            self.update_user_cr_total(fresh_user, score_ids=new_score_ids)
 
         self.update_user(user, {'$set': {'last_update': time.time()}})
 
@@ -73,7 +83,7 @@ class HitbloqMongo():
         if map_pool_id in user.cr_totals:
             cr_total = user.cr_totals[map_pool_id]
 
-            rank = self.db.users.find({'total_cr.' + map_pool_id: {'$gt': cr_total}}).sort('total_cr.bbbear', -1).count() + 1
+            rank = self.db['za_pool_users_' + map_pool_id].find({'cr_total': {'$gt': cr_total}}).sort('cr_total', -1).count() + 1
 
             return rank
 
@@ -85,8 +95,8 @@ class HitbloqMongo():
             'ladder': [],
         }
 
-        for user in self.db['users'].find({}).sort('total_cr.' + map_pool_id, -1).skip(start).limit(end - start):
-            ladder_data['ladder'].append({'user': user['_id'], 'cr': user['total_cr'][map_pool_id]})
+        for user in self.db['za_pool_users_' + map_pool_id].find({}).sort('cr_total', -1).skip(start).limit(end - start):
+            ladder_data['ladder'].append({'user': user['_id'], 'cr': user['cr_total']})
 
         return ladder_data
 
@@ -124,12 +134,13 @@ class HitbloqMongo():
         else:
             print('warning: no scores to replace')
 
-    def update_user_cr_total(self, user):
+    def update_user_cr_total(self, user, score_ids=[]):
         user.load_scores(self)
-        map_pool_ids = list(user.cr_totals)
+        map_pool_ids = self.get_ranked_list_ids()
         map_pools = self.search_ranked_lists({'_id': {'$in': map_pool_ids}})
         cr_counters = {map_pool_id : 0 for map_pool_id in map_pool_ids}
         cr_totals = {map_pool_id : 0 for map_pool_id in map_pool_ids}
+        changed_totals = []
         for map_pool in map_pools:
             valid_scores = [score for score in user.scores if map_pool['_id'] in score['cr']]
             valid_scores.sort(key=lambda x: x['cr'][map_pool['_id']], reverse=True)
@@ -137,9 +148,15 @@ class HitbloqMongo():
                 if score['song_id'] in map_pool['leaderboard_id_list']:
                     cr_totals[map_pool['_id']] += cr_accumulation_curve(cr_counters[map_pool['_id']], map_pool['accumulation_constant']) * score['cr'][map_pool['_id']]
                     cr_counters[map_pool['_id']] += 1
+
+                    if score['_id'] in score_ids:
+                        changed_totals.append(map_pool['_id'])
+
         for pool in cr_totals:
             user.cr_totals[pool] = cr_totals[pool]
-        self.db['users'].update_one({'_id': user.id}, {'$set': {'total_cr': user.cr_totals}})
+
+        for pool_id in changed_totals:
+            self.db['za_pool_users_' + pool_id].update_one({'_id': user.id}, {'$set': {'cr_total': user.cr_totals[pool_id]}})
         user.unload_scores()
 
     def add_score(self, user, scoresaber_json):
@@ -166,7 +183,7 @@ class HitbloqMongo():
             score_json = self.format_score(user, scoresaber_json, leaderboard)
             mongo_response = self.db['scores'].insert_one(score_json)
             inserted_id = mongo_response.inserted_id
-            return True
+            return inserted_id
 
     def delete_user_scores(self, user_id):
         score_list = list(self.db['scores'].find({'user': user_id}))
@@ -528,7 +545,7 @@ class HitbloqMongo():
         self.db['ranked_lists'].update_one({'_id': pool_id}, {'$set': {'cr_curve': curve_data, 'force_recalc': True}})
 
     def update_rank_histories(self, pool_id, action_id=None):
-        ranked_ladder = [user['_id'] for user in self.db['users'].find({}, {'_id': 1}).sort('total_cr.' + pool_id, -1)]
+        ranked_ladder = [user['_id'] for user in self.db['za_pool_users_' + pool_id].find({}, {'_id': 1, 'cr_total': 1}).sort('cr_total', -1)]
         # this will need to be bundled into one request somehow later on
         for rank, user in enumerate(ranked_ladder):
             self.db['users'].update_one({'_id': user}, {'$push': {'rank_history.' + pool_id: {'$each': [rank + 1], '$slice': -60}}, '$min': {'max_rank.' + pool_id: rank + 1}})

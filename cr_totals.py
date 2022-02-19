@@ -27,7 +27,7 @@ class BulkCRTotalUpdate:
 
     def bulk_update_cr_totals(self, users, pools, all_users=False, all_pools=False):
         for pool in pools:
-            self.db['ranked_lists'].update_one({'_id': pool}, {'$set': {'player_count': self.db['users'].find({'total_cr.' + pool: {'$gt': 0}}).count()}})
+            self.db['ranked_lists'].update_one({'_id': pool}, {'$set': {'player_count': self.db['za_pool_users_' + pool].find({'cr_total': {'$gt': 0}}).count()}})
         leaderboard_ids = {}
         accumulation_constants = {}
 

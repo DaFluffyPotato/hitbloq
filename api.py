@@ -186,7 +186,15 @@ def leaderboard_scores_friends(leaderboard_id, friends_list, extend=False):
 def ranked_ladder(pool_id, page, players_per_page=10, search=None):
 
     if search:
-        users = [User().load(user) for user in list(database.db['users'].find({'username': {'$regex': search, '$options': 'i'}}).sort('total_cr.' + pool_id, -1).limit(50))]
+        aggregation_results = database.db['users'].aggregate([
+            {'$match': {'username': {'$regex': search, '$options': 'i'}}},
+            {'$lookup': {'from': 'za_pool_users_' + pool_id, 'localField': '_id', 'foreignField': '_id', 'as': 'pool_stats'}},
+            {'$sort': {'pool_stats.0.cr_total': -1}},
+            {'$limit': 50}
+            ])
+
+        users = [User().load(user, pool_id=pool_id) for user in list(aggregation_results)]
+
         output_data = {
             '_id': pool_id,
             'ladder': [],
@@ -209,7 +217,7 @@ def ranked_ladder(pool_id, page, players_per_page=10, search=None):
     else:
         ladder_data = database.get_ranking_slice(pool_id, page * players_per_page, (page + 1) * players_per_page)
         user_list = [user['user'] for user in ladder_data['ladder']]
-        user_data = {user.id : user for user in database.get_users(user_list)}
+        user_data = {user.id : user for user in database.get_users(user_list, pool_id=pool_id)}
 
         for i, player in enumerate(ladder_data['ladder']):
             player['username'] = user_data[player['user']].username
@@ -224,7 +232,7 @@ def ranked_ladder(pool_id, page, players_per_page=10, search=None):
 def ranked_ladder_nearby(pool_id, user_id):
     players_per_page = 10
 
-    users = database.get_users([user_id])
+    users = database.get_users([user_id], pool_id=pool_id)
     base_index = 0
     if len(users):
         user = users[0]
@@ -251,7 +259,7 @@ def ranked_ladder_friends(pool_id, friends_list):
         'ladder': [],
     }
 
-    friend_users = sorted(database.get_users(friends_list), key=lambda x: x.cr_totals[pool_id], reverse=True)
+    friend_users = sorted(database.get_users(friends_list, pool_id=pool_id), key=lambda x: x.cr_totals[pool_id], reverse=True)
 
     for i, friend in enumerate(friend_users):
         ladder_data['ladder'].append({
@@ -395,11 +403,14 @@ def player_rank_base(pool_id, users, short=False):
 
 
 def player_rank_api(pool_id, user):
-    users = database.get_users([user])
+    users = database.get_users([user], pool_id=pool_id)
     return jsonify(player_rank_base(pool_id, users))
 
 def player_ranks_api(pool_ids, user):
     users = database.get_users([user])
+
+    for pool_id in pool_ids:
+        users[0].load_pool_stats(database, pool_id)
 
     # don't do more than 20 pools
     pool_ids = pool_ids[:20]
