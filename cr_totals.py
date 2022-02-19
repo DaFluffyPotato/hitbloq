@@ -61,7 +61,6 @@ class BulkCRTotalUpdate:
                 user_scores[score['user']][pool].append(score['cr'][pool])
 
 
-        bulk_ops = []
         pool_bulk_ops = {pool : [] for pool in pools}
 
         # add up CR
@@ -74,10 +73,8 @@ class BulkCRTotalUpdate:
                     cr_counters[user][pool] += 1
 
                 # the [user][pool] result is complete at this point
-                bulk_ops.append(UpdateOne({'_id': user}, {'$set': {'total_cr.' + pool: cr_totals[user][pool]}}))
                 pool_bulk_ops[pool].append(UpdateOne({'_id': user}, {'$set': {'cr_total': cr_totals[user][pool]}}))
 
-        self.db['users'].bulk_write(bulk_ops)
         for pool in pool_bulk_ops:
             if len(pool_bulk_ops[pool]):
                 self.db['za_pool_users_' + pool].bulk_write(pool_bulk_ops[pool])

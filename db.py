@@ -348,11 +348,6 @@ class HitbloqMongo():
         print(map_pool_data)
 
         self.db['ranked_lists'].insert_one(map_pool_data)
-        if not third_party:
-            self.db['users'].update_many({}, {'$set': {'total_cr.' + name : 0}})
-            self.db['users'].update_many({}, {'$set': {'rank_history.' + name : []}})
-
-        database.db['users'].create_index([('total_cr.' + name, pymongo.DESCENDING)])
 
         bulk_insert = []
         database.db['za_pool_users_' + name].create_index([('cr_total', pymongo.DESCENDING)])
@@ -388,7 +383,6 @@ class HitbloqMongo():
             return False
 
     def delete_map_pool(self, name):
-        self.db['users'].update_many({}, {'$unset': {'rank_history.' + name: 1, 'max_rank.' + name: 1, 'total_cr.' + name: 1}})
         self.db['leaderboards'].update_many({}, {'$unset': {'star_rating.' + name: 1, 'forced_star_rating.' + name: 1}})
         self.db['scores'].update_many({}, {'$unset': {'cr.' + name: 1}})
         self.db['ranked_lists'].delete_one({'_id': name})

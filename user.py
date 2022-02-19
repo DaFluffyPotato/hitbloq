@@ -109,7 +109,6 @@ class User():
         self.scoresaber_id = scoresaber_id
         self.last_update = 0
         self.date_created = time.time()
-        self.rank_history = {pool_id : [] for pool_id in pool_ids}
         self.score_banner = None
         self.profile_banner = None
         self.profile_background = None
@@ -161,8 +160,6 @@ class User():
             'last_update': self.last_update,
             'profile_pic': self.profile_pic,
             'date_created': self.date_created,
-            'max_rank': self.max_rank,
-            'rank_history': self.rank_history,
             'score_banner': self.score_banner,
             'profile_banner': self.profile_banner,
             'profile_background': self.profile_background,
