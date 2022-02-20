@@ -37,6 +37,9 @@ char_shorten = {
     'SoloNoArrows': 'sna',
     'SoloStandardHD': 'shd',
     'SoloLawless': 'sll',
+    'SoloInverseStandard': 'sit',
+    'SoloHorizontalStandard': 'shs',
+    'SoloVerticalStandard': 'svs',
 }
 
 diff_lengthen = {v: k for k, v in diff_shorten.items()}
