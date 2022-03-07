@@ -325,7 +325,15 @@ class create_community(Command):
                     new_channels.append(get_cat_chan(self.guild.channels, self.args[0] + '-updates', 'pool updates'))
                     await self.guild.create_text_channel(self.args[0] + '-discuss', category=pool_discuss_category)
                     new_channels.append(get_cat_chan(self.guild.channels, self.args[0] + '-discuss', 'pool discussion'))
+
+                    for channel in new_channels:
+                        perms = channel.overwrites_for(self.author)
+                        perms.send_messages = True
+                        perms.read_messages = True
+                        await channel.set_permissions(self.author, overwrite=perms)
+
                     await new_channels[0].send('Use `!ranking_discuss_invite <pool_id> <user_mention>` in ' + get_cat_chan(self.guild.channels, 'pool-admin-commands', 'hitbloq-commands').mention + ' to invite a user to the ranking discussion.')
+
                     database.db['communities'].insert_one({'_id': self.args[0]})
                     await self.reply('Created the `' + self.args[0] + '` community.')
                 else:
