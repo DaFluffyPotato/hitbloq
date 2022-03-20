@@ -323,7 +323,7 @@ class create_community(Command):
                     new_channels.append(get_cat_chan(self.guild.channels, self.args[0] + '-ranking', 'ranking'))
                     await self.guild.create_text_channel(self.args[0] + '-updates', category=pool_updates_category)
                     new_channels.append(get_cat_chan(self.guild.channels, self.args[0] + '-updates', 'pool updates'))
-                    new_channels[-1].set_permissions(self.guild.default_role, send_messages=False)
+                    await new_channels[-1].set_permissions(self.guild.default_role, send_messages=False)
                     await self.guild.create_text_channel(self.args[0] + '-discuss', category=pool_discuss_category)
                     new_channels.append(get_cat_chan(self.guild.channels, self.args[0] + '-discuss', 'pool discussion'))
 
