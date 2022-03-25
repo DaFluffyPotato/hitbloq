@@ -84,7 +84,7 @@ def get_map_pools_detailed():
     for pool in map_pools:
         authors_text = ''
         for i, author in enumerate(pool['owners']):
-            if str(author) in author_map:
+            if str(author) in authors_map:
                 authors_text += authors_map[str(author)]
             else:
                 authors_text += 'unknown'
