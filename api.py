@@ -81,13 +81,21 @@ def get_map_pools_detailed():
     for author in authors:
         authors_map[author['_id']] = author['tag'].split('#')[0]
 
-    print(authors_map)
-
     for pool in map_pools:
+        authors_text = ''
+        for i, author in enumerate(pool['owners']):
+            authors_text += authors_map[author]
+            if i == len(pool['owners']) - 2:
+                authors_text += ', and '
+            elif i < len(pool['owners']) - 2:
+                authors_text += ', '
+        if authors_text == '':
+            authors_text = 'unknown'
+
         response.append({
             'title': pool['shown_name'],
             'banner_title_hide': pool['banner_title_hide'],
-            'author': 'Hitbloq',
+            'author': authors_text,
             'banner_image': pool['cover'],
             'image': pool['playlist_cover'] if pool['playlist_cover'] else 'https://hitbloq.com/static/hitbloq.png',
             'id': pool['_id'],
