@@ -76,7 +76,13 @@ def get_map_pools_detailed():
             if owner not in author_ids:
                 author_ids.append(owner)
 
-    print(author_ids)
+    authors = list(database.db['discord_users'].find({'_id': {'$in': author_ids}}))
+    authors_map = {}
+    for author in authors:
+        authors_map[author['_id']] = author['tag'].split('#')[0]
+
+    print(authors_map)
+
     for pool in map_pools:
         response.append({
             'title': pool['shown_name'],
