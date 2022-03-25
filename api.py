@@ -79,12 +79,15 @@ def get_map_pools_detailed():
     authors = list(database.db['discord_users'].find({'_id': {'$in': author_ids}}))
     authors_map = {}
     for author in authors:
-        authors_map[author['_id']] = author['tag'].split('#')[0]
+        authors_map[str(author['_id'])] = author['tag'].split('#')[0]
 
     for pool in map_pools:
         authors_text = ''
         for i, author in enumerate(pool['owners']):
-            authors_text += authors_map[author]
+            if str(author) in author_map:
+                authors_text += authors_map[str(author)]
+            else:
+                authors_text += 'unknown'
             if i == len(pool['owners']) - 2:
                 authors_text += ', and '
             elif i < len(pool['owners']) - 2:
