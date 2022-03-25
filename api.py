@@ -70,6 +70,13 @@ def get_map_pools_detailed():
     map_pools = database.get_ranked_lists()
 
     response = []
+    author_ids = []
+    for pool in map_pools:
+        for owner in pool['owners']:
+            if owner not in author_ids:
+                author_ids.append(owner)
+
+    print(author_ids)
     for pool in map_pools:
         response.append({
             'title': pool['shown_name'],
