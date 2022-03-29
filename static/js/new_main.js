@@ -95,7 +95,7 @@ function eraseCookie(name) {
 
 function postAddUser(status, json_response) {
   if (json_response['status'] == 'success') {
-    document.getElementById('user-addition-card').innerHTML = '<p>Added to the <a href="/actions">Action Queue</a>! After the Score Saber data has been downloaded, you can search for your Score Saber username.</p>';
+    document.getElementById('user-addition-card').innerHTML = '<p>Added to the <a href="/actions">Action Queue</a>! After the ScoreSaber data has been downloaded, you can search for your ScoreSaber username.</p>';
   } else {
     document.getElementById('user-addition-card').innerHTML = '<p>It appears you\'ve hit the user addition limit. Please add from the <a href="https://discord.gg/pxWwtWJ">Discord server</a> where we can get a name associated with the request.</p>';
   }
