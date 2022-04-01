@@ -8,7 +8,7 @@ WAIT_TIME = 1
 class BeatSaverInterface():
     def __init__(self):
         self.headers = {'User-Agent': 'HB_Bot/1.2b'}
-        self.beatsaver_url = 'https://beatsaver.com/api/'
+        self.beatsaver_url = 'https://api.beatsaver.com/'
 
     def beatsaver_request(self, url):
         time.sleep(WAIT_TIME)
