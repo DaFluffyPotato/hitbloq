@@ -39,7 +39,7 @@ class User():
 
         player_rank = database.get_user_ranking(self, map_pool)
 
-        player_rank_ratio = (player_rank - 1) / pool_data['player_count']
+        player_rank_ratio = (player_rank - 1) / (pool_data['player_count'] if pool_data['player_count'] else 99999999)
 
         if self.scores == []:
             player_tier = 'none'
