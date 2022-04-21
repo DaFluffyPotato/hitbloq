@@ -115,7 +115,9 @@ class CRRecalc:
         return new_ratings
 
     def update_leaderboard_cr_rewards(self, new_ratings):
-        for leaderboard_id in self.pool_data['leaderboard_id_list']:
+        for i, leaderboard_id in enumerate(self.pool_data['leaderboard_id_list']):
+            if i % 10 == 0:
+                print('cr update for leaderboard', i, '/', len(self.pool_data['leaderboard_id_list']))
             if (self.old_ratings[leaderboard_id] != new_ratings[leaderboard_id]) or (self.pool_data['force_recalc']):
                 leaderboard_scores = list(self.db['scores'].find({'song_id': leaderboard_id}))
 
