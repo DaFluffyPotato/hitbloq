@@ -381,7 +381,7 @@ def player_rank_base(pool_id, users, short=False):
             player_cr = round(user.cr_totals[pool_id], 2)
 
         if pool_data:
-            player_rank_ratio = (player_rank - 1) / pool_data['player_count']
+            player_rank_ratio = (player_rank - 1) / (pool_data['player_count'] if pool_data['player_count'] else player_rank - 1)
             if player_cr == 0:
                 player_tier = 'none'
             if player_rank_ratio < 0.001:
