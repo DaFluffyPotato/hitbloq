@@ -152,5 +152,6 @@ class CRRecalc:
 
         self.update_leaderboard_cr_rewards(new_ratings)
 
-        database.set_action_progress(self.action_id, 0.9)
+        if self.action_id:
+            database.set_action_progress(self.action_id, 0.9)
         self.db['ranked_lists'].update_one({'_id': self.pool_id}, {'$set': {'needs_cr_total_recalc': True, 'force_recalc': False}})
