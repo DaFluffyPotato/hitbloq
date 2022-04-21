@@ -140,12 +140,17 @@ class CRRecalc:
 
         self.create_score_mappings()
         if self.action_id:
-            database.set_action_progress(self.action_id, 0.7)
+            database.set_action_progress(self.action_id, 0.2)
 
         self.generate_leaderboard_difficulties()
         if self.action_id:
-            database.set_action_progress(self.action_id, 0.9)
+            database.set_action_progress(self.action_id, 0.5)
 
         new_ratings = self.adjust_difficulty_results()
+        if self.action_id:
+            database.set_action_progress(self.action_id, 0.6)
+
         self.update_leaderboard_cr_rewards(new_ratings)
+
+        database.set_action_progress(self.action_id, 0.9)
         self.db['ranked_lists'].update_one({'_id': self.pool_id}, {'$set': {'needs_cr_total_recalc': True, 'force_recalc': False}})
