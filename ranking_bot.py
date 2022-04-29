@@ -63,7 +63,7 @@ class Command:
 
                     if arg_type == 'user':
                         try:
-                            user_id = arg[3:-1]
+                            user_id = arg[2:-1]
                             user = await self.guild.fetch_member(int(user_id))
                             self.args[i] = user
                         except:
