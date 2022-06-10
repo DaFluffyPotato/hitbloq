@@ -509,6 +509,8 @@ class HitbloqMongo():
         self.db['ratelimits'].update_one({'_id': ip_hash}, {'$inc': {field: 1}})
 
     def log_interest(self, ip_address, pool_id):
+        if (pool_id.find('.') != -1) or (pool_id.find('$') != -1):
+            return
         self.db['ranked_lists'].update_one({'_id': pool_id}, {'$inc': {'views': 1}})
         self.db['pool_interest'].update_one({'_id': hash_ip(ip_address)}, {'$set': {'pools_viewed.' + pool_id: time.time()}}, upsert=True)
 
