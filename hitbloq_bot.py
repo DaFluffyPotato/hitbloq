@@ -218,8 +218,8 @@ async def on_message(message):
                         await message.channel.send(message.author.mention + ' there was an error in the formatting of the event data.')
 
             if message_args[0] == '!delete_pool':
-                await message.channel.send(message.author.mention + ' attempting to delete the `' + pool_id + '` map pool.')
                 pool_id = message_args[1]
+                await message.channel.send(message.author.mention + ' attempting to delete the `' + pool_id + '` map pool.')
                 database.delete_map_pool(pool_id)
                 await message.channel.send(message.author.mention + ' deleted the `' + pool_id + '` map pool.')
 
