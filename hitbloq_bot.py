@@ -261,8 +261,11 @@ async def on_message(message):
 
             if message_args[0] == '!recalculate_cr':
                 map_pools = message_args[1].split(',')
+                map_pools = map_pools[0] # hack
+                print('recalculating cr:', map_pools)
                 create_action.recalculate_cr(map_pools, queue_id=1)
                 await message.channel.send(message.author.mention + ' a cr recalculation for `' + str(map_pools) + '` has been added to the action queue.\nhttps://hitbloq.com/actions')
+
             if message_args[0] == '!update_rank_histories':
                 for pool_id in database.get_pool_ids(False):
                     create_action.update_rank_histories(pool_id)
