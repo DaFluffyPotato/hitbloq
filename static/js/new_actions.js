@@ -37,6 +37,7 @@ function updateActions(status, action_data) {
 }
 
 function refreshQueueStatus(status, queue_statuses) {
+  console.log(status);
   console.log(queue_statuses);
   console.log(queue_statuses['0']);
   var new_html = '';
