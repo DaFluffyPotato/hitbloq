@@ -511,8 +511,9 @@ class HitbloqMongo():
     def log_interest(self, ip_address, pool_id):
         if (pool_id.find('.') != -1) or (pool_id.find('$') != -1):
             return
-        self.db['ranked_lists'].update_one({'_id': pool_id}, {'$inc': {'views': 1}})
-        self.db['pool_interest'].update_one({'_id': hash_ip(ip_address)}, {'$set': {'pools_viewed.' + pool_id: time.time()}}, upsert=True)
+        update_res = self.db['ranked_lists'].update_one({'_id': pool_id}, {'$inc': {'views': 1}})
+        if update_res.matched_count:
+            self.db['pool_interest'].update_one({'_id': hash_ip(ip_address)}, {'$set': {'pools_viewed.' + pool_id: time.time()}}, upsert=True)
 
     def calculate_pool_popularity(self):
         POOL_INTEREST_CYCLE = 60 * 60 * 24 * 30 # 30 day cycle
