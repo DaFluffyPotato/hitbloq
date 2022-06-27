@@ -37,9 +37,6 @@ function updateActions(status, action_data) {
 }
 
 function updateQueueStatus(status, queue_statuses) {
-  console.log(status);
-  console.log(queue_statuses);
-  console.log(queue_statuses['0']);
   var newHTML = '';
   for (let i = 0; i < 3; i++) {
     newHTML += '<h3>Queue ' + i + ' - ' + (queue_statuses[i.toString()] ? 'busy' : 'idle') + '</h3>';
