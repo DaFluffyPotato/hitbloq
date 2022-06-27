@@ -420,7 +420,7 @@ async def on_message(message):
                 pool_id = message_args[1]
                 if pool_id in database.get_pool_ids(True):
                     if database.is_pool_owner(pool_id, message.author.id):
-                        print('recalculating cr:', map_pools)
+                        print('recalculating cr:', pool_id)
                         create_action.recalculate_cr([pool_id], queue_id=0)
                         await message.channel.send(message.author.mention + ' the action queue has been updated with the recalc request for ' + pool_id + '.\nhttps://hitbloq.com/actions')
                     else:
