@@ -603,5 +603,12 @@ class HitbloqMongo():
         bulk_ops.append(UpdateOne({'_id': 'ua_' + user_agent_name, 'type': 'user_agent_reqs'}, {'$inc': {'count': 1}}, upsert=True))
         self.db['counters'].bulk_write(bulk_ops)
 
+    def new_notification(self, category, content):
+        self.db['admin_notifications'].insert_one({
+            'time': time.time(),
+            'category': category,
+            'content': content,
+        })
+
 print('MongoDB requires a password!')
 database = HitbloqMongo(getpass())
