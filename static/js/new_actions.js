@@ -7,6 +7,10 @@ function refreshActions() {
   getJSON('/api/actions', updateActions);
 }
 
+function refreshQueueStatus() {
+  getJSON('/api/queue_statuses', updateQueueStatus);
+}
+
 function updateActions(status, action_data) {
   var newHTML = '';
   action_data.forEach((action, i) => {
@@ -32,5 +36,15 @@ function updateActions(status, action_data) {
   document.getElementById('actions-container').innerHTML = newHTML;
 }
 
+function refreshQueueStatus(status, queue_statuses) {
+  var new_html = '';
+  for (let i = 0; i < 3; i++) {
+    new_html += '<h3>Queue ' + i + ' - ' + (queue_statuses[i.toString()] ? 'busy' : 'idle') + '</h3>';
+  }
+  document.getElementById('actions-status-container').innerHTML = newHTML;
+}
+
 refreshActions();
+refreshQueueStatus();
 setInterval(refreshActions, 2000);
+setInterval(refreshQueueStatus, 5000);
