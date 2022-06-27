@@ -1,7 +1,7 @@
 from db import database
 
-def create_user(scoresaber_id):
-    action_id = database.add_action({'type': 'add_user', 'user_id': scoresaber_id})
+def create_user(scoresaber_id, queue_id=1):
+    action_id = database.add_action({'type': 'add_user', 'user_id': scoresaber_id}, queue_id=queue_id)
     return action_id
 
 def update_user(user_id, queue_id=0):

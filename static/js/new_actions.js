@@ -1,4 +1,4 @@
-const QUEUE_NAMES = ['Priority', 'Management', 'Regular Tasks'];
+const QUEUE_NAMES = ['Management', 'Priority', 'Regular Tasks'];
 
 function epoch() {
   currentDate = new Date();

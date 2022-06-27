@@ -263,7 +263,7 @@ async def on_message(message):
                 map_pools = message_args[1].split(',')
                 map_pools = map_pools[0] # hack
                 print('recalculating cr:', map_pools)
-                create_action.recalculate_cr(map_pools, queue_id=1)
+                create_action.recalculate_cr(map_pools, queue_id=0)
                 await message.channel.send(message.author.mention + ' a cr recalculation for `' + str(map_pools) + '` has been added to the action queue.\nhttps://hitbloq.com/actions')
 
             if message_args[0] == '!update_rank_histories':
@@ -420,7 +420,8 @@ async def on_message(message):
                 pool_id = message_args[1]
                 if pool_id in database.get_pool_ids(True):
                     if database.is_pool_owner(pool_id, message.author.id):
-                        create_action.recalculate_cr([pool_id])
+                        print('recalculating cr:', map_pools)
+                        create_action.recalculate_cr([pool_id], queue_id=0)
                         await message.channel.send(message.author.mention + ' the action queue has been updated with the recalc request for ' + pool_id + '.\nhttps://hitbloq.com/actions')
                     else:
                         await message.channel.send(message.author.mention + ' you don\'t have permissions to modify this pool')
