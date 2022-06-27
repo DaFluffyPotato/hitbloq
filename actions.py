@@ -158,6 +158,7 @@ def process_queue(queue_id=0):
             time.sleep(1.5)
 
 if __name__ == "__main__":
+    threading.Thread(target=process_queue, args=(2,)).start()
     threading.Thread(target=process_queue, args=(1,)).start()
 
     process_queue(queue_id=0)

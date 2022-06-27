@@ -490,3 +490,6 @@ def get_player_badges(user_id):
             if badge in badge_data:
                 response.append(badge_data[badge])
     return jsonify(response)
+
+def action_queue_statuses():
+    return jsonify(database.action_queue_status())

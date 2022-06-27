@@ -616,5 +616,11 @@ class HitbloqMongo():
         self.db['admin_notifications'].update_many({'$set': {'read': True}})
         return notifications
 
+    def action_queue_status(self):
+        queue_list = [0, 1, 2]
+        busy_queues = self.db['actions'].distinct()
+        queue_statuses = {queue_id : queue_id in busy_queues for queue_id in queue_list}
+        return queue_statuses
+
 print('MongoDB requires a password!')
 database = HitbloqMongo(getpass())

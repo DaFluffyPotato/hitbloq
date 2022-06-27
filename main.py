@@ -206,6 +206,11 @@ def action_id_status(action_id):
     api_endpoint()
     return api.action_id_status(action_id)
 
+@app.route('/api/queue_statuses')
+def action_queue_statuses():
+    api_endpoint()
+    return api.action_queue_statuses()
+
 @app.route('/api/get_template/<template_id>')
 def get_template(template_id):
     api_endpoint()
