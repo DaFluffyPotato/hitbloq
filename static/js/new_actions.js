@@ -40,9 +40,9 @@ function updateQueueStatus(status, queue_statuses) {
   console.log(status);
   console.log(queue_statuses);
   console.log(queue_statuses['0']);
-  var new_html = '';
+  var newHTML = '';
   for (let i = 0; i < 3; i++) {
-    new_html += '<h3>Queue ' + i + ' - ' + (queue_statuses[i.toString()] ? 'busy' : 'idle') + '</h3>';
+    newHTML += '<h3>Queue ' + i + ' - ' + (queue_statuses[i.toString()] ? 'busy' : 'idle') + '</h3>';
   }
   document.getElementById('actions-status-container').innerHTML = newHTML;
 }
