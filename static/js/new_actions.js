@@ -1,3 +1,5 @@
+const QUEUE_NAMES = ['Priority', 'Management', 'Regular Tasks'];
+
 function epoch() {
   currentDate = new Date();
   return Math.round(currentDate.getTime() / 1000);
@@ -39,7 +41,7 @@ function updateActions(status, action_data) {
 function updateQueueStatus(status, queue_statuses) {
   var newHTML = '';
   for (let i = 0; i < 3; i++) {
-    newHTML += '<h3>Queue ' + i + ' - ' + (queue_statuses[i.toString()] ? 'busy' : 'idle') + '</h3>';
+    newHTML += '<h3>Queue ' + i + ' (' + QUEUE_NAMES[i] + ') - ' + (queue_statuses[i.toString()] ? 'busy' : 'idle') + '</h3>';
   }
   document.getElementById('actions-status-container').innerHTML = newHTML;
 }
