@@ -36,7 +36,7 @@ function updateActions(status, action_data) {
   document.getElementById('actions-container').innerHTML = newHTML;
 }
 
-function refreshQueueStatus(status, queue_statuses) {
+function updateQueueStatus(status, queue_statuses) {
   console.log(status);
   console.log(queue_statuses);
   console.log(queue_statuses['0']);
