@@ -608,7 +608,13 @@ class HitbloqMongo():
             'time': time.time(),
             'category': category,
             'content': content,
+            'read': False,
         })
+
+    def fetch_notifications(self):
+        notifications = self.db['admin_notifications'].find({'read': False})
+        self.db['admin_notifications'].update_many({'$set': {'read': True}})
+        return notifications
 
 print('MongoDB requires a password!')
 database = HitbloqMongo(getpass())
