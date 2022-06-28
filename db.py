@@ -648,8 +648,8 @@ class HitbloqMongo():
         })
 
     def fetch_notifications(self):
-        notifications = self.db['admin_notifications'].find({'read': False})
-        self.db['admin_notifications'].update_many({'$set': {'read': True}})
+        notifications = list(self.db['admin_notifications'].find({'read': False}))
+        self.db['admin_notifications'].update_many({}, {'$set': {'read': True}})
         return notifications
 
     def action_queue_status(self):

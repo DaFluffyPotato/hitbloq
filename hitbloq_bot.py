@@ -6,6 +6,7 @@ import os
 
 import discord
 from discord.utils import get
+from discord.ext import tasks
 
 import create_action
 from db import database
@@ -519,5 +520,17 @@ async def on_message(message):
                         await message.channel.send(message.author.mention + ' you don\'t have permissions to modify this pool')
                 else:
                     await message.channel.send(message.author.mention + ' that pool ID appears to be invalid')
+
+@tasks.loop(seconds=10)
+async def check_notifications():
+    for guild in client.guilds:
+        if guild.name == guild_id:
+            channel = get(guild.channels, name='admin-notifications')
+            notifications = database.fetch_notifications()
+            for notification in notifications:
+                notification_text = 'Category **' + notification['category'] + '**\n```py\n' + notification['content'] + '```'
+                await channel.send(notification_text)
+
+check_notifications.start()
 
 client.run(token)
