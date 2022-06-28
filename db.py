@@ -200,8 +200,13 @@ class HitbloqMongo():
 
         self.db['scores'].delete_many({'_id': {'$in': score_ids}})
 
+    def delete_user_pool_info(self, user_id):
+        for pool in self.get_pool_ids():
+            self.db['za_pool_users_' + pool].delete_one({'_id': user_id})
+
     def delete_user(self, user_id):
         self.delete_user_scores(user_id)
+        self.delete_user_pool_info(user_id)
         self.db['users'].delete_one({'_id': user_id})
         print('deleted user', user_id)
 
