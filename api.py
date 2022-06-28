@@ -499,5 +499,5 @@ def action_queue_statuses():
 def pool_feed(pool_id):
     recent_updates = list(database.db['pool_feeds'].find({'pool': pool_id}).sort('time', -1).limit(16))
     for update in recent_updates:
-        del recent_updates['_id']
+        del update['_id']
     return jsonify(recent_updates)
