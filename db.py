@@ -415,6 +415,14 @@ class HitbloqMongo():
             print('replacing', len(scores), 'scores')
             self.replace_scores(scores)
 
+            self.db['pool_feeds'].insert_one({
+                'pool': map_pool,
+                'category': 'ranking',
+                'status': 'unranked',
+                'leaderboard_id': leaderboard_id,
+                'time': time.time(),
+            })
+
     def rank_song(self, leaderboard_id, map_pool):
         leaderboard_id = leaderboard_id.split('|')[0].upper() + '|' + leaderboard_id.split('|')[1]
         # ensure that it wasn't previously added
@@ -433,6 +441,14 @@ class HitbloqMongo():
         for score in scores:
             score['cr'][map_pool] = 0
         self.replace_scores(scores)
+
+        self.db['pool_feeds'].insert_one({
+            'pool': map_pool,
+            'category': 'ranking',
+            'status': 'ranked',
+            'leaderboard_id': leaderboard_id,
+            'time': time.time(),
+        })
 
     def reimport_song(self, leaderboard_id):
         current_leaderboard = self.db['leaderboards'].find_one({'_id': leaderboard_id})
