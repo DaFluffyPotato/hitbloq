@@ -292,5 +292,11 @@ def discord():
     html = new_pages['discord']()
     return html
 
+@app.after_request
+def after_request(response):
+    if request.path.split('.')[-1] == 'bplist':
+        response.headers['Cache-Control'] = 'no-store'
+    return response
+
 if __name__ == "__main__":
     app.run()
