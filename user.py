@@ -102,6 +102,10 @@ class User():
             print('attempted to create invalid user', scoresaber_id)
             return None
 
+        if database.db['bans'].find_one({'scoresaber_id': scoresaber_id}).count():
+            print('attempted to add a banned user', scoresaber_id)
+            return None
+
         pool_ids = database.get_pool_ids(False)
 
         self.profile_pic = ss_profile['profilePicture']

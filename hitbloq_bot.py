@@ -228,6 +228,11 @@ async def on_message(message):
                 database.delete_user(int(user_id))
                 await message.channel.send(message.author.mention + ' deleted user `' + str(user_id) + '`.')
 
+            if message_args[0] == '!ban_user':
+                user_id = message_args[1]
+                database.ban_user(int(user_id))
+                await message.channel.send(message.author.mention + ' banned user `' + str(user_id) + '`.')
+
             if message_args[0] == '!set_pool_ratelimits':
                 user_list = message_args[2:]
                 new_count = int(message_args[1])

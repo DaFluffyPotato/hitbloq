@@ -210,6 +210,11 @@ class HitbloqMongo():
         self.db['users'].delete_one({'_id': user_id})
         print('deleted user', user_id)
 
+    def ban_user(self, user_id):
+        user = self.db['users'].find_one({'_id': user_id})
+        self.db['bans'].insert_one({'_id': user_id, 'scoresaber_id': user['scoresaber_id'], 'username': user['username'], 'time': time.time()})
+        self.delete_user(user_id)
+
     def get_full_ranked_list(self):
         map_pools = self.get_ranked_lists()
         ranked_maps = []
