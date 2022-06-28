@@ -232,6 +232,11 @@ def get_player_badges(user_id):
     api_endpoint()
     return api.get_player_badges(user_id)
 
+@app.route('/api/pool_feed/<pool_id>')
+def get_pool_feed(pool_id):
+    api_endpoint()
+    return api.pool_feed(pool_id)
+
 @app.route('/')
 def new_home():
     html = new_pages['home']()

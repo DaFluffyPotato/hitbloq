@@ -495,3 +495,7 @@ def get_player_badges(user_id):
 
 def action_queue_statuses():
     return jsonify(database.action_queue_status())
+
+def pool_feed(pool_id):
+    recent_updates = database.db['pool_feeds'].find({'pool': pool_id}).sort('time', -1).limit(16)
+    return jsonify(recent_updates)
