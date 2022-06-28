@@ -102,7 +102,7 @@ class User():
             print('attempted to create invalid user', scoresaber_id)
             return None
 
-        if database.db['bans'].find_one({'scoresaber_id': scoresaber_id}).count():
+        if len(list(database.db['bans'].find({'scoresaber_id': scoresaber_id}))):
             print('attempted to add a banned user', scoresaber_id)
             return None
 
