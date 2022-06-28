@@ -130,7 +130,16 @@ class HitbloqMongo():
         score_ids = [score['_id'] for score in scores]
         if score_ids != []:
             self.db['scores'].delete_many({'_id': {'$in': score_ids}})
-            self.db['scores'].insert_many(scores)
+            success = False
+            for i in range(5):
+                self.db['scores'].insert_many(scores)
+                if self.db['scores'].find({'_id': {'$in': score_ids}}).count() == len(scores):
+                    success = True
+                    break
+                else:
+                    new_notification('warning', 'failed to detect inserted scores for score replacement')
+            if not success:
+                new_notification('critical_error', 'failed to detect inserted scores for score replacement', data=scores)
         else:
             print('warning: no scores to replace')
 
@@ -603,12 +612,13 @@ class HitbloqMongo():
         bulk_ops.append(UpdateOne({'_id': 'ua_' + user_agent_name, 'type': 'user_agent_reqs'}, {'$inc': {'count': 1}}, upsert=True))
         self.db['counters'].bulk_write(bulk_ops)
 
-    def new_notification(self, category, content):
+    def new_notification(self, category, content, data=None):
         self.db['admin_notifications'].insert_one({
             'time': time.time(),
             'category': category,
             'content': content,
             'read': False,
+            'data': data,
         })
 
     def fetch_notifications(self):
