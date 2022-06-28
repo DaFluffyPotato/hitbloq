@@ -147,13 +147,16 @@ def process_action(action):
 
     database.clear_action(action['_id'])
 
+def action_cleanup(action):
+    database.clear_action(action['_id'])
+
 def process_queue(queue_id=0):
     while True:
         next_action = database.get_next_action(queue_id)
 
         if next_action:
             print('processing action', next_action['type'])
-            error_catch(process_action, next_action, group_id='actions_' + next_action['type'], retry=3, retry_delay=10)
+            error_catch(process_action, next_action, group_id='actions_' + next_action['type'], retry=3, retry_delay=10, cleanup=action_cleanup)
         else:
             time.sleep(1.5)
 

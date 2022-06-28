@@ -4,7 +4,7 @@ from datetime import datetime
 
 from db import database
 
-def error_catch(func, *args, group_id=None, retry=0, retry_delay=0, **kwargs):
+def error_catch(func, *args, group_id=None, retry=0, retry_delay=0, cleanup=None **kwargs):
     while retry >= 0:
         try:
             func(*args, **kwargs)
@@ -13,6 +13,7 @@ def error_catch(func, *args, group_id=None, retry=0, retry_delay=0, **kwargs):
             raise KeyboardInterrupt()
         except Exception:
             print('error on group:', group_id)
+            print('retry:', retry)
 
             error = traceback.format_exc()
 
@@ -30,3 +31,7 @@ def error_catch(func, *args, group_id=None, retry=0, retry_delay=0, **kwargs):
             retry -= 1
             if retry_delay and retry >= 0:
                 time.sleep(retry_delay)
+
+    if retry < 0:
+        if cleanup:
+            cleanup(*args, **kwargs)
