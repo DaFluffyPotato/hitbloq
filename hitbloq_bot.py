@@ -223,6 +223,11 @@ async def on_message(message):
                 database.delete_map_pool(pool_id)
                 await message.channel.send(message.author.mention + ' deleted the `' + pool_id + '` map pool.')
 
+            if message_args[0] == '!delete_user':
+                user_id = message_args[1]
+                database.delete_user(int(user_id))
+                await message.channel.send(message.author.mention + ' deleted user `' + str(user_id) + '`.')
+
             if message_args[0] == '!set_pool_ratelimits':
                 user_list = message_args[2:]
                 new_count = int(message_args[1])
