@@ -500,4 +500,6 @@ def pool_feed(pool_id):
     recent_updates = list(database.db['pool_feeds'].aggregate([{'$match': {'pool': pool_id}}, {'$lookup': {'from': 'leaderboards', 'localField': 'leaderboard_id', 'foreignField': '_id', 'as': 'leaderboard_data'}}, {'$sort': {'time': -1}}, {'$limit': 16}]))
     for update in recent_updates:
         del update['_id']
+        update['date'] = epoch_ago(update['time'])
+        update['short_leaderboard_id'] = update['leaderboard_data'][0]['hash'] + '_' + shorten_settings(update['leaderboard_data'][0]['difficulty_settings'])
     return jsonify(recent_updates)
