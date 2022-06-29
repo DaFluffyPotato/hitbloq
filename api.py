@@ -497,7 +497,7 @@ def action_queue_statuses():
     return jsonify(database.action_queue_status())
 
 def pool_feed(pool_id):
-    recent_updates = list(database.db['pool_feeds'].find({'pool': pool_id}).sort('time', -1).limit(16))
+    recent_updates = list(database.db['pool_feeds'].aggregate([{'$match': {'pool': pool_id}}, {'$lookup': {'from': 'leaderboards', 'localField': 'leaderboard_id', 'foreignField': '_id', 'as': 'leaderboard_data'}}]).sort('time', -1).limit(16))
     for update in recent_updates:
         del update['_id']
     return jsonify(recent_updates)
