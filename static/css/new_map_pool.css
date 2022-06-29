@@ -114,6 +114,61 @@
   top: 0;
 }
 
+.pool-feed {
+  margin-top: 1em;
+  box-shadow: 0.4em 0.4em 0 rgb(0, 0, 0);
+  padding: 2em;
+}
+
+.pool-feed-header {
+}
+
+.pool-post-card {
+  margin-top: 1em;
+  background-color: rgb(13, 13, 14);
+  border-radius: 0.7em;
+  height: 4em;
+}
+
+.pool-post-card-content {
+  padding: 0.5em;
+  padding-left: 6.5em;
+  font-size: 70%;
+}
+
+.pool-post-card:hover {
+  background-color: rgb(0, 0, 0);
+}
+
+.song-cover {
+  width: 4em;
+  border-radius: 0.7em 0em 0em 0.7em;
+  float: left;
+}
+
+.action-name {
+  font-size: 140%;
+}
+
+.song-name {
+  font-size: 115%;
+}
+
+.song-difficulty {
+  display: inline;
+}
+
+.song-rating {
+  display: inline;
+}
+
+.action-date {
+  font-size: 70%;
+  font-style: italic;
+  float: right;
+  padding-right: 1em;
+}
+
 @media only screen and (min-width: 1020px) {
   .pool-card {
     font-size: 0.91em;

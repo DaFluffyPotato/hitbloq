@@ -50,11 +50,30 @@ function genPlayerLeaderboard(status, data) {
   }
 }
 
+function genPoolFeed(status, data) {
+  for (const post of data) {
+    var newHTML = useTemplate('new_pool_ranking_post',
+        {
+            'action': (post['status'] == 'ranked') ? 'Ranked' : 'Unranked',
+            'cover': post['leaderboard_data'][0]['cover'],
+            'name': post['leaderboard_data'][0]['name'],
+            'difficulty': post['leaderboard_data'][0]['difficulty'],
+            'stars': (poolID in post['leaderboard_data'][0]['star_rating']) ? post['leaderboard_data'][0]['star_rating'][poolID] + '★' : '',
+            'date': post['date'],
+            'leaderboard_id': post['short_leaderboard_id'],
+            'pool_id': poolID,
+        }
+    );
+    document.getElementById('pool-feed').appendChild(newHTML);
+  }
+}
+
 function finishedTemplateLoading() {
   getJSON(window.location.origin + '/api/ranked_list/' + poolID, genMapPool);
   getJSON(window.location.origin + '/api/ladder/' + poolID + '/players/0?per_page=20', genPlayerLeaderboard);
+  getJSON(window.location.origin + '/api/pool_feed/' + poolID, genPoolFeed);
 }
 
 window.addEventListener('load', () => {
-    loadTemplates(['new_map_pool_card_alt', 'new_player_leaderboard_entry_alt'], finishedTemplateLoading);
+    loadTemplates(['new_map_pool_card_alt', 'new_player_leaderboard_entry_alt', 'new_pool_ranking_post'], finishedTemplateLoading);
 })
