@@ -33,8 +33,6 @@ class Matchmaking:
         return {'pools': self.db.db['config'].find_one({'_id': 'mm_pools'})['pools']}
 
     def submit_match(self, match_data):
-        print(match_data)
-
         required_fields = ('key', 'players', 'pool', 'left', 'maps')
         for field in required_fields:
             if field not in match_data:
@@ -62,6 +60,7 @@ class Matchmaking:
                 player_wins[match_data['players'][i]] += 1
 
         related_players = self.db.db['mm_users'].find({'scoresaber_id': {'$in': [match_data['players']]}})
+        print(related_players)
         player_info = {player['scoresaber_id']: {'rating': player['rating'], 'id': player['_id']} for player in related_players}
         match_data['player_info'] = player_info
         match_data['wins'] = player_wins
