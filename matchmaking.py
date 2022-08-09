@@ -64,7 +64,7 @@ class Matchmaking:
         if match_data['pool'] not in self.pools()['pools']:
             return {'error': 'invalid pool'}
 
-        if len(match_data['players'] != 2):
+        if len(match_data['players']) != 2:
             return {'error': 'only 2 player matches are supported for now'}
 
         player_wins = {player: 0 for player in match_data['players']}
