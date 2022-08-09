@@ -2,6 +2,8 @@ import time
 from config_loader import config
 
 DEFAULT_RATING = 1000
+EXPECTED_SCORE_CONSTANT = 400
+ELO_K = 16 # done per map
 
 class Matchmaking:
     def __init__(self, db):
@@ -32,6 +34,17 @@ class Matchmaking:
     def pools(self):
         return {'pools': self.db.db['config'].find_one({'_id': 'mm_pools'})['pools']}
 
+    def elo_calc(self, wins, ratings):
+        total_score = sum(wins.values())
+        p1, p2 = list(ratings)[:2]
+        p1_score = wins[p1]
+        p2_score = wins[p2]
+        p1_expected_score = total_score / (1 + 10 ** ((ratings[p2] - ratings[p1]) / EXPECTED_SCORE_CONSTANT))
+        p2_expected_score = total_score / (1 + 10 ** ((ratings[p1] - ratings[p2]) / EXPECTED_SCORE_CONSTANT))
+        p1_rating_change = ELO_K * total_score * (p1_score - p1_expected_score)
+        p2_rating_change = ELO_K * total_score * (p2_score - p2_expected_score)
+        return {p1: p1_rating_change, p2: p2_rating_change}
+
     def submit_match(self, match_data):
         required_fields = ('key', 'players', 'pool', 'left', 'maps')
         for field in required_fields:
@@ -51,6 +64,9 @@ class Matchmaking:
         if match_data['pool'] not in self.pools()['pools']:
             return {'error': 'invalid pool'}
 
+        if len(match_data['players'] != 2):
+            return {'error': 'only 2 player matches are supported for now'}
+
         player_wins = {player: 0 for player in match_data['players']}
         for map in match_data['maps']:
             max_score = [-1, []]
@@ -68,6 +84,9 @@ class Matchmaking:
         match_data['wins'] = player_wins
         match_data['timestamp'] = time.time()
         del match_data['key']
+
+        rating_changes = self.elo_calc(match_data['wins'], {p: player_info[p]['rating'] for p in player_info})
+        match_data['rating_changes'] = rating_changes
 
         self.db.db['mm_matches'].insert_one(match_data)
 
