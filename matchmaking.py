@@ -60,7 +60,7 @@ class Matchmaking:
                 player_wins[match_data['players'][i]] += 1
 
         related_players = self.db.db['mm_users'].find({'scoresaber_id': {'$in': [match_data['players']]}})
-        print(related_players)
+        print(list(related_players))
         player_info = {player['scoresaber_id']: {'rating': player['rating'], 'id': player['_id']} for player in related_players}
         match_data['player_info'] = player_info
         match_data['wins'] = player_wins
