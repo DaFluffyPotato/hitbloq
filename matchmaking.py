@@ -90,7 +90,7 @@ class Matchmaking:
 
         self.db.db['mm_matches'].insert_one(match_data)
         for player in rating_changes:
-            self.db.db['mm_users'].update_one({'scoresaber_id': player}, {'$inc': {'ratings.' + match_data['pool']: rating_changes[player]}})
+            self.db.db['mm_users'].update_one({'scoresaber_id': player}, {'$inc': {'rating.' + match_data['pool']: rating_changes[player]}})
 
         if '_id' in match_data:
             del match_data['_id']
