@@ -287,6 +287,7 @@ async def on_message(message):
                 pool_list = message_args[1:]
                 database.db['config'].update_one({'_id': 'mm_pools'}, {'$set': {'pools': pool_list}})
                 for pool in pool_list:
+                    print('updating ratings for', pool)
                     database.db['mm_users'].update_many({'rating.' + pool: {'$exists': False}}, {'$set': {'rating.' + pool: DEFAULT_RATING}})
                 await message.channel.send(message.author.mention + ' updated to `' + str(pool_list) + '`.')
 
