@@ -8,6 +8,9 @@ class Matchmaking:
         user = self.db.db['users'].find_one({'_id': user_id})
         if not user:
             user = self.db.db['users'].find_one({'scoresaber_id': user_id})
+        if not user:
+            return {}
+
         mm_user = self.db.db['mm_users'].find_one({'_id': user['_id']})
 
         # generate user data if not found

@@ -242,7 +242,7 @@ def get_mm_ss_user(scoresaber_id):
     api_endpoint()
     return jsonify(api.mm.profile(scoresaber_id))
 
-@app.route('/api/mm/user/<user_id>')
+@app.route('/api/mm/user/<int:user_id>')
 def get_mm_user(user_id):
     api_endpoint()
     return jsonify(api.mm.profile(user_id))
