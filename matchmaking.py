@@ -1,3 +1,5 @@
+from config_loader import config
+
 DEFAULT_RATING = 1000
 
 class Matchmaking:
@@ -28,3 +30,40 @@ class Matchmaking:
 
     def pools(self):
         return {'pools': self.db.db['config'].find_one({'_id': 'mm_pools'})['pools']}
+
+    def submit_match(self, match_data):
+        print(match_data)
+
+        required_fields = ('key', 'players', 'pool', 'left', 'maps')
+        for field in required_fields:
+            if field not in match_data:
+                return {'error': 'invalid fields'}
+
+        match_key = match_data['key']
+        match_host = None
+        for known_host in config['mm_keys']:
+            if config['mm_keys'][known_host] == match_key:
+                match_host = known_host
+        if not known_host:
+            return {'error': 'invalid key'}
+
+        match_data['host'] = match_host
+
+        player_wins = {player: 0 for player in match_data['players']}
+        for map in match_data['maps']:
+            max_score = [-1, []]
+            for i, score in enumerate(map['scores']):
+                if score >= max_score[0]:
+                    if score > max_score[0]:
+                        max_score = [score, []]
+                    max_score[1].append(i)
+            for winner in max_score[1]:
+                player_wins[match_data['players'][i]] += 1
+
+        related_players = self.db.db['mm_users'].find({'scoresaber_id': {'$in': [match_data['players']]}})
+        player_info = {'rating': player['rating'] for player in related_players}
+        match_data['player_info'] = player_info
+
+        self.db.db['mm_matches'].insert_one(match_data)
+
+        return jsonify(match_data)

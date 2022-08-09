@@ -252,6 +252,11 @@ def get_mm_pools():
     api_endpoint()
     return jsonify(api.mm.pools())
 
+@app.route('/api/mm/submit_match', methods=['POST'])
+def submit_mm_match():
+    api_endpoint()
+    return jsonify(api.mm.submit_match(request.json))
+
 @app.route('/')
 def new_home():
     html = new_pages['home']()
