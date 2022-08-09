@@ -21,7 +21,7 @@ class Matchmaking:
             mm_user = {
                 '_id': user['_id'],
                 'scoresaber_id': user['scoresaber_id'],
-                'rating': {pool: DEFAULT_RATING for pool in self.pools()},
+                'rating': {pool: DEFAULT_RATING for pool in self.pools()['pools']},
                 'username': user['username'],
             }
 
