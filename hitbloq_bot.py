@@ -281,6 +281,9 @@ async def on_message(message):
                 for pool_id in database.get_pool_ids(False):
                     create_action.update_rank_histories(pool_id)
                 await message.channel.send(message.author.mention + ' a full player history update has been added to the action queue.\nhttps://hitbloq.com/actions')
+            if message_args[0] == '!set_mm_pools':
+                pool_list = message_args[1:]
+                database.db['config'].update_one({'_id': 'mm_pools'}, {'$set': {'pools': pool_list}})
             if message_args[0] == '!set_announcement':
                 announcement_html = ' '.join(message_args[1:])
                 if announcement_html == '':
