@@ -76,7 +76,7 @@ class Matchmaking:
                         max_score = [score, []]
                     max_score[1].append(i)
             for winner in max_score[1]:
-                player_wins[match_data['players'][i]] += 1
+                player_wins[match_data['players'][winner]] += 1
 
         related_players = self.db.db['mm_users'].find({'scoresaber_id': {'$in': match_data['players']}})
         player_info = {player['scoresaber_id']: {'rating': player['rating'][match_data['pool']], 'id': player['_id']} for player in related_players}
