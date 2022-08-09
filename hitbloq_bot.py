@@ -13,6 +13,7 @@ from db import database
 import beatsaver
 from cr_formulas import curves
 from general import full_clean, format_num
+from matchmaking import DEFAULT_RATING
 
 beatsaver_interface = beatsaver.BeatSaverInterface()
 
@@ -281,16 +282,21 @@ async def on_message(message):
                 for pool_id in database.get_pool_ids(False):
                     create_action.update_rank_histories(pool_id)
                 await message.channel.send(message.author.mention + ' a full player history update has been added to the action queue.\nhttps://hitbloq.com/actions')
+
             if message_args[0] == '!set_mm_pools':
                 pool_list = message_args[1:]
                 database.db['config'].update_one({'_id': 'mm_pools'}, {'$set': {'pools': pool_list}})
+                for pool in pool_list:
+                    database.db['mm_users'].update_many({'rating.' + pool: {'$exists': False}}, {'$set': {'rating.' + pool: DEFAULT_RATING}})
                 await message.channel.send(message.author.mention + ' updated to `' + str(pool_list) + '`.')
+
             if message_args[0] == '!set_announcement':
                 announcement_html = ' '.join(message_args[1:])
                 if announcement_html == '':
                     database.db['config'].update_one({'_id': 'announcement'}, {'$set': {'html': None}})
                 else:
                     database.db['config'].update_one({'_id': 'announcement'}, {'$set': {'html': announcement_html}})
+
             if message_args[0] == '!rewind':
                 rewind_id = int(message_args[1])
                 rewind_amount = int(message_args[2])
@@ -299,6 +305,7 @@ async def on_message(message):
                 database.db['users'].update_one({'_id': rewind_id}, {'$set': {'last_update': rewind_to}})
                 create_action.update_user(rewind_id)
                 await message.channel.send(message.author.mention + ' user ' + str(rewind_id) + ' will be rewinded and updated.')
+
         if message.channel.name == POOL_ADMIN_COMMANDS_CHANNEL:
             if message_args[0] in ['!set_short_desc', '!set_long_desc']:
                 pool_id = message_args[1]
