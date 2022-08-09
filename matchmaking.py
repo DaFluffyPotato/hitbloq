@@ -1,3 +1,4 @@
+import time
 from config_loader import config
 
 DEFAULT_RATING = 1000
@@ -63,7 +64,12 @@ class Matchmaking:
         related_players = self.db.db['mm_users'].find({'scoresaber_id': {'$in': [match_data['players']]}})
         player_info = {'rating': player['rating'] for player in related_players}
         match_data['player_info'] = player_info
+        match_data['wins'] = player_wins
+        match_data['timestamp'] = time.time()
 
         self.db.db['mm_matches'].insert_one(match_data)
+
+        if '_id' in match_data:
+            del match_data['_id']
 
         return match_data
