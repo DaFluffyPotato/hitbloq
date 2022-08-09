@@ -66,4 +66,4 @@ class Matchmaking:
 
         self.db.db['mm_matches'].insert_one(match_data)
 
-        return jsonify(match_data)
+        return match_data
