@@ -24,4 +24,4 @@ class Matchmaking:
         return mm_user
 
     def pools(self):
-        return {'pools': self.gdb.db['config'].find_one({'_id': 'mm_pools'})['pools']}
+        return {'pools': self.db.db['config'].find_one({'_id': 'mm_pools'})['pools']}

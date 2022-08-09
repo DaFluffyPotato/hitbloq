@@ -1,7 +1,7 @@
 import json
 import time
 
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, jsonify
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
@@ -236,6 +236,21 @@ def get_player_badges(user_id):
 def get_pool_feed(pool_id):
     api_endpoint()
     return api.pool_feed(pool_id)
+
+@app.route('/api/mm/ss_user/<scoresaber_id>')
+def get_mm_ss_user(scoresaber_id):
+    api_endpoint()
+    return jsonify(api.mm.profile(scoresaber_id))
+
+@app.route('/api/mm/user/<user_id>')
+def get_mm_user(user_id):
+    api_endpoint()
+    return jsonify(api.mm.profile(user_id))
+
+@app.route('/api/mm/active_pools')
+def get_mm_pools():
+    api_endpoint()
+    return jsonify(api.mm.pools())
 
 @app.route('/')
 def new_home():

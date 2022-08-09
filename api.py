@@ -9,6 +9,9 @@ from general import mongo_clean, max_score, shorten_settings, lengthen_settings,
 from cr_formulas import cr_accumulation_curve
 import create_action
 from templates import templates
+from matchmaking import Matchmaking
+
+mm = Matchmaking(database)
 
 RANKED_LIST_DESCRIPTION = 'A collection of maps from the <map_pool_name> Hitbloq map pool used for the associated ranked ladder. Check out https://hitbloq.com for more info.'
 
