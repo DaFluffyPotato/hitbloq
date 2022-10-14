@@ -60,14 +60,21 @@ class ScoresaberInterface():
                 if 'playerScores' not in new_dat:
                     print('ERROR')
                     print(new_dat)
-                for score in new_dat['playerScores']:
-                    if convert_epoch(score['score']['timeSet']) < (epoch - 300): # -300 to be safe
-                        looking = False
-                    else:
-                        score['score']['epochTime'] = convert_epoch(score['score']['timeSet'])
-                        score['leaderboard']['songHash'] = score['leaderboard']['songHash'].upper()
-                        save_dat.append(score)
-                total_dat += save_dat
+
+                # umbranox did a lil' trolling and changed the API again
+                if not len(new_dat['playerScores']):
+                    looking = False
+                    print('reached end of profile')
+
+                else:
+                    for score in new_dat['playerScores']:
+                        if convert_epoch(score['score']['timeSet']) < (epoch - 300): # -300 to be safe
+                            looking = False
+                        else:
+                            score['score']['epochTime'] = convert_epoch(score['score']['timeSet'])
+                            score['leaderboard']['songHash'] = score['leaderboard']['songHash'].upper()
+                            save_dat.append(score)
+                    total_dat += save_dat
             c += 1
         print('Finished SS lookup for', ss_id)
         return total_dat
