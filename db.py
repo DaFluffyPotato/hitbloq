@@ -411,13 +411,13 @@ class HitbloqMongo():
         print('successfully deleted map pool:', name)
 
     def copy_map_pool(self, src, new):
-        self.db['leaderboards'].update_many({'star_rating.' + src: {'$exists': True}}, {'$set': {'star_rating.' + new: '$star_rating.' + src, 'forced_star_rating.' + new: '$forced_star_rating.' + src}})
-        self.db['scores'].update_many({'cr.' + src: {'$exists': True}}, {'$set': {'cr.' + new: '$cr.' + src}})
+        self.db['leaderboards'].update_many({'star_rating.' + src: {'$exists': True}}, [{'$set': {'star_rating.' + new: '$star_rating.' + src, 'forced_star_rating.' + new: '$forced_star_rating.' + src}}])
+        self.db['scores'].update_many({'cr.' + src: {'$exists': True}}, [{'$set': {'cr.' + new: '$cr.' + src}}])
         old_ranked_list = self.db['ranked_lists'].find_one({'_id': src})
         old_ranked_list['_id'] = new
         self.db['ranked_lists'].insert_one(old_ranked_list)
         self.db['za_pool_users_' + src].aggregate([{'$out': 'za_pool_users_' + new}])
-        self.db['pool_interest'].update_many({'pools_viewed.' + src: {'$exists': True}}, {'$set': {'pools_viewed.' + new: '$pools_viewed.' + src}})
+        self.db['pool_interest'].update_many({'pools_viewed.' + src: {'$exists': True}}, [{'$set': {'pools_viewed.' + new: '$pools_viewed.' + src}}])
         print('successfully copied map pool', src, 'to', new)
 
     def unrank_song(self, leaderboard_id, map_pool):
