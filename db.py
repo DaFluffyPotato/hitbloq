@@ -155,6 +155,9 @@ class HitbloqMongo():
             valid_scores.sort(key=lambda x: x['cr'][map_pool['_id']], reverse=True)
             for score in valid_scores:
                 if score['song_id'] in map_pool['leaderboard_id_list']:
+                    print(cr_accumulation_curve(cr_counters[map_pool['_id']], map_pool['accumulation_constant']), score['cr'][map_pool['_id']])
+                    print('b', cr_counters[map_pool['_id']], map_pool['accumulation_constant'])
+                    print('c', score)
                     cr_totals[map_pool['_id']] += cr_accumulation_curve(cr_counters[map_pool['_id']], map_pool['accumulation_constant']) * score['cr'][map_pool['_id']]
                     cr_counters[map_pool['_id']] += 1
 
