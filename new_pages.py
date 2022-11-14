@@ -273,7 +273,6 @@ def actions():
 
 @page
 def map_pool(pool_id):
-    pool_id = resolve_pool_id(map_pool)
     
     database.log_interest(request.remote_addr, pool_id)
 
