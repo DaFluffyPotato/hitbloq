@@ -21,6 +21,9 @@ def get_map_pool():
         database.log_interest(user_ip, map_pool)
     if request.args.get('pool'):
         map_pool = request.args.get('pool')
+    pool_reference = database.db['pool_preferences'].find_one({'_id': map_pool})
+    if pool_reference:
+        map_pool = pool_reference['target']
     return map_pool
 
 def page(page_func):
