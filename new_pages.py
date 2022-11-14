@@ -1,7 +1,7 @@
 import json
 import time
 
-from flask import request
+from flask import request, redirect, url_for
 
 from templates import templates
 from db import database
@@ -21,14 +21,13 @@ def get_map_pool():
         database.log_interest(user_ip, map_pool)
     if request.args.get('pool'):
         map_pool = request.args.get('pool')
-    resolve_pool_id(map_pool)
     return map_pool
 
 def resolve_pool_id(pool_id):
-    pool_reference = database.db['pool_preferences'].find_one({'_id': pool_id})
+    pool_reference = database.db['pool_references'].find_one({'_id': pool_id})
     if pool_reference:
         return pool_reference['target']
-    return pool_id
+    return None
 
 def page(page_func):
     new_pages[page_func.__name__] = page_func
@@ -87,6 +86,10 @@ def map_pools():
 
 @page
 def ladder(ladder_id):
+    resolve_id = resolve_pool_id(ladder_id)
+    if resolve_id:
+        return redirect('/ladder/' + resolve_id)
+
     shown_name = database.db['ranked_lists'].find_one({'_id': ladder_id})['shown_name']
 
     header = generate_header(
@@ -113,6 +116,10 @@ def user(user_id):
     sort_mode = request.args.get('sort')
 
     pool_id = get_map_pool()
+
+    resolve_id = resolve_pool_id(pool_id)
+    if resolve_id:
+        return redirect('/user/' + str(user_id) + '?pool=' + resolve_id)
 
     next_page = request.path + '?page=' + str(next_page) + '&pool=' + pool_id
     last_page = request.path + '?page=' + str(last_page) + '&pool=' + pool_id
@@ -175,6 +182,12 @@ def user(user_id):
 @page
 def leaderboard(leaderboard_id):
     pool_id = get_map_pool()
+
+    resolve_id = resolve_pool_id(pool_id)
+    if resolve_id:
+        current_page_str = str(request.args.get('page') if request.args.get('page') else 0)
+        return redirect('/leaderboard/' + leaderboard_id + '?page=' + current_page_str + '&pool=' + resolve_id)
+
     try:
         shown_name = database.db['ranked_lists'].find_one({'_id': pool_id})['shown_name']
     except:
@@ -228,6 +241,10 @@ def leaderboard(leaderboard_id):
 
 @page
 def ranked_list(pool_id):
+    resolve_id = resolve_pool_id(pool_id)
+    if resolve_id:
+        return redirect('/ranked_list/' + resolve_id)
+
     database.log_interest(request.remote_addr, pool_id)
 
     pool_id = request.path.split('/')[-1]
@@ -273,7 +290,10 @@ def actions():
 
 @page
 def map_pool(pool_id):
-    
+    resolve_id = resolve_pool_id(pool_id)
+    if resolve_id:
+        return redirect('/map_pool/' + resolve_id)
+
     database.log_interest(request.remote_addr, pool_id)
 
     pool_data = database.db['ranked_lists'].find_one({'_id': pool_id})
