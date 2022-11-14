@@ -420,6 +420,9 @@ class HitbloqMongo():
         self.db['pool_interest'].update_many({'pools_viewed.' + src: {'$exists': True}}, [{'$set': {'pools_viewed.' + new: '$pools_viewed.' + src}}])
         print('successfully copied map pool', src, 'to', new)
 
+    def create_pool_reference(src, target):
+        self.db['pool_references'].insert_one({'_id': src, 'target': target})
+
     def unrank_song(self, leaderboard_id, map_pool):
         self.db['ranked_lists'].update_one({'_id': map_pool}, {'$pull': {'leaderboard_id_list': leaderboard_id}})
 

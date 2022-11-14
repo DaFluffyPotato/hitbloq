@@ -232,6 +232,13 @@ async def on_message(message):
                 database.copy_map_pool(src_pool_id, new_pool_id)
                 await message.channel.send(message.author.mention + ' copied the `' + src_pool_id + '` map pool to `' + new_pool_id + '`.')
 
+            if message_args[0] == '!add_pool_reference':
+                src_pool_id = message_args[1]
+                target_pool_id = message_args[2]
+                database.create_pool_reference(src_pool_id, target_pool_id)
+                await message.channel.send(message.author.mention + ' created a pool reference from the `' + src_pool_id + '` map pool to `' + target_pool_id + '`.')
+
+
             if message_args[0] == '!delete_user':
                 user_id = message_args[1]
                 database.delete_user(int(user_id))
