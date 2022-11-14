@@ -21,10 +21,14 @@ def get_map_pool():
         database.log_interest(user_ip, map_pool)
     if request.args.get('pool'):
         map_pool = request.args.get('pool')
-    pool_reference = database.db['pool_preferences'].find_one({'_id': map_pool})
-    if pool_reference:
-        map_pool = pool_reference['target']
+    resolve_pool_id(map_pool)
     return map_pool
+
+def resolve_pool_id(pool_id):
+    pool_reference = database.db['pool_preferences'].find_one({'_id': pool_id})
+    if pool_reference:
+        return pool_reference['target']
+    return pool_id
 
 def page(page_func):
     new_pages[page_func.__name__] = page_func
@@ -269,6 +273,8 @@ def actions():
 
 @page
 def map_pool(pool_id):
+    pool_id = resolve_pool_id(map_pool)
+    
     database.log_interest(request.remote_addr, pool_id)
 
     pool_data = database.db['ranked_lists'].find_one({'_id': pool_id})
