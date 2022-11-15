@@ -138,6 +138,10 @@ def process_action(action):
             json.dump(hash_list_json, f)
             f.close()
 
+            # copy playlist for references
+            for reference in database.db['pool_references'].find({'target': pool}):
+                shutil.copy('static/hashlists/' + pool + '.bplist', 'static/hashlists/' + reference['_id'] + '.bplist')
+
     if action['type'] == 'refresh_profiles':
         for user in database.get_all_users():
             user.refresh(database)
