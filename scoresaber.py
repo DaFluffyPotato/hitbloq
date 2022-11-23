@@ -10,7 +10,7 @@ def convert_epoch(t):
 
 class ScoresaberInterface():
     def __init__(self, database, queue_id=0):
-        self.headers = {'User-Agent': 'Hitbloq/1.2b'}
+        self.headers = {'User-Agent': 'Hitbloq/1.3b'}
         self.database = database
         self.queue_id = queue_id
         self.all_endpoints = config['scoresaber_endpoints'][str(queue_id)]
