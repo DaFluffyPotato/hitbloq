@@ -1,6 +1,7 @@
 import time
 
 import scoresaber
+import beatleader
 
 class User():
     def __init__(self):
@@ -16,6 +17,7 @@ class User():
         self.date_created = 0
         self.max_rank = {}
         self.rank_history = {}
+        self.valid_profiles = {'ss': False, 'bl': False}
         self.last_manual_refresh = 0
         self.badges = []
         self.custom_color = None
@@ -79,9 +81,28 @@ class User():
 
     def refresh(self, database):
         ss_profile = scoresaber.ScoresaberInterface(database).ss_req('player/' + self.scoresaber_id + '/basic')
-        self.username = ss_profile['name'].replace('<', '&lt;').replace('>', '&gt;')
-        self.profile_pic = ss_profile['profilePicture']
-        database.db['users'].update_one({'_id': self.id}, {'$set': {'profile_pic': self.profile_pic, 'username': self.username}})
+        if 'errorMessage' not in ss_profile:
+            self.username = ss_profile['name'].replace('<', '&lt;').replace('>', '&gt;')
+            self.profile_pic = ss_profile['profilePicture']
+            self.valid_profiles['ss'] = True
+        else:
+            self.valid_profiles['ss'] = False
+
+        try:
+            bl_profile = beatleader.BeatLeaderInterface().bl_req('player/' + self.scoresaber_id)
+            if not self.valid_profiles['ss']:
+                self.username = bl_profile['name'].replace('<', '&lt;').replace('>', '&gt;')
+                self.profile_pic = bl_profile['avatar']
+
+            self.valid_profiles['bl'] = True
+        except:
+            self.valid_profiles['bl'] = False
+
+        database.db['users'].update_one({'_id': self.id}, {'$set': {
+            'profile_pic': self.profile_pic,
+            'username': self.username,
+            'valid_profiles': self.valid_profiles,
+        }})
 
     def create(self, database, scoresaber_id):
         scoresaber_id = scoresaber_id.split('/')[-1]
@@ -109,6 +130,7 @@ class User():
         pool_ids = database.get_pool_ids(False)
 
         self.profile_pic = ss_profile['profilePicture']
+        self.valid_profiles['ss'] = True
         self.id = database.gen_new_user_id()
         self.scoresaber_id = scoresaber_id
         self.last_update = 0
@@ -154,6 +176,7 @@ class User():
         self.last_manual_refresh = json_data['last_manual_refresh']
         self.badges = json_data['badges']
         self.custom_color = json_data['custom_color']
+        self.valid_profiles = json_data['valid_profiles']
         return self
 
     def jsonify(self):
@@ -170,6 +193,7 @@ class User():
             'last_manual_refresh': self.last_manual_refresh,
             'badges': self.badges,
             'custom_color': self.custom_color,
+            'valid_profiles': self.valid_profiles,
         }
         return json_data
 
