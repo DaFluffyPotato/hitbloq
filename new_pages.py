@@ -160,6 +160,8 @@ def user(user_id):
         'player_banner_styling': banner_style,
         'last_manual_refresh': str(profile_obj.user.last_manual_refresh),
         'scoresaber_id': profile_obj.user.scoresaber_id,
+        'ss_visible': 'block' if profile_obj.user.valid_profiles['ss'] else 'none',
+        'bl_visible': 'block' if profile_obj.user.valid_profiles['bl'] else 'none',
     }
 
     desc_text = 'Rank: #' + '{:,}'.format(profile_obj.user.pool_rank) + '\n'

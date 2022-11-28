@@ -199,14 +199,20 @@
   right: 5em;
 }
 
-.user-ss-button {
+.player-external-profiles {
   position: absolute;
   top: 1.9em;
   right: 2em;
+  width: 2.5em;
+}
+
+.user-ss-button {
+  width: 2.5em;
+  margin-bottom: 0.5em;
 }
 
 .user-ss-button:hover {
-  top: 2.05em;
+  transform: translateY(0.2em);
 }
 
 .player-profile-header-text {
