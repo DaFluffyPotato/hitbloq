@@ -143,8 +143,11 @@ def process_action(action):
                 shutil.copy('static/hashlists/' + pool + '.bplist', 'static/hashlists/' + reference['_id'] + '.bplist')
 
     if action['type'] == 'refresh_profiles':
-        for user in database.get_all_users():
+        users = database.get_all_users()
+        for i, user in enumerate(users):
             user.refresh(database)
+            if (i % 10 == 0):
+                database.set_action_progress(action['_id'], (i + 1) / len(users))
 
     if action['type'] == 'refresh_pool_popularity':
         database.calculate_pool_popularity()
