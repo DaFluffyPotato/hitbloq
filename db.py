@@ -65,7 +65,7 @@ class HitbloqMongo():
             scoresaber_api = scoresaber.ScoresaberInterface(self.db, queue_id=queue_id)
             new_scores += scoresaber_api.fetch_until(user.scoresaber_id, user.last_update)
         if user.valid_profiles['bl']:
-            beatleader_api = beatleader.BeatleaderInterface()
+            beatleader_api = beatleader.BeatLeaderInterface()
             new_scores += beatleader_api.fetch_until(user.scoresaber_id, user.last_update)
         new_score_ids = []
         for i, score in enumerate(new_scores):
