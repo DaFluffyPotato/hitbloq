@@ -194,7 +194,7 @@ class HitbloqMongo():
             # ignore score if the old scores are better
             for score in matching_scores:
                 if score['modifiedScore'] > scoresaber_json['score']['modifiedScore']:
-                    break
+                    return False
 
             # delete old scores
             matching_scores = [score['_id'] for score in matching_scores]
