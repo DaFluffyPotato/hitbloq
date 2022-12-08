@@ -189,7 +189,7 @@ class HitbloqMongo():
                 return False
 
             # fetch old score data
-            matching_scores = self.db['scores'].find({'user': user.id, 'song_id': scoresaber_json['leaderboard']['songHash'] + '|' + scoresaber_json['leaderboard']['difficulty']['difficultyRaw']})
+            matching_scores = list(self.db['scores'].find({'user': user.id, 'song_id': scoresaber_json['leaderboard']['songHash'] + '|' + scoresaber_json['leaderboard']['difficulty']['difficultyRaw']}))
 
             # ignore score if the old scores are better
             for score in matching_scores:
