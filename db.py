@@ -6,7 +6,7 @@ import pymongo
 from pymongo import UpdateOne
 from bson.objectid import ObjectId
 
-import scoresaber, beatsaver
+import scoresaber, beatleader, beatsaver
 import user
 import config as old_config
 from cr_formulas import *
@@ -60,8 +60,13 @@ class HitbloqMongo():
             self.db['users'].replace_one({'_id': user.id}, user.jsonify())
 
     def update_user_scores(self, user, action_id=None, queue_id=0):
-        scoresaber_api = scoresaber.ScoresaberInterface(self.db, queue_id=queue_id)
-        new_scores = scoresaber_api.fetch_until(user.scoresaber_id, user.last_update)
+        new_scores = []
+        if user.valid_profiles['ss']:
+            scoresaber_api = scoresaber.ScoresaberInterface(self.db, queue_id=queue_id)
+            new_scores += scoresaber_api.fetch_until(user.scoresaber_id, user.last_update)
+        if user.valid_profiles['bl']:
+            beatleader_api = beatleader.BeatleaderInterface()
+            new_scores += beatleader_api.fetch_until(user.scoresaber_id, user.last_update)
         new_score_ids = []
         for i, score in enumerate(new_scores):
             print('adding score', i, '/', len(new_scores))
@@ -183,8 +188,15 @@ class HitbloqMongo():
             if scoresaber_json['score']['modifiers'] not in ['']:
                 return False
 
-            # delete old score data
+            # fetch old score data
             matching_scores = self.db['scores'].find({'user': user.id, 'song_id': scoresaber_json['leaderboard']['songHash'] + '|' + scoresaber_json['leaderboard']['difficulty']['difficultyRaw']})
+
+            # ignore score if the old scores are better
+            for score in matching_scores:
+                if score['modifiedScore'] > scoresaber_json['score']['modifiedScore']:
+                    break
+
+            # delete old scores
             matching_scores = [score['_id'] for score in matching_scores]
             self.delete_scores(leaderboard_id, matching_scores)
 

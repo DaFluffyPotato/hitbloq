@@ -28,11 +28,12 @@ class BeatLeaderInterface:
             new_score = {
                 'score': {
                     'modifiedScore': score['modifiedScore'],
-                    'maxCombo': -1,
+                    'maxCombo': score['maxCombo'],
                     'missedNotes': score['missedNotes'],
                     'badCuts': score['badCuts'],
                     'hmd': score['hmd'],
                     'epochTime': score['timepost'],
+                    'modifiers': score['modifiers'],
                 },
                 'leaderboard': {
                     'songHash': score['leaderboard']['song']['hash'].upper(),
@@ -73,4 +74,4 @@ class BeatLeaderInterface:
             c += 1
 
         print('Finish BL lookup for', bl_id)
-        return scores
+        return self.convert_score_format(scores)
