@@ -94,7 +94,10 @@ class User():
                 self.username = bl_profile['name'].replace('<', '&lt;').replace('>', '&gt;')
                 self.profile_pic = bl_profile['avatar']
 
-            self.valid_profiles['bl'] = True
+            if bl_profile['scoreStats']['lastScoreTime'] > 0:
+                self.valid_profiles['bl'] = True
+            else:
+                self.valid_profiles['bl'] = False
         except:
             self.valid_profiles['bl'] = False
 
