@@ -122,6 +122,7 @@ class HitbloqMongo():
             'song_id': scoresaber_json['leaderboard']['songHash'] + '|' + scoresaber_json['leaderboard']['difficulty']['difficultyRaw'],
             'cr': cr_data,
             'user': user.id,
+            'src': scoresaber_json['src'],
         }
         return score_data
 

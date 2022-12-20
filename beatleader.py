@@ -40,7 +40,8 @@ class BeatLeaderInterface:
                     'difficulty': {
                         'difficultyRaw': '_' + score['leaderboard']['difficulty']['difficultyName'] + '_Solo' + score['leaderboard']['difficulty']['modeName']
                     }
-                }
+                },
+                'src': 'bl',
             }
             modified_scores.append(new_score)
         return modified_scores
