@@ -108,7 +108,7 @@ class User():
         }})
 
     def create(self, database, scoresaber_id):
-        scoresaber_id = scoresaber_id.split('/')[-1]
+        scoresaber_id = scoresaber_id.split('/')[-1].split('?')[0]
         try:
             a = int(scoresaber_id)
         except:
@@ -119,10 +119,29 @@ class User():
             print('user', scoresaber_id, 'is a duplicate!')
             return None
 
+        self.valid_profiles['ss'] = True
+        self.valid_profiles['bl'] = True
+        found_profile = False
         ss_profile = scoresaber.ScoresaberInterface(database).ss_req('player/' + scoresaber_id + '/basic')
         try:
             self.username = ss_profile['name']
+            self.profile_pic = ss_profile['profilePicture']
+            found_profile = True
         except KeyError:
+            self.valid_profiles['ss'] = False
+
+        try:
+            bl_profile = beatleader.BeatLeaderInterface().bl_req('player/' + self.scoresaber_id)
+            if bl_profile['scoreStats']['lastScoreTime'] > 0:
+                self.username = bl_profile['name'].replace('<', '&lt;').replace('>', '&gt;')
+                self.profile_pic = bl_profile['avatar']
+                found_profile = True
+            else:
+                self.valid_profiles['bl'] = False
+        except:
+            self.valid_profiles['bl'] = False
+
+        if not found_profile:
             print('attempted to create invalid user', scoresaber_id)
             return None
 
@@ -132,8 +151,6 @@ class User():
 
         pool_ids = database.get_pool_ids(False)
 
-        self.profile_pic = ss_profile['profilePicture']
-        self.valid_profiles['ss'] = True
         self.id = database.gen_new_user_id()
         self.scoresaber_id = scoresaber_id
         self.last_update = 0
