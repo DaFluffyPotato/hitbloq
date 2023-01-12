@@ -131,7 +131,7 @@ class User():
             self.valid_profiles['ss'] = False
 
         try:
-            bl_profile = beatleader.BeatLeaderInterface().bl_req('player/' + scoresaber_id)
+            bl_profile = beatleader.BeatLeaderInterface().bl_req('player/' + scoresaber_id, retry=False)
             if bl_profile['scoreStats']['lastScoreTime'] > 0:
                 self.username = bl_profile['name'].replace('<', '&lt;').replace('>', '&gt;')
                 self.profile_pic = bl_profile['avatar']

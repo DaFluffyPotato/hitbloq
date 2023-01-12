@@ -12,13 +12,15 @@ class BeatLeaderInterface:
         self.beatleader_url = self.all_endpoints[0]
         print('created BeatLeader interface with endpoint set:', self.all_endpoints)
 
-    def bl_req(self, url):
+    def bl_req(self, url, retry=True):
         for i in range(5):
             try:
                 req = requests.get(self.beatleader_url + url, headers=self.headers)
                 req_content = req.text
                 return json.loads(req_content)
             except Exception as e:
+                if not retry:
+                    raise KeyError
                 print(e)
                 time.sleep(15)
 
