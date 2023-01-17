@@ -13,13 +13,17 @@ class BeatLeaderInterface:
         print('created BeatLeader interface with endpoint set:', self.all_endpoints)
 
     def bl_req(self, url, retry=True):
+        is_404 = False
         for i in range(5):
             try:
                 req = requests.get(self.beatleader_url + url, headers=self.headers)
+                if req.status_code == 404:
+                    print('BL 404:', url)
+                    is_404 = True
                 req_content = req.text
                 return json.loads(req_content)
             except Exception as e:
-                if not retry:
+                if (not retry) or is_404:
                     raise KeyError
                 print(e)
                 time.sleep(15)
