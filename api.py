@@ -139,7 +139,7 @@ def extend_scores(leaderboard_data, score_data, base_rank, user_data=None):
         if '_id' in score:
             del score['_id']
         score['username'] = user_data[score['user']].username
-        score['accuracy'] = round(score['score'] / max_score(leaderboard_data['notes']) * 100, 2)
+        score['accuracy'] = round(score['score'] / leaderboard_data['max_score'] * 100, 2)
         score['rank'] = base_rank + i + 1
         score['profile_pic'] = user_data[score['user']].profile_pic
         score['date_set'] = epoch_ago(score['time_set']) + ' ago'
@@ -180,7 +180,7 @@ def get_leaderboard_scores_nearby(leaderboard_id, user, extend=False):
     for i, score in enumerate(score_data):
         del score['_id']
         score['username'] = user_data[score['user']].username
-        score['accuracy'] = round(score['score'] / max_score(leaderboard_data['notes']) * 100, 2)
+        score['accuracy'] = round(score['score'] / leaderboard_data['max_score'] * 100, 2)
         score['rank'] = base_index + i + 1
 
     # TODO remove spaghetti with doubled up user requests
@@ -201,7 +201,7 @@ def leaderboard_scores_friends(leaderboard_id, friends_list, extend=False):
     for i, score in enumerate(score_data):
         del score['_id']
         score['username'] = user_data[score['user']].username
-        score['accuracy'] = round(score['score'] / max_score(leaderboard_data['notes']) * 100, 2)
+        score['accuracy'] = round(score['score'] / leaderboard_data['max_score'] * 100, 2)
         score['rank'] = i + 1
 
     # TODO remove spaghetti with doubled up user requests

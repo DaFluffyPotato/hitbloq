@@ -38,7 +38,7 @@ class CRRecalc:
 
             # get leaderboard info
             leaderboard_data = self.db['leaderboards'].find_one({'_id': leaderboard_id})
-            leaderboard_max_score = max_score(leaderboard_data['notes'])
+            leaderboard_max_score = leaderboard_data['max_score']
             self.max_scores[leaderboard_id] = leaderboard_max_score
 
             # add to skip list if necessary
