@@ -69,8 +69,8 @@ def ranked_lists():
 def get_announcement():
     return jsonify(database.db['config'].find_one({'_id': 'announcement'}))
 
-def get_map_pools_detailed():
-    map_pools = database.get_ranked_lists()
+def get_map_pools_detailed(search=''):
+    map_pools = database.get_ranked_lists(search=search)
 
     response = []
     author_ids = []

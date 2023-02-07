@@ -492,7 +492,17 @@ class HitbloqMongo():
             self.create_leaderboard(leaderboard_id, leaderboard_id.split('|')[0], transfer=True)
             print('reimporting', leaderboard_id)
 
-    def get_ranked_lists(self):
+    def get_ranked_lists(self, search=''):
+        if len(search):
+            strong_matches = list(self.db['ranked_lists'].find({'$or': [
+                    {'_id': {'$regex': 'fun', '$options': 'i'}},
+                    {'shown_name': {'$regex': 'fun', '$options': 'i'}},
+                ]}).sort('priority', -1))
+            weak_matches = list(self.db['ranked_lists'].find({'$or': [
+                    {'short_description': {'$regex': 'fun', '$options': 'i'}},
+                    {'long_description': {'$regex': 'fun', '$options': 'i'}},
+                ]}).sort('priority', -1))
+            return strong_matches + weak_matches
         return list(self.db['ranked_lists'].find({}).sort('priority', -1))
 
     def get_ranked_list_ids(self):

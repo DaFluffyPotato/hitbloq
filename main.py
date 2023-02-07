@@ -66,7 +66,8 @@ def announcement_api():
 @app.route('/api/map_pools_detailed')
 def map_pools_detailed_api():
     api_endpoint()
-    return api.get_map_pools_detailed()
+    search = request.args.get('search') if request.args.get('search') else ''
+    return api.get_map_pools_detailed(search=search)
 
 @app.route('/api/leaderboard/<leaderboard_id>/info')
 def leaderboard_info_api(leaderboard_id):
