@@ -1,3 +1,28 @@
+.map-pool-search {
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+  font-family: inherit;
+  font-size: 150%;
+  color: rgb(255, 255, 255);
+  box-shadow: 0 2px 0 0 rgba(255, 255, 255, 0.4);
+  width: 15vw;
+  margin: 3em 15vw;
+  transition: all 0.5s;
+}
+
+.map-pool-search:focus {
+  outline: none;
+  box-shadow: 0 2px 0 0 rgba(255, 255, 255, 0.8);
+  width: 45vw;
+  margin: 3em 0vw;
+  transition: all 0.5s;
+}
+
+.map-pools-search-container {
+  width: 45vw;
+  margin: 0 auto;
+}
+
 .map-pools-container {
   width: 80%;
   min-width: 10cm;

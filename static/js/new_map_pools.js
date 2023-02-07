@@ -1,12 +1,18 @@
 var poolData;
+var searchChanged = null;
 
 function genMapPools(status, data) {
   poolData = data;
   window.setInterval(genMapPool, 50);
 }
 
+function updateMapPools(status, data) {
+  poolData = data;
+  document.getElementById('map-pools-container').innerHTML = '';
+}
+
 function genMapPool() {
-  if (poolData.length > 0) {
+  if (poolData && (poolData.length > 0)) {
     const pool = poolData[0];
     var newHTML = useTemplate('new_map_pool_card',
         {
@@ -28,8 +34,21 @@ function finishedTemplateLoading() {
   getJSON(window.location.origin + '/api/map_pools_detailed', genMapPools);
 }
 
+function updateSearch() {
+  if (searchChanged) {
+    getJSON(window.location.origin + '/api/map_pools_detailed?search=' + searchChanged, updateMapPools);
+    searchChanged = null;
+  }
+}
+
+function searchChange(elem) {
+  searchChanged = elem.target.value;
+}
+
 window.addEventListener('load', () => {
     //console.log(document.getElementsByClassName('map-pool-card')[0].innerHTML);
+    document.getElementById('map-pool-search').addEventListener('input', searchChange);
+    window.setInterval(updateSearch, 700);
 
     loadTemplates(['new_map_pool_card'], finishedTemplateLoading);
 })
