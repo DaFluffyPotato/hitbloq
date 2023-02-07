@@ -35,8 +35,12 @@ function finishedTemplateLoading() {
 }
 
 function updateSearch() {
-  if (searchChanged) {
-    getJSON(window.location.origin + '/api/map_pools_detailed?search=' + searchChanged, updateMapPools);
+  if (searchChanged != null) {
+    if (searchChanged.length) {
+      getJSON(window.location.origin + '/api/map_pools_detailed?search=' + searchChanged, updateMapPools);
+    } else {
+      getJSON(window.location.origin + '/api/map_pools_detailed', updateMapPools);
+    }
     searchChanged = null;
   }
 }
