@@ -502,7 +502,14 @@ class HitbloqMongo():
                     {'short_description': {'$regex': search, '$options': 'i'}},
                     {'long_description': {'$regex': search, '$options': 'i'}},
                 ]}).sort('priority', -1))
-            return strong_matches + weak_matches
+            all_matches = strong_matches + weak_matches
+            merged_ids = set()
+            merged_matches = []
+            for match in all_matches:
+                if match['_id'] not in merged_ids:
+                    merged_ids.add(match['_id'])
+                    merged_matches.append(match)
+            return merged_matches
         return list(self.db['ranked_lists'].find({}).sort('priority', -1))
 
     def get_ranked_list_ids(self):
