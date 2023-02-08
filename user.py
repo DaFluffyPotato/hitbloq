@@ -3,6 +3,8 @@ import time
 import scoresaber
 import beatleader
 
+from general import substrings
+
 class User():
     def __init__(self):
         # direct db values
@@ -79,7 +81,12 @@ class User():
     def refresh_scores(self, database, action_id=None, queue_id=0):
         database.update_user_scores(self, action_id, queue_id)
 
+    def update_search_terms(self, database):
+        search_terms = substrings(self.username)
+        database.db['usernames'].update_one({'_id': self.id}, {'$set': {'name': self.username, 'terms': search_terms}}, upsert=True)
+
     def refresh(self, database):
+        old_username = self.username
         ss_profile = scoresaber.ScoresaberInterface(database).ss_req('player/' + self.scoresaber_id + '/basic')
         if 'errorMessage' not in ss_profile:
             self.username = ss_profile['name'].replace('<', '&lt;').replace('>', '&gt;')
@@ -98,6 +105,9 @@ class User():
                 self.valid_profiles['bl'] = False
         except:
             self.valid_profiles['bl'] = False
+
+        if self.username != old_username:
+            self.update_search_terms(database)
 
         database.db['users'].update_one({'_id': self.id}, {'$set': {
             'profile_pic': self.profile_pic,
@@ -166,6 +176,9 @@ class User():
             database.db['za_pool_users_' + pool_id].insert_one(pool_stats)
 
         database.add_user(self)
+
+        self.update_search_terms(database)
+
         return self
 
     def load_pool_stats(self, database, pool_id):

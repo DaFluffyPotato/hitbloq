@@ -45,6 +45,10 @@ char_shorten = {
 diff_lengthen = {v: k for k, v in diff_shorten.items()}
 char_lengthen = {v: k for k, v in char_shorten.items()}
 
+def substrings(string):
+    length = len(string)
+    return [string[i:j + 1] for i in range(length) for j in range(i, length)]
+
 def shorten_settings(settings_str):
     diff = settings_str.split('_')[1]
     char = settings_str.split('_')[2]
