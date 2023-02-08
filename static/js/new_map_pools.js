@@ -46,7 +46,9 @@ function updateSearch() {
 }
 
 function searchChange(elem) {
-  searchChanged = elem.target.value;
+  if (poolData != elem.target.value) {
+    searchChanged = elem.target.value;
+  }
 }
 
 window.addEventListener('load', () => {
