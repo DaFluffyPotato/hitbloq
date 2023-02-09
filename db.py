@@ -111,7 +111,7 @@ class HitbloqMongo():
             cr_curve_data = {rl['_id']: rl['cr_curve'] for rl in self.search_ranked_lists({'_id': {'$in': list(leaderboard['star_rating'])}})}
         cr_data = {}
         for pool_id in leaderboard['star_rating']:
-            cr_data[pool_id] = calculate_cr(scoresaber_json['score']['modifiedScore'] / leaderboard['max_score'] * 100, leaderboard['star_rating'][pool_id], cr_curve_data[pool_id])
+            cr_data[pool_id] = calculate_cr(scoresaber_json['score']['modifiedScore'] / max(leaderboard['max_score'], 1) * 100, leaderboard['star_rating'][pool_id], cr_curve_data[pool_id])
         score_data = {
             'score': scoresaber_json['score']['modifiedScore'],
             'max_combo': scoresaber_json['score']['maxCombo'],
