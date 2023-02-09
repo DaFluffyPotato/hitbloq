@@ -213,14 +213,19 @@ def leaderboard_scores_friends(leaderboard_id, friends_list, extend=False):
 def ranked_ladder(pool_id, page, players_per_page=10, search=None):
 
     if search:
-        aggregation_results = database.db['users'].aggregate([
-            {'$match': {'username': {'$regex': search, '$options': 'i'}}},
+        aggregation_results = database.db['usernames'].aggregate([
+            {'$match': {'$text': {'$search': search}}}, 
             {'$lookup': {'from': 'za_pool_users_' + pool_id, 'localField': '_id', 'foreignField': '_id', 'as': 'pool_stats'}},
             {'$sort': {'pool_stats.0.cr_total': -1}},
-            {'$limit': 50}
+            {'$limit': 50},
+            {'$lookup': {'from': 'users', 'localField': '_id', 'foreignField': '_id', 'as': 'user'}},
             ])
+        user_data = []
+        for result in aggregation_results:
+            user_data.append(result['user'][0])
+            user_data[-1]['pool_stats'] = result['pool_stats']
 
-        users = [User().load(user, pool_id=pool_id) for user in list(aggregation_results)]
+        users = [User().load(user, pool_id=pool_id) for user in list(user_data)]
 
         output_data = {
             '_id': pool_id,
