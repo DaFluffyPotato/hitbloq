@@ -563,6 +563,13 @@ class HitbloqMongo():
     def set_action_progress(self, action_id, progress):
         if action_id:
             self.db['actions'].update_one({'_id': action_id}, {'$set': {'progress': progress}})
+            
+    def reset_rate_limits(self, ip_address, hash=True):
+        if hash:
+            ip_hash = hash_ip(ip_address)
+        else:
+            ip_hash = ip_address
+        self.db['ratelimits'].delete_one({'_id': ip_hash})
 
     def get_rate_limits(self, ip_address, hash=True):
         if hash:

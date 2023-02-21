@@ -184,6 +184,9 @@ async def on_message(message):
                 msg_text += '```'
                 await message.channel.send(msg_text)
         if message.channel.name == ADMIN_COMMANDS_CHANNEL:
+            if message_args[0] == '!reset_ratelimits':
+                database.reset_rate_limits(message_args[1])
+                await message.channel.send(message.author.mention + ' cleared ratelimits for the address ' + message_args[1] + '.')
             if message_args[0] == '!create_badge':
                 badge_id = message_args[1]
                 badge_description = ' '.join(message_args[2:])
