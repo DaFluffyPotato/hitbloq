@@ -76,7 +76,9 @@ class BeatLeaderInterface:
                 for score in new_dat['data']:
                     if score['timepost'] < (epoch - 300):
                         looking = False
-                    else:
+
+                    # catch account migrations
+                    elif score['playerId'] == bl_id:
                         scores.append(score)
             c += 1
 
