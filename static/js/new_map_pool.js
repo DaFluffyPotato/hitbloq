@@ -1,4 +1,6 @@
 var poolID = window.location.pathname.split('/');
+var lazyLoading = false;
+var lazyLoadIndex = 0;
 poolID = poolID[poolID.length - 1];
 
 function genMapPool(status, data) {
@@ -66,6 +68,8 @@ function genPoolFeed(status, data) {
     );
     document.getElementById('pool-feed').appendChild(newHTML);
   }
+  lazyLoadIndex++;
+  lazyLoading = false;
 }
 
 function finishedTemplateLoading() {
@@ -75,5 +79,14 @@ function finishedTemplateLoading() {
 }
 
 window.addEventListener('load', () => {
-    loadTemplates(['new_map_pool_card_alt', 'new_player_leaderboard_entry_alt', 'new_pool_ranking_post'], finishedTemplateLoading);
+  loadTemplates(['new_map_pool_card_alt', 'new_player_leaderboard_entry_alt', 'new_pool_ranking_post'], finishedTemplateLoading);
+  content = document.getElementById('content');
+  content.onscroll = function(ev) {
+    if (content.scrollTop === (content.scrollHeight - content.offsetHeight)) {
+        if (!lazyLoading) {
+          lazyLoading = true;
+          getJSON(window.location.origin + '/api/pool_feed/' + poolID + '?page=' + lazyLoadIndex, genPoolFeed);
+        }
+    }
+  };
 })
