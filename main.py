@@ -236,7 +236,10 @@ def get_player_badges(user_id):
 @app.route('/api/pool_feed/<pool_id>')
 def get_pool_feed(pool_id):
     api_endpoint()
-    return api.pool_feed(pool_id)
+    page = 0
+    if request.args.get('page'):
+        page = int(request.args.get('page'))
+    return api.pool_feed(pool_id, page)
 
 @app.route('/api/mm/ss_user/<scoresaber_id>')
 def get_mm_ss_user(scoresaber_id):

@@ -504,8 +504,10 @@ def get_player_badges(user_id):
 def action_queue_statuses():
     return jsonify(database.action_queue_status())
 
-def pool_feed(pool_id):
-    recent_updates = list(database.db['pool_feeds'].aggregate([{'$match': {'pool': pool_id}}, {'$lookup': {'from': 'leaderboards', 'localField': 'leaderboard_id', 'foreignField': '_id', 'as': 'leaderboard_data'}}, {'$sort': {'time': -1}}, {'$limit': 16}]))
+def pool_feed(pool_id, page):
+    page_size = 16
+    skip = page_size * page
+    recent_updates = list(database.db['pool_feeds'].aggregate([{'$match': {'pool': pool_id}}, {'$lookup': {'from': 'leaderboards', 'localField': 'leaderboard_id', 'foreignField': '_id', 'as': 'leaderboard_data'}}, {'$sort': {'time': -1}}, {'$limit': 16 + skip}, {'$skip': skip}]))
     for update in recent_updates:
         del update['_id']
         update['date'] = epoch_ago(update['time'])
