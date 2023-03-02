@@ -78,9 +78,9 @@ class BeatLeaderInterface:
                         looking = False
 
                     # catch account migrations
-                    elif (int(bl_id) >= 70000000000000000) and (score['platform'] == 'steam'):
+                    elif (int(bl_id) >= 70000000000000000) and ('steam' in score['platform'].split(',')):
                         scores.append(score)
-                    elif (int(bl_id) < 70000000000000000) and (score['platform'] != 'steam'):
+                    elif (int(bl_id) < 70000000000000000) and ('steam' in score['platform'].split(',')):
                         scores.append(score)
                     else:
                         print('detected invalid score source:', bl_id, score['platform'])
