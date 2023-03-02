@@ -323,6 +323,16 @@ async def on_message(message):
                 database.db['users'].update_one({'_id': rewind_id}, {'$set': {'last_update': rewind_to}})
                 create_action.update_user(rewind_id)
                 await message.channel.send(message.author.mention + ' user ' + str(rewind_id) + ' will be rewinded and updated.')
+            
+            if message_args[0] == '!drewind':
+                rewind_id = int(message_args[1])
+                rewind_amount = int(message_args[2])
+                rewind_amount = max(0, rewind_amount)
+                rewind_to = time.time() - rewind_amount
+                database.db['users'].update_one({'_id': rewind_id}, {'$set': {'last_update': rewind_to}})
+                database.db['scores'].delete_many({'user': rewind_id, 'time_set': {'$gt': rewind_to}})
+                create_action.update_user(rewind_id)
+                await message.channel.send(message.author.mention + ' user ' + str(rewind_id) + ' will be rewinded and updated (with deletion).')
 
         if message.channel.name == POOL_ADMIN_COMMANDS_CHANNEL:
             if message_args[0] in ['!set_short_desc', '!set_long_desc']:
