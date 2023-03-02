@@ -78,8 +78,13 @@ class BeatLeaderInterface:
                         looking = False
 
                     # catch account migrations
-                    elif score['playerId'] == bl_id:
+                    elif (int(bl_id) >= 70000000000000000) and (score['platform'] == 'steam'):
                         scores.append(score)
+                    elif (int(bl_id) < 70000000000000000) and (score['platform'] != 'steam'):
+                        scores.append(score)
+                    else:
+                        print('detected invalid score source:', bl_id, score['platform'])
+                    
             c += 1
 
         print('Finish BL lookup for', bl_id)
