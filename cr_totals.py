@@ -4,6 +4,7 @@ from pymongo import UpdateOne
 
 from db import database
 from cr_formulas import cr_accumulation_curve
+from error import error_catch
 
 class BulkCRTotalUpdate:
     def __init__(self, db, debug=True):
@@ -78,17 +79,21 @@ class BulkCRTotalUpdate:
         for pool in pool_bulk_ops:
             if len(pool_bulk_ops[pool]):
                 self.db['za_pool_users_' + pool].bulk_write(pool_bulk_ops[pool])
+                
+def cycle(update_list, all_users=True):
+    if len(update_list):
+        print('updating totals for pools:')
+        print(update_list)
+        BulkCRTotalUpdate(database.db).safe_bulk_update_cr_totals(database.get_all_user_ids(), update_list, all_users=all_users)
+        database.db['ranked_lists'].update_many({'_id': {'$in': update_list}}, {'$set': {'needs_cr_total_recalc': False}})
+    print('success')
 
 while True:
     update_list = []
     for pool in database.db['ranked_lists'].find({}, {'needs_cr_total_recalc': 1}):
         if pool['needs_cr_total_recalc']:
             update_list.append(pool['_id'])
-
-    if len(update_list):
-        print('updating totals for pools:')
-        print(update_list)
-        BulkCRTotalUpdate(database.db).safe_bulk_update_cr_totals(database.get_all_user_ids(), update_list, all_users=True)
-        database.db['ranked_lists'].update_many({'_id': {'$in': update_list}}, {'$set': {'needs_cr_total_recalc': False}})
+            
+    error_catch(cycle, update_list, group_id='cr_totals', retry=3, retry_delay=10)
 
     time.sleep(10)
