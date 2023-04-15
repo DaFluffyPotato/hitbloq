@@ -26,7 +26,7 @@ def read_f(path):
 token = read_f('data/token.txt')
 guild_id = 'Hitbloq'
 
-client = discord.Client()
+client = discord.Client(intents=discord.Intents.all())
 
 GENERAL_COMMANDS_CHANNEL = 'general-commands'
 ADMIN_COMMANDS_CHANNEL = 'admin-commands'
@@ -76,6 +76,8 @@ async def on_ready():
             active_guild = guild
             channels = guild.channels
             break
+        
+    client.loop.create_task(check_notifications())
     print(client.user.name + ' has connected to Discord!')
 
 @client.event
@@ -560,16 +562,16 @@ async def on_message(message):
                 else:
                     await message.channel.send(message.author.mention + ' that pool ID appears to be invalid')
 
-@tasks.loop(seconds=10)
+@client.event
 async def check_notifications():
-    for guild in client.guilds:
-        if guild.name == guild_id:
-            channel = get(guild.channels, name='admin-notifications')
-            notifications = database.fetch_notifications()
-            for notification in notifications:
-                notification_text = 'Category **' + notification['category'] + '**\n```py\n' + notification['content'] + '```'
-                await channel.send(notification_text)
-
-check_notifications.start()
-
+    while not client.is_closed():
+        for guild in client.guilds:
+            if guild.name == guild_id:
+                channel = get(guild.channels, name='admin-notifications')
+                notifications = database.fetch_notifications()
+                for notification in notifications:
+                    notification_text = 'Category **' + notification['category'] + '**\n```py\n' + notification['content'] + '```'
+                    await channel.send(notification_text)
+        await asyncio.sleep(10)
+        
 client.run(token)
