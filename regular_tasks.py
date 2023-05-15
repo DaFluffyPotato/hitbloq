@@ -1,4 +1,5 @@
 import time
+import os
 
 from db import database
 import create_action
@@ -39,6 +40,7 @@ while True:
     if timer % (DAY * 7) == 0:
         create_action.refresh_pool_popularity()
         create_action.refresh_profiles()
+        os.system('service nginx restart')
 
     time.sleep(1)
     timer += 1
