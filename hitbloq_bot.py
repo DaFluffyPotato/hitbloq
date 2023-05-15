@@ -14,6 +14,8 @@ import beatsaver
 from cr_formulas import curves
 from general import full_clean, format_num
 from matchmaking import DEFAULT_RATING
+from actions import get_web_img_b64
+from file_io import write_f
 
 beatsaver_interface = beatsaver.BeatSaverInterface()
 
@@ -367,14 +369,22 @@ async def on_message(message):
             if message_args[0] == '!set_playlist_cover':
                 valid_host = 'https://i.imgur.com/'
                 pool_id = message_args[1]
-                image_url = message_args[2]
                 if pool_id in database.get_pool_ids(True):
                     if database.is_pool_owner(pool_id, message.author.id):
-                        if (image_url[:len(valid_host)] != valid_host) or (image_url.split('.')[-1] != 'png'):
-                            await message.channel.send(message.author.mention + ' the image URL must come from ' + valid_host + ' and be a PNG')
+                        if len(message.attachments):
+                            cover_url = message.attachments[0].url
+                            if cover_url.split('.')[-1] == 'png':
+                                print('downloading cover:', cover_url)
+                                cover_b64 = get_web_img_b64(cover_url)
+                                if cover_b64:
+                                    write_f('static/hashlists/' + pool_id + '.cover')
+                                    await message.channel.send(message.author.mention + ' the playlist cover has been updated.')
+                                else:
+                                    await message.channel.send(message.author.mention + ' the cover appears to be invalid.')
+                            else:
+                                await message.channel.send(message.author.mention + ' the image must be a PNG.')
                         else:
-                            database.db['ranked_lists'].update_one({'_id': pool_id}, {'$set': {'playlist_cover': image_url}})
-                            await message.channel.send(message.author.mention + ' the pool image has been updated')
+                            await message.channel.send(message.author.mention + ' you must attach an image to be used as a cover.')
                     else:
                         await message.channel.send(message.author.mention + ' you don\'t have permissions to modify this pool')
                 else:
