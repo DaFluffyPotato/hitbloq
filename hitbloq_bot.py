@@ -377,7 +377,7 @@ async def on_message(message):
                                 print('downloading cover:', cover_url)
                                 cover_b64 = get_web_img_b64(cover_url)
                                 if cover_b64:
-                                    write_f('static/hashlists/' + pool_id + '.cover')
+                                    write_f('static/hashlists/' + pool_id + '.cover', cover_b64)
                                     await message.channel.send(message.author.mention + ' the playlist cover has been updated.')
                                 else:
                                     await message.channel.send(message.author.mention + ' the cover appears to be invalid.')
