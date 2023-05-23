@@ -109,6 +109,11 @@ def laderboard_scores_nearby_extended_api(leaderboard_id, user):
     user = int(user)
     return api.get_leaderboard_scores_nearby(leaderboard_id, user, extend=True)
 
+@app.route('/api/leaderboard/<leaderboard_id>/score_to_rank/<int:score>')
+def leaderboard_score_to_rank(leaderboard_id, score):
+    api_endpoint()
+    return api.leaderboard_score_to_rank(leaderboard_id, score)
+
 @app.route('/api/leaderboard/<leaderboard_id>/friends', methods=['POST'])
 def leaderboard_scores_friends_api(leaderboard_id):
     api_endpoint()
