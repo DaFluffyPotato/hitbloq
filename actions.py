@@ -54,6 +54,7 @@ def process_action(action):
             user.refresh_scores(database)
             if i % 10 == 0:
                 database.set_action_progress(action['_id'], (i + 1) / len(action['user_ids']))
+            time.sleep(0.15)
 
     if action['type'] == 'recalculate_cr':
         for pool in action['map_pools']:
@@ -148,11 +149,12 @@ def process_action(action):
                 shutil.copy('static/hashlists/' + pool + '.bplist', 'static/hashlists/' + reference['_id'] + '.bplist')
 
     if action['type'] == 'refresh_profiles':
-        users = database.get_all_users()
+        users = database.get_all_users() if not action['user_ids'] else database.get_users(action['user_ids'])
         for i, user in enumerate(users):
             user.refresh(database)
             if (i % 10 == 0):
                 database.set_action_progress(action['_id'], (i + 1) / len(users))
+            time.sleep(0.15)
 
     if action['type'] == 'refresh_pool_popularity':
         database.calculate_pool_popularity()

@@ -30,6 +30,7 @@ while True:
                 print('updating users', user_ids[0], 'to', user_ids[-1])
 
             create_action.update_users(user_ids)
+            create_action.refresh_profiles(user_ids)
     if timer % (DAY) == 0:
         for pool_id in database.get_pool_ids(False):
             create_action.recalculate_cr([pool_id])
@@ -39,7 +40,6 @@ while True:
 
     if timer % (DAY * 7) == 0:
         create_action.refresh_pool_popularity()
-        create_action.refresh_profiles()
         os.system('service nginx restart')
 
     time.sleep(1)

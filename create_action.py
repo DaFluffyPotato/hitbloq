@@ -32,8 +32,8 @@ def regenerate_playlists():
     action_id = database.add_action({'type': 'regenerate_playlists'})
     return action_id
 
-def refresh_profiles(queue_id=2):
-    action_id = database.add_action({'type': 'refresh_profiles'}, queue_id=queue_id)
+def refresh_profiles(user_ids=None, queue_id=2):
+    action_id = database.add_action({'type': 'refresh_profiles', 'user_ids': user_ids}, queue_id=queue_id)
     return action_id
 
 def refresh_pool_popularity(queue_id=2):
