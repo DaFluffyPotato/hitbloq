@@ -190,6 +190,11 @@ def user_api(user_id):
         page = int(request.args.get('page'))
     return api.get_user_scores(user_id, get_map_pool(), sort_mode=sort_mode, page=page)
 
+@app.route('/api/user/<int:user_id>/all_scores')
+def user_all_api(user_id):
+    api_endpoint()
+    return api.get_all_user_scores(user_id, get_map_pool())
+
 @app.route('/api/update_user/<int:user_id>')
 def update_user(user_id):
     api_endpoint()

@@ -307,6 +307,31 @@ def ranked_ladder_friends(pool_id, friends_list):
 
     return jsonify(ladder_data)
 
+def get_all_user_scores(user_id, pool_id):
+    profile_obj = Profile(user_id)
+    pool_data = profile_obj.user.load_pool_scores(database, pool_id)
+    profile_obj.fetch_score_leaderboards(profile_obj.user.scores)
+    profile_obj.user.scores.sort(key=lambda x : x['cr'][pool_id], reverse=True)
+    scores_by_cr = profile_obj.user.scores
+    score_data = []
+    for i, score in enumerate(profile_obj.user.scores):
+        player_score_index = scores_by_cr.index(score)
+        inject_values = {
+            'song_rank': score['rank'],
+            'song_name': score['leaderboard']['name'],
+            'song_id': score['leaderboard']['hash'] + '_' + shorten_settings(score['song_id'].split('|')[1]),
+            'cr_received': round(score['cr'][pool_id], 2),
+            'weighted_cr': round(score['cr'][pool_id] * cr_accumulation_curve(player_score_index, pool_data['accumulation_constant']), 2),
+            'accuracy': score['accuracy'],
+            'song_cover': score['leaderboard']['cover'],
+            'date_set': epoch_ago(score['time_set']) + ' ago',
+            'time': score['time_set'],
+            'difficulty': score['leaderboard']['difficulty'][0].upper() + score['leaderboard']['difficulty'][1:],
+        }
+        score_data.append(inject_values)
+
+    return jsonify(score_data)
+
 def get_user_scores(user_id, pool_id, sort_mode='cr', page=0, count=10):
     page_length = count
     profile_obj = Profile(user_id)
