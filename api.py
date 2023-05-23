@@ -131,7 +131,7 @@ def get_leaderboard_scores(leaderboard_id, offset=0, count=30):
     return jsonify(score_data)
 
 def leaderboard_score_to_rank(leaderboard_id, score):
-    rank = database.db['scores'].find({'song_id': leaderboard_id, 'score': {'$gte': score}}).count()
+    rank = database.db['scores'].find({'song_id': leaderboard_id, 'score': {'$gte': score}}).count() + 1
     return jsonify({'rank': rank})
 
 def extend_scores(leaderboard_data, score_data, base_rank, user_data=None):
