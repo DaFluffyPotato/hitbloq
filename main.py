@@ -163,6 +163,11 @@ def player_ranks_api():
     pool_ids = request.json['pools']
     return api.player_ranks_api(pool_ids, user)
 
+@app.route('/api/ladder/<pool_id>/cr_to_rank/<cr>')
+def ranked_ladder_theoretical_rank(pool_id, cr):
+    api_endpoint()
+    return api.theoretical_rank(pool_id, float(cr))
+
 @app.route('/api/ladder/<pool_id>/players/<int:page>')
 def ranked_ladder_api(pool_id, page):
     api_endpoint()

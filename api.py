@@ -134,6 +134,10 @@ def leaderboard_score_to_rank(leaderboard_id, score):
     rank = database.db['scores'].find({'song_id': leaderboard_id, 'score': {'$gte': score}}).count() + 1
     return jsonify({'rank': rank})
 
+def theoretical_rank(pool_id, cr):
+    rank = database.db['za_pool_users_' + pool_id].find({'cr_total': {'$gte': cr}}).count() + 1
+    return jsonify({'rank': rank})
+
 def extend_scores(leaderboard_data, score_data, base_rank, user_data=None):
     user_list = [score['user'] for score in score_data]
     if not user_data:
