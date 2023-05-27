@@ -88,6 +88,8 @@ class CRRecalc:
             # add exception case for when a leaderboard has no scores
             if not len(self.leaderboard_scores[leaderboard_id]):
                 map_difficulty = 0
+                if leaderboard_id in self.skip_list:
+                    map_difficulty = self.skip_list[leaderboard_id]
 
             # main case
             else:
