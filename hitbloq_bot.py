@@ -537,6 +537,8 @@ async def on_message(message):
                     else:
                         await message.channel.send(message.author.mention + ' that song ID appears to be invalid')
                         await message.channel.send(bs_error)
+                        if len(song_id.split('|')) == 2:
+                            await message.channel.send('https://beatsaver.com/api/maps/hash/' + song_id.split('|')[0])
                 else:
                     await message.channel.send(message.author.mention + ' that pool ID appears to be invalid')
 
