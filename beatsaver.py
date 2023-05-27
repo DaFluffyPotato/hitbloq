@@ -85,4 +85,4 @@ class BeatSaverInterface():
                         return song_data, None
 
         print('invalid hash: no matching beatsaver diff/char:', characteristic, difficulty)
-        return False, 'invalid hash: no matching beatsaver diff/char:' + characteristic + difficulty
+        return False, 'invalid hash: no matching beatsaver diff/char: ' + characteristic + ' - ' + difficulty
