@@ -45,29 +45,29 @@ class BeatSaverInterface():
     def verify_song_id(self, song_id):
         if len(song_id.split('|')) != 2:
             print('invalid hash: bad hash format')
-            return False
+            return False, 'invalid hash: bad hash format'
 
         difficulty_settings = song_id.split('|')[-1]
 
         if len(difficulty_settings.split('_')) != 3:
             print('invalid hash: bad difficulty args')
-            return False
+            return False, 'invalid hash: bad difficulty args'
 
         junk, difficulty, characteristic = difficulty_settings.split('_')
 
         if junk != '':
             print('invalid hash: bad difficulty args')
-            return False
+            return False, 'invalid hash: bad difficulty args'
 
         hash = song_id.split('|')[0].upper()
 
         if characteristic not in char_shorten:
             print('invalid hash: char not enabled')
-            return False
+            return False, 'invalid hash: char not enabled'
 
         if difficulty not in diff_shorten:
             print('invalid hash: diff not enabled')
-            return False
+            return False, 'invalid hash: diff not enabled'
 
         if characteristic[:4] == 'Solo':
             characteristic = characteristic[4:]
@@ -76,13 +76,13 @@ class BeatSaverInterface():
 
         if not song_data:
             print('invalid hash: beatsaver hash not found')
-            return False
+            return False, 'invalid hash: beatsaver hash not found'
 
         if len(song_data['versions']):
             for diff in song_data['versions'][0]['diffs']:
                 if diff['characteristic'] == characteristic:
                     if diff['difficulty'] == difficulty:
-                        return song_data
+                        return song_data, None
 
         print('invalid hash: no matching beatsaver diff/char:', characteristic, difficulty)
-        return False
+        return False, 'invalid hash: no matching beatsaver diff/char:' + characteristic + difficulty

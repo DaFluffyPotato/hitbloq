@@ -527,7 +527,7 @@ async def on_message(message):
                 song_id = message_args[1]
                 pool_id = message_args[2]
                 if pool_id in database.get_pool_ids(True):
-                    song_data = beatsaver_interface.verify_song_id(song_id)
+                    song_data, bs_error = beatsaver_interface.verify_song_id(song_id)
                     if song_data:
                         if database.is_pool_owner(pool_id, message.author.id):
                             create_action.rank_song(song_id, pool_id)
@@ -536,6 +536,7 @@ async def on_message(message):
                             await message.channel.send(message.author.mention + ' you don\'t have permissions to modify this pool')
                     else:
                         await message.channel.send(message.author.mention + ' that song ID appears to be invalid')
+                        await message.channel.send(bs_error)
                 else:
                     await message.channel.send(message.author.mention + ' that pool ID appears to be invalid')
 
