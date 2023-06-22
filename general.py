@@ -1,5 +1,8 @@
-import datetime
 import time
+import datetime
+import requests
+
+from PIL import Image
 
 DAY = 60 * 60 * 24
 
@@ -108,3 +111,13 @@ def epoch_ago(epoch):
     seconds_ago = int(time_ago)
     added_s = 's' if seconds_ago > 1 else ''
     return str(seconds_ago) + ' second' + added_s
+
+def download_image(url, filename):
+    img_data = requests.get(url).content
+    url_extension = url.split('.')[-1].split('?')[0]
+    with open(filename + '.' + url_extension, 'wb') as handler:
+        handler.write(img_data)
+
+    if url_extension != 'png':
+        img = Image.open(filename + '.' + url_extension)
+        img.save(filename + '.png')
