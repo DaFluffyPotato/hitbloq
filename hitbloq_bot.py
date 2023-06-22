@@ -376,7 +376,7 @@ async def on_message(message):
                             if cover_url.split('.')[-1] == 'png':
                                 print('downloading cover:', cover_url)
                                 download_image(cover_url, 'static/hashlists/' + pool_id + '_cover')
-                                database.db['ranked_list'].update_one({'_id': pool_id}, {'$set': {'playlist_cover': '/static/hashlists/' + pool_id + '_cover.png'}})
+                                database.db['ranked_lists'].update_one({'_id': pool_id}, {'$set': {'playlist_cover': '/static/hashlists/' + pool_id + '_cover.png'}})
                                 cover_b64 = get_web_img_b64(cover_url)
                                 if cover_b64:
                                     write_f('static/hashlists/' + pool_id + '.cover', cover_b64)
