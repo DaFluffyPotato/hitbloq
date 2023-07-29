@@ -123,6 +123,7 @@ class HitbloqMongo():
             'cr': cr_data,
             'user': user.id,
             'src': scoresaber_json['src'],
+            'modifiers': scoresaber_json['score']['modifiers']
         }
         return score_data
 
@@ -186,7 +187,7 @@ class HitbloqMongo():
             leaderboard = leaderboard[0]
 
         if valid_leaderboard:
-            if scoresaber_json['score']['modifiers'] not in ['']:
+            if scoresaber_json['score']['modifiers'] not in ['', 'IF', 'BE']:
                 return False
 
             # fetch old score data
