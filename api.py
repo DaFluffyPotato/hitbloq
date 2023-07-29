@@ -36,7 +36,7 @@ def add_user(request_json, ip_address):
 def ranked_list(pool_id, offset=0, count=30):
     ranked_list_data = database.get_ranked_list(mongo_clean(pool_id))
     ranked_list_data['leaderboard_id_list'] = ranked_list_data['leaderboard_id_list'][offset:offset + count]
-    ranked_list_data['playlist_cover'] = abs_img(ranked_list_data['playlist_cover'])
+    ranked_list_data['playlist_cover'] = abs_img(ranked_list_data['playlist_cover']) if ranked_list_data['playlist_cover'] else None
     return jsonify(ranked_list_data)
 
 def ranked_list_detailed(pool_id, page=0, count=30):
