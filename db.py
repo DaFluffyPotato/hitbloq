@@ -187,7 +187,7 @@ class HitbloqMongo():
             leaderboard = leaderboard[0]
 
         if valid_leaderboard:
-            if scoresaber_json['score']['modifiers'] not in ['', 'IF', 'BE']:
+            if scoresaber_json['score']['modifiers'] not in ['', 'IF', 'BE', 'OD']:
                 return False
 
             # fetch old score data
