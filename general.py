@@ -1,5 +1,8 @@
-import datetime
 import time
+import datetime
+import requests
+
+from PIL import Image
 
 DAY = 60 * 60 * 24
 
@@ -113,3 +116,13 @@ def abs_img(url):
     if url.find(':') == -1:
         return 'https://hitbloq.com' + url
     return url
+
+def download_image(url, filename):
+    img_data = requests.get(url).content
+    url_extension = url.split('.')[-1].split('?')[0]
+    with open(filename + '.' + url_extension, 'wb') as handler:
+        handler.write(img_data)
+
+    if url_extension != 'png':
+        img = Image.open(filename + '.' + url_extension)
+        img.save(filename + '.png')

@@ -61,6 +61,10 @@ class ScoresaberInterface():
                     print('ERROR')
                     print(new_dat)
 
+                    # hack because umbra never fixed thousands of broken scores on SS.
+                    c += 1
+                    continue
+
                 # umbranox did a lil' trolling and changed the API again
                 if not len(new_dat['playerScores']):
                     looking = False
