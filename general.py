@@ -108,3 +108,8 @@ def epoch_ago(epoch):
     seconds_ago = int(time_ago)
     added_s = 's' if seconds_ago > 1 else ''
     return str(seconds_ago) + ' second' + added_s
+
+def abs_img(url):
+    if url.find(':') == -1:
+        return 'https://hitbloq.com' + url
+    return url

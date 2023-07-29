@@ -5,7 +5,7 @@ from flask import jsonify
 from db import database
 from profile import Profile
 from user import User
-from general import mongo_clean, max_score, shorten_settings, lengthen_settings, epoch_ago
+from general import mongo_clean, max_score, shorten_settings, lengthen_settings, epoch_ago, abs_img
 from cr_formulas import cr_accumulation_curve
 import create_action
 from templates import templates
@@ -36,6 +36,7 @@ def add_user(request_json, ip_address):
 def ranked_list(pool_id, offset=0, count=30):
     ranked_list_data = database.get_ranked_list(mongo_clean(pool_id))
     ranked_list_data['leaderboard_id_list'] = ranked_list_data['leaderboard_id_list'][offset:offset + count]
+    ranked_list_data['playlist_cover'] = abs_img(ranked_list_data['playlist_cover'])
     return jsonify(ranked_list_data)
 
 def ranked_list_detailed(pool_id, page=0, count=30):
@@ -97,13 +98,15 @@ def get_map_pools_detailed(search=''):
                 authors_text += ', '
         if authors_text == '':
             authors_text = 'unknown'
+            
+        playlist_cover = abs_img(pool['playlist_cover'] if pool['playlist_cover'] else 'https://hitbloq.com/static/hitbloq.png')
 
         response.append({
             'title': pool['shown_name'],
             'banner_title_hide': pool['banner_title_hide'],
             'author': authors_text,
             'banner_image': pool['cover'],
-            'image': pool['playlist_cover'] if pool['playlist_cover'] else 'https://hitbloq.com/static/hitbloq.png',
+            'image': playlist_cover,
             'id': pool['_id'],
             'description': pool['long_description'],
             'short_description': 'The ' + pool['shown_name'] + ' map pool.' if not pool['short_description'] else pool['short_description'],
