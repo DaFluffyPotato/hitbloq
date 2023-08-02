@@ -65,6 +65,12 @@ async def pool_announcement(ctx, pool_id):
     threads = database.db['threads'].find_one({'_id': pool_id})
     if threads:
         updates_channel = bot.get_channel(threads['updates'])
+        if not updates_channel:
+            async for thread in get_channel(ctx, 'pool-updates').archived_threads():
+                if thread.name == pool_id + ' updates':
+                    updates_channel = thread
+                    print('found archived channel')
+                    break
         await updates_channel.send(new_message)
         await ctx.message.channel.send('Sent {} update.'.format(pool_id))
     else:
