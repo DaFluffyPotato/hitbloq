@@ -46,6 +46,12 @@ async def pool_nominate(ctx, pool_id, map_id):
     threads = database.db['threads'].find_one({'_id': pool_id})
     if threads:
         ranking_channel = bot.get_channel(threads['ranking'])
+        if not ranking_channel:
+            async for thread in get_channel(ctx, 'pool-ranking').archived_threads():
+                if thread.name == pool_id + ' ranking':
+                    ranking_channel = thread
+                    print('found archived channel')
+                    break
         await ranking_channel.send('Ranking Request from ' + ctx.message.author.display_name + ':\nhttps://beatsaver.com/maps/' + beatsaver_key)
         await ctx.message.channel.send('The ranking team has been notified.')
     else:
