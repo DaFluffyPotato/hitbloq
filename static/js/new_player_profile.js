@@ -22,8 +22,8 @@ function refreshUpdateButton() {
 
 function manualRefresh() {
   if (epoch - lastUserUpdate >= 60 * 3) {
-    getJSON('/api/update_user/' + location.pathname.split('/')[location.pathname.split('/').length - 1], setLastRefresh);
     getJSON('/api/refresh_profile/' + location.pathname.split('/')[location.pathname.split('/').length - 1], ignoreResponse);
+    getJSON('/api/update_user/' + location.pathname.split('/')[location.pathname.split('/').length - 1], setLastRefresh);
   }
 }
 
