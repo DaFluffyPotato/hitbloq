@@ -216,6 +216,13 @@ def update_user(user_id):
         return json.dumps({'time': time.time(), 'id': action_id, 'error': None})
     else:
         return json.dumps({'time': last_refresh, 'id': None, 'error': 'refreshed too quickly'})
+    
+@app.route('/api/refresh_profile/<int:user_id>')
+def refresh_profile(user_id):
+    api_endpoint()
+    print('received profile refresh request for', user_id)
+    action_id = create_action.refresh_profile(user_id, queue_id=1)
+    return json.dumps({'success': True})
 
 @app.route('/api/action_status/<action_id>')
 def action_id_status(action_id):

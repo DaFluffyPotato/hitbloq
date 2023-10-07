@@ -8,6 +8,10 @@ def update_user(user_id, queue_id=0):
     action_id = database.add_action({'type': 'update_user', 'user_id': user_id}, queue_id=queue_id)
     return action_id
 
+def refresh_profile(user_id, queue_id=0):
+    action_id = database.add_action({'type': 'refresh_profile', 'user_id': user_id}, queue_id=queue_id)
+    return action_id
+
 def update_users(user_ids, queue_id=2):
     action_id = database.add_action({'type': 'update_users', 'user_ids': user_ids}, queue_id=queue_id)
     return action_id

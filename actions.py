@@ -157,6 +157,13 @@ def process_action(action):
             if (i % 10 == 0):
                 database.set_action_progress(action['_id'], (i + 1) / len(users))
             time.sleep(0.15)
+            
+    if action['type'] == 'refresh_profile':
+        try:
+            u = database.get_users([action['user_id']])[0]
+            u.refresh(database)
+        except IndexError:
+            print('Invalid user for update:', action['user_id'])
 
     if action['type'] == 'refresh_pool_popularity':
         database.calculate_pool_popularity()
