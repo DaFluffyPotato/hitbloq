@@ -373,6 +373,7 @@ async def on_message(message):
                     if database.is_pool_owner(pool_id, message.author.id):
                         if len(message.attachments):
                             cover_url = message.attachments[0].url
+                            cover_url = cover_url.split('?')[0]
                             if cover_url.split('.')[-1] == 'png':
                                 print('downloading cover:', cover_url)
                                 download_image(cover_url, 'static/hashlists/' + pool_id + '_cover')
