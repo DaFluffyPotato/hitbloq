@@ -10,3 +10,6 @@ database.db['usernames'].create_index([('terms', pymongo.TEXT)])
 
 for pool_id in database.get_pool_ids():
     database.db['users'].create_index([('total_cr.' + pool_id, pymongo.DESCENDING)])
+
+database.db['actions'].create_index([('queue_id', pymongo.ASCENDING)])
+database.db['actions'].create_index([('queue_id', pymongo.ASCENDING), ('time', pymongo.ASCENDING)])
