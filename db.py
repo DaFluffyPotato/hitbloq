@@ -1,4 +1,5 @@
 import time
+import os
 from getpass import getpass
 from hashlib import sha256
 
@@ -709,5 +710,12 @@ class HitbloqMongo():
         queue_statuses = {queue_id : queue_id in busy_queues for queue_id in queue_list}
         return queue_statuses
 
-print('MongoDB requires a password!')
-database = HitbloqMongo(getpass())
+password = None
+if os.path.exists('temppass.txt'):
+    f = open('temppass.txt', 'r')
+    password = f.read()
+    f.close()
+else:
+    print('MongoDB requires a password!')
+    password = getpass()
+database = HitbloqMongo(password)
