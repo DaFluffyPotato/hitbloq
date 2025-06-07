@@ -7,7 +7,7 @@ import create_action
 beatsaver_interface = beatsaver.BeatSaverInterface()
 
 def create_pool_api_endpoints(app):
-    @app.route('/api/pool/rank', methods=['POST'])
+    @app.route('/api/pools/rank', methods=['POST'])
     def pool_rank():
         error = check_for_fields(request.json, ['key', 'pool', 'song'])
         if error:
@@ -16,7 +16,7 @@ def create_pool_api_endpoints(app):
             return jsonify(pool_rank_cmd(request.json['song'], request.json['pool']))
         return jsonify({'status': 'invalid pool/key pair'})
     
-    @app.route('/api/pool/unrank', methods=['POST'])
+    @app.route('/api/pools/unrank', methods=['POST'])
     def pool_unrank():
         error = check_for_fields(request.json, ['key', 'pool', 'song'])
         if error:
