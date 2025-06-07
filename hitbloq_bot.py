@@ -22,7 +22,7 @@ from file_io import write_f
 beatsaver_interface = beatsaver.BeatSaverInterface()
 
 def gen_key(length):
-    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
+    return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(length))
 
 def read_f(path):
     f = open(path,'r')
