@@ -13,6 +13,7 @@ from error import error_catch
 from file_io import read_f
 
 BASE_64_LOGO = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIQAAACECAYAAABRRIOnAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAPXSURBVHhe7d0ta5dRGMfxzWAwCE6HcwaLD2WCwWQ0iYIDX4MsmS1mg8um4VtQWNAimMRk06JYLNMxmWAwWCb4v4K/azdcO5xzn/uc7fspnqIT+XHuL/8HnF86c2lvbkR/bty3UxuOv3tmJww5Zr8C/zAICAYBkd0QrTVCaUetObghIBgEBIOASG6I3GaInsm9NclhawxuCAgGAcEgIMKGSH2mt/ZMrd0kvTcFNwQEg4BgEBD7GiJ65vb+jJz6dY7W//24ISAYBASDgAgbIveZ5/+85Y0HdjqYD2dP2KmO06vrdprG1I3BDQHBICAYBMT8wt0n0hCpz7DcRqht7CYp3SC1m4IbAoJBQDAIiOzPVLbeDKWVbpDU5hi7KbghIBgEBIOAmLwhPm5u2alNK6vLdhrW2usauY3BDQHBICAYBETy9zIOezNEpm6KiG+O1KbghoBgEBAMAqJ4Q5RuhKVHt+00zP/9Irt37tmpjNabwju3eNlOw7ghIBgEBIOACL+X4ZVuiKgRvNRmSJXbGL4paAh0jUFAMAiI7IaYuhlyv0cSSW2K2g1xdfu3nYb5n09DIAmDgGAQEM01ROlmSOV/fm5DeLlNkdoMHg2BJAwCgkFANN8QYzdD5PvjV3Y6mNINMXYzeNwQEAwCgkFAJDdE6c8L/Fi5Zqc2RQ0RNYMXPfNrN4PHDQHBICAYBMS+hvByX9uPlH4G5z5DvdyGaL0ZPG4ICAYBwSAgJm+ISGpjeKnP4Nz3LnprBo8bAoJBQDAIiOSG8Go3hVe6MeY3vthpWOrrDq03g8cNAcEgIBgERNgQXutN4UXP/NTPhEavO/TWDB43BASDgGAQEMUbwiv9vYrU9xpK21u7aKeZ3pvB44aAYBAQDAIiuSG8qZsiVWqDHPZm8LghIBgEBIOAyG4Ir/WmiBqidDNEv7+177ZyQ0AwCAgGAVG8ISJRY4zdFL4hSjdD7mcyt9ae2mmmdmNxQ0AwCAgGAVG9ISJjN8a3nc92mqn93kT0OohvjNpNwQ0BwSAgGAREcw2R6/2VC3Yaduv5pp2G1f48Q9QUCy9f2GlY6abghoBgEBAMAuLINYR3/u1rOw2r/RlI3xTR6xJeblNwQ0AwCAgGAdF9Q6wvnLTTsJuLp+x0MNc/fbVTG3xT+P+zzL/3Q0OgKAYBwSAgum8I/7rDm52fdhoWNUVvDeHlNgU3BASDgGAQEN01RPReRdQQD3d/2alPqU2RihsCgkFAMAiI5hsitRl6b4QIDYGqGAQEg4BoriFohmlxQ0AwCAgGAdF8Q9AMdXFDQDAICAaB/8zN/QUIhnNHlbUamAAAAABJRU5ErkJggg=='
+LAST_UPDATES = {i: time.time() for i in range(3)}
 
 def get_web_img_b64(url):
     if url[0] == '/':
@@ -175,6 +176,7 @@ def action_cleanup(action):
 
 def process_queue(queue_id=0):
     while True:
+        LAST_UPDATES[queue_id] = time.time()
         next_action = database.get_next_action(queue_id)
 
         if next_action:
@@ -186,5 +188,19 @@ def process_queue(queue_id=0):
 if __name__ == "__main__":
     threading.Thread(target=process_queue, args=(2,)).start()
     threading.Thread(target=process_queue, args=(1,)).start()
-
-    process_queue(queue_id=0)
+    threading.Thread(target=process_queue, args=(0,)).start()
+    
+    # There's a rare hang that occurs roughly once every other month.
+    # The hang seems to occur in queue #1, but the traceback on keyboard interrupt didn't reveal where the hang was.
+    # It might be on one of the web or db requests. It randomly appeared without changes to Hitbloq, so it may be an interaction with BL.
+    # For the time being, the main thread will watch to make sure the other threads are progressing at least one loop per hour.
+    # If not, all threads are forcibly terminated and the parent task is free to restart the actions task.
+    good_status = True
+    while good_status:
+        time.sleep(1)
+        for queue_id in LAST_UPDATES:
+            if time.time() - LAST_UPDATES[queue_id] > 60 * 60:
+                good_status = False
+    
+    # forcibly kill threads
+    os._exit(0)
