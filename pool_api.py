@@ -51,7 +51,7 @@ def create_pool_api_endpoints(app):
     
     @app.route('/api/pools/recalculate_cr', methods=['POST'])
     def pool_recalculate_cr():
-        error = check_for_fields(request.json, ['key', 'pool', 'song'])
+        error = check_for_fields(request.json, ['key', 'pool'])
         if error:
             return jsonify(error)
         if valid_pool_key(request.json['key'], request.json['pool']):
