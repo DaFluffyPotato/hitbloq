@@ -541,6 +541,7 @@ async def on_message(message):
                             pool_key = gen_key(32)
                             database.db['ranked_lists'].update_one({'_id': pool_id}, {'$set': {'api_key', pool_key}})
                             await message.author.send('Here\'s your pool API key. It acts as a password for pool management API requests such as ranking and curve management.\n`' + pool_key + '`\nRefer to <https://github.com/DaFluffyPotato/hitbloq/blob/main/pool_api.py> for the pool management API endpoints.\nExample Python API request:\n```py\nimport requests\nrequests.post(\'https://hitbloq.com/api/pools/rank\', json={\n\t\'key\': \'' + pool_key + '\',\n\t\'pool\': \'fitbeat\',\n\t\'song\': \'28574959BDEFE94C326344A1285256402130B2CC|_Hard_SoloStandard\'})```\n\n*Generating a new key replaces the old one.*')
+                            await message.channel.send(message.author.mention + ' sent pool key via DM.')
                         else:
                             await message.channel.send(message.author.mention + ' you don\'t have permissions to modify this pool')
                     else:
