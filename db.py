@@ -378,6 +378,7 @@ class HitbloqMongo():
             'long_description': '',
             'date_created': time.time(),
             'views': 0,
+            'api_key': None,
         }
 
         print('creating map pool:')

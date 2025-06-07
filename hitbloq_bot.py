@@ -3,6 +3,8 @@ import json
 import time
 import sys
 import os
+import random
+import string
 
 import discord
 from discord.utils import get
@@ -18,6 +20,9 @@ from actions import get_web_img_b64
 from file_io import write_f
 
 beatsaver_interface = beatsaver.BeatSaverInterface()
+
+def gen_key(length):
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
 
 def read_f(path):
     f = open(path,'r')
@@ -525,6 +530,21 @@ async def on_message(message):
                             await message.channel.send(message.author.mention + ' you don\'t have permissions to modify this pool')
                 else:
                     await message.channel.send(message.author.mention + ' that pool ID appears to be invalid')
+
+            if message_args[0] == '!generate_pool_key':
+                if len(message_args) < 2:
+                    await message.channel.send(message.author.mention + '\nUsage: `!generate_pool_key <pool_id>`')
+                else:
+                    pool_id = message_args[1]
+                    if pool_id in database.get_pool_ids(True):
+                        if database.is_pool_owner(pool_id, message.author.id):
+                            pool_key = gen_key(32)
+                            database.db['ranked_lists'].update_one({'_id': pool_id}, {'$set': {'api_key', pool_key}})
+                            await message.author.send('Here\'s your pool API key. It acts as a password for pool management API requests such as ranking and curve management.\n`' + pool_key + '`\nRefer to <https://github.com/DaFluffyPotato/hitbloq/blob/main/pool_api.py> for the pool management API endpoints.\nExample Python API request:\n```py\nimport requests\nrequests.post(\'https://hitbloq.com/api/pools/rank\', json={\n\t\'key\': \'' + pool_key + '\',\n\t\'pool\': \'fitbeat\',\n\t\'song\': \'28574959BDEFE94C326344A1285256402130B2CC|_Hard_SoloStandard\'})```\n\n*Generating a new key replaces the old one.*')
+                        else:
+                            await message.channel.send(message.author.mention + ' you don\'t have permissions to modify this pool')
+                    else:
+                        await message.channel.send(message.author.mention + ' that pool ID appears to be invalid')
 
             if message_args[0] == '!rank':
                 song_id = message_args[1]
