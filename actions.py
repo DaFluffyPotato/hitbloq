@@ -189,6 +189,9 @@ if __name__ == "__main__":
     threading.Thread(target=process_queue, args=(2,)).start()
     threading.Thread(target=process_queue, args=(1,)).start()
     threading.Thread(target=process_queue, args=(0,)).start()
+
+    if os.path.exists('temppass.txt'):
+        os.remove('temppass.txt')
     
     # There's a rare hang that occurs roughly once every other month.
     # The hang seems to occur in queue #1, but the traceback on keyboard interrupt didn't reveal where the hang was.

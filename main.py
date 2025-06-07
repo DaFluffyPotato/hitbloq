@@ -10,6 +10,7 @@ from new_pages import new_pages, get_map_pool
 import api
 from user import User
 import create_action
+from pool_api import create_pool_api_endpoints
 
 app = Flask(__name__)
 limiter = Limiter(
@@ -342,6 +343,8 @@ def contact():
 def discord():
     html = new_pages['discord']()
     return html
+
+create_pool_api_endpoints(app)
 
 @app.after_request
 def after_request(response):

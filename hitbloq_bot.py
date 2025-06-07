@@ -92,6 +92,9 @@ async def on_message(message):
     global channels, active_guild
     for line in message.content.split('\n'):
         message_args = [v for v in line.split(' ') if v != '']
+        if type(message.channel) == discord.DMChannel:
+            # ignore DMs
+            return
         if message.channel.name == PATRON_COMMANDS_CHANNEL:
             if message_args[0] == '!link_account':
                 user_id = int(message_args[1])

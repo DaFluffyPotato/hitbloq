@@ -13,6 +13,5 @@ while True:
     f.write(db_password)
     f.close()
     os.system(f'{PYTHON_CMD} actions.py')
-    os.remove('temppass.txt')
     time.sleep(1)
     print('actions rebooted')
