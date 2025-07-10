@@ -202,7 +202,7 @@ if __name__ == "__main__":
     while good_status:
         time.sleep(1)
         for queue_id in LAST_UPDATES:
-            if time.time() - LAST_UPDATES[queue_id] > 60 * 60:
+            if time.time() - LAST_UPDATES[queue_id] > 60 * 60 * 3:
                 good_status = False
     
     # forcibly kill threads
