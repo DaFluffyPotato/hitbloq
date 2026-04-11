@@ -440,6 +440,7 @@ class HitbloqMongo():
         self.db['pool_references'].insert_one({'_id': src, 'target': target})
 
     def unrank_song(self, leaderboard_id, map_pool):
+        leaderboard_id = leaderboard_id.split('|')[0].upper() + '|' + leaderboard_id.split('|')[1]
         self.db['ranked_lists'].update_one({'_id': map_pool}, {'$pull': {'leaderboard_id_list': leaderboard_id}})
 
         current_leaderboard = self.db['leaderboards'].find_one({'_id': leaderboard_id})
