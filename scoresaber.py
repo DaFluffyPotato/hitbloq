@@ -38,13 +38,16 @@ class ScoresaberInterface():
     def convert_score_format(self, scores):
         modified_scores = []
         for score in scores:
+            hmd = 'unknown'
+            if ('device' in score['score']) and ('hmd' in score['score']['device']):
+                hmd = score['score']['device']['hmd']
             new_score = {
                 'score': {
                     'modifiedScore': score['score']['modifiedScore'],
                     'maxCombo': score['score']['maxCombo'],
                     'missedNotes': score['score']['missedNotes'],
                     'badCuts': score['score']['badCuts'],
-                    'hmd': score['score']['device']['hmd'],
+                    'hmd': hmd,
                     'epochTime': score['score']['createdAt'],
                     'modifiers': ','.join(score['score']['mods']),
                 },
