@@ -61,6 +61,9 @@ class ScoresaberInterface():
                     'src': 'ss',
                 }
             except Exception as e:
+                f = open('idek.json', 'w')
+                json.dump(score, f)
+                f.close()
                 raise AttributeError(score)
             modified_scores.append(new_score)
         return modified_scores
