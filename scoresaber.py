@@ -39,6 +39,8 @@ class ScoresaberInterface():
         modified_scores = []
         for score in scores:
             hmd = 'unknown'
+            if not score:
+                raise AttributeError(score)
             if ('device' in score['score']) and ('hmd' in score['score']['device']):
                 hmd = score['score']['device']['hmd']
             new_score = {
