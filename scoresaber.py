@@ -10,7 +10,7 @@ def convert_epoch(t):
 
 class ScoresaberInterface():
     def __init__(self, database, queue_id=0):
-        self.headers = {'User-Agent': 'Hitbloq/1.3b'}
+        self.headers = {'User-Agent': 'Hitbloq/1.4b'}
         self.database = database
         self.queue_id = queue_id
         self.all_endpoints = config['scoresaber_endpoints'][str(queue_id)]
@@ -31,6 +31,30 @@ class ScoresaberInterface():
                 print(e)
                 time.sleep(15)
 
+    def convert_score_format(self, scores):
+        modified_scores = []
+        for score in scores:
+            new_score = {
+                'score': {
+                    'modifiedScore': score['score']['modifiedScore'],
+                    'maxCombo': score['score']['maxCombo'],
+                    'missedNotes': score['score']['missedNotes'],
+                    'badCuts': score['score']['badCuts'],
+                    'hmd': score['score']['device']['hmd'],
+                    'epochTime': score['score']['createdAt'],
+                    'modifiers': ','.join(score['score']['mods']),
+                },
+                'leaderboard': {
+                    'songHash': score['leaderboard']['map']['hash'].upper(),
+                    'difficulty': {
+                        'difficultyRaw': score['leaderboard']['difficulty']['rawDifficulty'],
+                    }
+                },
+                'src': 'ss',
+            }
+            modified_scores.append(new_score)
+        return modified_scores
+
     def fetch_until(self, ss_id, epoch, limit=100):
         looking = True
         total_dat = []
@@ -49,7 +73,7 @@ class ScoresaberInterface():
                 new_dat = []
 
             # new api case for end of pages
-            if ('errorMessage' in new_dat) and (new_dat['errorMessage'] == 'Scores not found'):
+            if ('data' in new_dat) and (not len(new_dat['data'])):
                 new_dat = []
                 print('reached end of profile')
 
@@ -57,7 +81,7 @@ class ScoresaberInterface():
             if new_dat == []:
                 looking = False
             else:
-                if 'playerScores' not in new_dat:
+                if 'data' not in new_dat:
                     print('ERROR')
                     print(new_dat)
 
@@ -66,23 +90,22 @@ class ScoresaberInterface():
                     continue
 
                 # umbranox did a lil' trolling and changed the API again
-                if not len(new_dat['playerScores']):
+                if not len(new_dat['data']):
                     looking = False
                     print('reached end of profile')
 
                 else:
-                    for score in new_dat['playerScores']:
-                        if convert_epoch(score['score']['timeSet']) < (epoch - 300): # -300 to be safe
+                    for score in new_dat['data']:
+                        if convert_epoch(score['score']['createdAt']) < (epoch - 300): # -300 to be safe
                             looking = False
                         else:
-                            score['score']['epochTime'] = convert_epoch(score['score']['timeSet'])
-                            score['leaderboard']['songHash'] = score['leaderboard']['songHash'].upper()
-                            score['src'] = 'ss'
+                            score['score']['createdAt'] = convert_epoch(score['score']['createdAt'])
+                            score['leaderboard']['map']['hash'] = score['leaderboard']['map']['hash'].upper()
                             save_dat.append(score)
                     total_dat += save_dat
             c += 1
         print('Finished SS lookup for', ss_id)
-        return total_dat
+        return self.convert_score_format(total_dat)
 
     def fetch_all_scores(self, ss_id):
         return self.fetch_until(ss_id, 0, limit=100)
