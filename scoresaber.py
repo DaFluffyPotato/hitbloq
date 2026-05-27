@@ -26,7 +26,11 @@ class ScoresaberInterface():
                     print(req.headers['X-RateLimit-Limit'], req.headers['X-RateLimit-Remaining'], req.headers['X-RateLimit-Reset'])
                 except:
                     print('no headers found. received SS response.')
-                return json.loads(req_content)
+                req_json = json.loads(req_content)
+                if 'statusCode' in req_json:
+                    print('ratelimited.', req_json)
+                    raise ValueError
+                return req_json
             except Exception as e:
                 print(e)
                 time.sleep(15)
