@@ -28,6 +28,9 @@ class ScoresaberInterface():
                     print('no headers found. received SS response.')
                 req_json = json.loads(req_content)
                 if 'statusCode' in req_json:
+                    if req_json['statusCode'] == 404:
+                        print('404 status code:', url)
+                        break
                     print('ratelimited.', req_json)
                     raise ValueError
                 return req_json
