@@ -30,7 +30,7 @@ class ScoresaberInterface():
                 if 'statusCode' in req_json:
                     if req_json['statusCode'] == 404:
                         print('404 status code:', url)
-                        break
+                        return -1
                     print('ratelimited.', req_json)
                     raise ValueError
                 return req_json
@@ -74,6 +74,10 @@ class ScoresaberInterface():
             print('checking', req_url)
             try:
                 new_dat = self.ss_req(req_url)
+                if new_dat == -1:
+                    looking = False
+                    print('ending lookup due to 404')
+                    continue
                 if new_dat == None:
                     print('skipping due to failures')
                     continue
